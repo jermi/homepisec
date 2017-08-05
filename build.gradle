@@ -1,0 +1,7 @@
+buildscript {
+    ext {
+        swaggerVersion = "2.6.1"
+        springBootVersion = '1.5.6.RELEASE'
+        jacksonVersion = '2.8.9'
+    }
+}
