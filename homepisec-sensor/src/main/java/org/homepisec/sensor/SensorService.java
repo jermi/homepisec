@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,22 +17,37 @@ public class SensorService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ControlApiRestClient controlApiRestClient;
+    private final GpioProvider gpioProvider;
+    private final CapabilitiesProvider capabilitiesProvider;
 
     @Autowired
-    public SensorService(ControlApiRestClient controlApiRestClient) {
+    public SensorService(
+            ControlApiRestClient controlApiRestClient,
+            GpioProvider gpioProvider,
+            CapabilitiesProvider capabilitiesProvider
+    ) {
         this.controlApiRestClient = controlApiRestClient;
+        this.gpioProvider = gpioProvider;
+        this.capabilitiesProvider = capabilitiesProvider;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRateString = "${updateFrequency}")
     public void sendDataToControl() {
-        logger.info("sending data to control");
-        int i = (int) (Math.random() * 10);
-        List<DeviceReading> readings = new ArrayList<>();
-        while (i-- > 0) {
-            final DeviceReading reading = new DeviceReading(new Device("id1", DeviceType.SENSOR_MOTION), (Math.random() > 0.5) + "");
-            readings.add(reading);
-        }
+        final Capabilities capabilities = capabilitiesProvider.loadCapabilities();
+        final List<DeviceReading> readings = new ArrayList<>();
+        populateMotionSensorReadings(readings, capabilities.getMotionSensors());
+        logger.debug("sending readings {} to control", readings);
         controlApiRestClient.postReadings(readings);
+    }
+
+    private void populateMotionSensorReadings(List<DeviceReading> readings, List<Capabilities.DeviceGpio> motionSensors) {
+        for (Capabilities.DeviceGpio deviceGpio : motionSensors) {
+            final int pin = deviceGpio.getGpio();
+            final boolean value = gpioProvider.readPin(pin);
+            final Device device = new Device(deviceGpio.getId(), DeviceType.SENSOR_MOTION);
+            final DeviceReading deviceReading = new DeviceReading(device, String.valueOf(value));
+            readings.add(deviceReading);
+        }
     }
 
 }

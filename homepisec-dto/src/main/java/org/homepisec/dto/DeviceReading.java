@@ -21,4 +21,11 @@ public class DeviceReading {
         return value;
     }
 
+    @Override
+    public String toString() {
+        return "DeviceReading{" +
+                "device=" + device +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

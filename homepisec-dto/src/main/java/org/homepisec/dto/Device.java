@@ -21,4 +21,11 @@ public class Device {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id='" + id + '\'' +
+                ", type=" + type +
+                '}';
+    }
 }

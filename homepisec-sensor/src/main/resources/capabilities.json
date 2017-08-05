@@ -1,0 +1,8 @@
+{
+  "motionSensors": [
+    {
+      "id": "test-motion-sensor",
+      "gpio": 17
+    }
+  ]
+}

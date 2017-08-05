@@ -54,7 +54,7 @@ public class ReadingsServiceTest {
         final Device device2 = instance.getDevice(device.getId());
         // then
         Assert.assertEquals(device.getId(), device2.getId());
-        Assert.assertEquals(DeviceType.UNKNOWN, device2.getType());
+        Assert.assertEquals(DeviceType.SENSOR_MOTION, device2.getType());
         Assert.assertEquals(3, events.size());
     }
 

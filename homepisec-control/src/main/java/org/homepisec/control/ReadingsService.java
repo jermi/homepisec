@@ -1,8 +1,9 @@
 package org.homepisec.control;
 
-import org.homepisec.dto.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.homepisec.dto.Device;
+import org.homepisec.dto.DeviceReading;
+import org.homepisec.dto.EnrichedEvent;
+import org.homepisec.dto.EventType;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -11,8 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class ReadingsService {
 
-    private final static int EVENTS_LIMIT = 100000;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final int EVENTS_LIMIT = 60 * 60 * 24 * 356;
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
     private final LinkedList<EnrichedEvent> events = new LinkedList<>();
 
@@ -22,11 +22,11 @@ public class ReadingsService {
 
     public void handleDeviceRead(List<DeviceReading> readings) {
         readings.forEach(reading -> {
-            Device d = getDevice(reading);
+            Device device = getDevice(reading);
             EnrichedEvent ee = new EnrichedEvent(
                     EventType.DEVICE_READ,
                     new Date(),
-                    d,
+                    device,
                     reading.getValue()
             );
             events.addFirst(ee);
@@ -41,7 +41,7 @@ public class ReadingsService {
         final String deviceId = device.getId();
         Device d = devices.get(deviceId);
         if (d == null) {
-            d = new Device(deviceId, DeviceType.UNKNOWN);
+            d = new Device(deviceId, device.getType());
             devices.put(deviceId, d);
         }
         return d;
