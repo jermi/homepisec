@@ -1,6 +1,10 @@
 package org.homepisec.control;
 
-import org.homepisec.dto.*;
+import org.homepisec.control.alarm.AlarmStatus;
+import org.homepisec.control.alarm.AlarmStatusService;
+import org.homepisec.dto.ApiEndpoints;
+import org.homepisec.dto.EnrichedEvent;
+import org.homepisec.dto.EventDeviceReading;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -15,10 +19,12 @@ import java.util.List;
 public class ApiController {
 
     private final ReadingsService readingsService;
+    private final AlarmStatusService alarmStatusService;
 
     @Autowired
-    public ApiController(ReadingsService readingsService) {
+    public ApiController(ReadingsService readingsService, AlarmStatusService alarmStatusService) {
         this.readingsService = readingsService;
+        this.alarmStatusService = alarmStatusService;
     }
 
     @RequestMapping(
@@ -49,6 +55,38 @@ public class ApiController {
             count = 10;
         }
         return readingsService.readEvents(offset, count);
+    }
+
+    @RequestMapping(
+            value = ApiEndpoints.ALARM,
+            method = RequestMethod.GET,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    public AlarmStatus getAlarmStatus() {
+        return alarmStatusService.getAlarmStatus();
+    }
+
+    @RequestMapping(
+            value = ApiEndpoints.ALARM_ARM,
+            method = RequestMethod.POST,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    public AlarmStatus postAlarmArm() {
+        alarmStatusService.armAlarm();
+        return alarmStatusService.getAlarmStatus();
+    }
+
+    @RequestMapping(
+            value = ApiEndpoints.ALARM_DISARM,
+            method = RequestMethod.POST,
+            consumes = MediaType.ALL_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+    )
+    public AlarmStatus postAlarmDisarm() {
+        alarmStatusService.disarmAlarm();
+        return alarmStatusService.getAlarmStatus();
     }
 
 }

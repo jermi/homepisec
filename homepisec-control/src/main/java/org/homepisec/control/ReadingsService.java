@@ -1,9 +1,8 @@
 package org.homepisec.control;
 
-import org.homepisec.dto.Device;
-import org.homepisec.dto.DeviceReading;
-import org.homepisec.dto.EnrichedEvent;
-import org.homepisec.dto.EventType;
+import io.reactivex.subjects.PublishSubject;
+import org.homepisec.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,6 +15,13 @@ public class ReadingsService {
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
     private final LinkedList<EnrichedEvent> events = new LinkedList<>();
 
+    private final PublishSubject<EnrichedEvent> eventsSubject;
+
+    @Autowired
+    public ReadingsService(PublishSubject<EnrichedEvent> eventsSubject) {
+        this.eventsSubject = eventsSubject;
+    }
+
     public Device getDevice(String deviceId) {
         return devices.get(deviceId);
     }
@@ -23,12 +29,13 @@ public class ReadingsService {
     public void handleDeviceRead(List<DeviceReading> readings) {
         readings.forEach(reading -> {
             Device device = getDevice(reading);
-            EnrichedEvent ee = new EnrichedEvent(
+            final EnrichedEvent ee = new EnrichedEvent<>(
                     EventType.DEVICE_READ,
                     new Date(),
                     device,
                     reading.getValue()
             );
+            eventsSubject.onNext(ee);
             events.addFirst(ee);
             if (events.size() > EVENTS_LIMIT) {
                 events.pollLast();

@@ -2,21 +2,19 @@ package org.homepisec.dto;
 
 import java.util.Date;
 
-public class EnrichedEvent {
+public class EnrichedEvent<PAYLOAD> extends Event<PAYLOAD> {
 
     private Date time;
     private Device device;
-    private EventType type;
-    private String value;
 
-    private EnrichedEvent() {
+    public EnrichedEvent() {
+        super(null, null);
     }
 
-    public EnrichedEvent(EventType type, Date time, Device device, String value) {
+    public EnrichedEvent(EventType type, Date time, Device device, PAYLOAD payload) {
+        super(type, payload);
         this.time = time;
         this.device = device;
-        this.value = value;
-        this.type = type;
     }
 
     public Date getTime() {
@@ -25,14 +23,6 @@ public class EnrichedEvent {
 
     public Device getDevice() {
         return device;
-    }
-
-    public EventType getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
     }
 
 }

@@ -4,5 +4,6 @@ public enum DeviceType {
     SENSOR_MOTION,
     SENSOR_TEMP,
     RELAY,
-    UNKNOWN
+    UNKNOWN,
+    CONTROL
 }

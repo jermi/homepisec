@@ -1,5 +1,6 @@
 package org.homepisec.control;
 
+import io.reactivex.subjects.PublishSubject;
 import org.homepisec.dto.Device;
 import org.homepisec.dto.DeviceReading;
 import org.homepisec.dto.DeviceType;
@@ -12,10 +13,12 @@ import java.util.List;
 
 public class ReadingsServiceTest {
 
+    private final PublishSubject<EnrichedEvent> eventsSubject = PublishSubject.create();
+
     @Test
     public void readEmptyEventsTest() {
         // given
-        final ReadingsService instance = new ReadingsService();
+        final ReadingsService instance = new ReadingsService(eventsSubject);
         // when
         final List<EnrichedEvent> events = instance.readEvents(0, 10);
         // then
@@ -25,7 +28,7 @@ public class ReadingsServiceTest {
     @Test
     public void readEventsOffsetCountTest() {
         // given
-        final ReadingsService instance = new ReadingsService();
+        final ReadingsService instance = new ReadingsService(eventsSubject);
         final Device device = new Device("d1", DeviceType.SENSOR_MOTION);
         // when
         instance.handleDeviceRead(Arrays.asList(
@@ -36,13 +39,13 @@ public class ReadingsServiceTest {
         final List<EnrichedEvent> events = instance.readEvents(1, 1);
         // then
         Assert.assertEquals(1, events.size());
-        Assert.assertEquals("true", events.get(0).getValue());
+        Assert.assertEquals("true", events.get(0).getPayload());
     }
 
     @Test
     public void readEventsUnknownDeviceTest() {
         // given
-        final ReadingsService instance = new ReadingsService();
+        final ReadingsService instance = new ReadingsService(eventsSubject);
         final Device device = new Device("d1", DeviceType.SENSOR_MOTION);
         // when
         instance.handleDeviceRead(Arrays.asList(

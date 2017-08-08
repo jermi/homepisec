@@ -2,6 +2,8 @@ package org.homepisec.dto;
 
 public class Device {
 
+    public static final Device CONTROL = new Device("CONTROL", DeviceType.CONTROL);
+
     private String id;
     private DeviceType type;
 
