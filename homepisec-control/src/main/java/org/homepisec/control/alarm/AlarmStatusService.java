@@ -54,6 +54,7 @@ public class AlarmStatusService {
         switch (event.getType()) {
             case DEVICE_READ:
                 handleDeviceRead(event);
+                break;
             case ALARM_DISARM:
                 handleAlarmDisarm();
                 break;
@@ -108,11 +109,11 @@ public class AlarmStatusService {
     }
 
     private void delayAlarmTrigger() {
-        scheduledFuture = scheduler.scheduleWithFixedDelay(() -> {
+        scheduledFuture = scheduler.schedule(() -> {
             eventsSubject.onNext(new AlarmTriggeredEvent(
                     new Date()
             ));
-        }, alarmCountdownSeconds, 0, TimeUnit.SECONDS);
+        }, alarmCountdownSeconds, TimeUnit.SECONDS);
     }
 
     private void handleAlarmTrigger() {
