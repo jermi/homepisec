@@ -14,7 +14,6 @@ public class ReadingsService {
     private static final int EVENTS_LIMIT = 60 * 60 * 24 * 356;
     private final Map<String, Device> devices = new ConcurrentHashMap<>();
     private final LinkedList<EnrichedEvent> events = new LinkedList<>();
-
     private final PublishSubject<EnrichedEvent> eventsSubject;
 
     @Autowired

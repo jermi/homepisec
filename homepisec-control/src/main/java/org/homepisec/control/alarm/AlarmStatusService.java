@@ -50,7 +50,7 @@ public class AlarmStatusService {
         disposable.dispose();
     }
 
-    public void handleEvent(EnrichedEvent event) {
+    private void handleEvent(EnrichedEvent event) {
         switch (event.getType()) {
             case DEVICE_READ:
                 handleDeviceRead(event);
@@ -82,7 +82,8 @@ public class AlarmStatusService {
         final boolean isAlarmArmed = alarmStatus.getState().equals(AlarmState.ARMED);
         final boolean isDeviceMotionSensor = DeviceType.SENSOR_MOTION.equals(event.getDevice().getType());
         if (isAlarmArmed && isDeviceMotionSensor) {
-            if (Boolean.valueOf(event.getPayload().toString())) {
+            final Boolean isMotionDetected = Boolean.valueOf(event.getPayload().toString());
+            if (isMotionDetected) {
                 eventsSubject.onNext(new AlarmCountdownEvent(new Date()));
             }
         }
@@ -109,11 +110,8 @@ public class AlarmStatusService {
     }
 
     private void delayAlarmTrigger() {
-        scheduledFuture = scheduler.schedule(() -> {
-            eventsSubject.onNext(new AlarmTriggeredEvent(
-                    new Date()
-            ));
-        }, alarmCountdownSeconds, TimeUnit.SECONDS);
+        final Runnable runnable = () -> eventsSubject.onNext(new AlarmTriggeredEvent(new Date()));
+        scheduledFuture = scheduler.schedule(runnable, alarmCountdownSeconds, TimeUnit.SECONDS);
     }
 
     private void handleAlarmTrigger() {
