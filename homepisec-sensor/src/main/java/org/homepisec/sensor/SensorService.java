@@ -35,19 +35,25 @@ public class SensorService {
     public void sendDataToControl() {
         final Capabilities capabilities = capabilitiesProvider.loadCapabilities();
         final List<DeviceReading> readings = new ArrayList<>();
-        populateMotionSensorReadings(readings, capabilities.getMotionSensors());
+        populateGpioPinReadings(readings, capabilities.getMotionSensors(), GpioProvider.Direction.IN);
+        populateGpioPinReadings(readings, capabilities.getRelays(), GpioProvider.Direction.OUT);
+        populateGpioPinReadings(readings, capabilities.getAlarmRelays(), GpioProvider.Direction.OUT);
         logger.debug("sending readings {} to control", readings);
         controlApiRestClient.postReadings(readings);
     }
 
-    private void populateMotionSensorReadings(List<DeviceReading> readings, List<Capabilities.DeviceGpio> motionSensors) {
+    private void populateGpioPinReadings(List<DeviceReading> readings, List<Capabilities.DeviceGpio> motionSensors, GpioProvider.Direction direction) {
         for (Capabilities.DeviceGpio deviceGpio : motionSensors) {
             final int pin = deviceGpio.getGpio();
+            gpioProvider.enablePin(pin);
+            gpioProvider.setPinDirection(pin, direction);
             final boolean value = gpioProvider.readPin(pin);
             final Device device = new Device(deviceGpio.getId(), DeviceType.SENSOR_MOTION);
             final DeviceReading deviceReading = new DeviceReading(device, String.valueOf(value));
             readings.add(deviceReading);
         }
     }
+
+
 
 }

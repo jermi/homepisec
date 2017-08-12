@@ -4,5 +4,21 @@
       "id": "test-motion-sensor",
       "gpio": 17
     }
+  ],
+  "alarmRelays": [
+    {
+      "id": "relay-alarm",
+      "gpio": 26
+    }
+  ],
+  "relays": [
+    {
+      "id": "relay-2",
+      "gpio": 20
+    },
+    {
+      "id": "relay-3",
+      "gpio": 21
+    }
   ]
 }

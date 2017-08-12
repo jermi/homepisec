@@ -1,9 +1,0 @@
-{
-  "devices": [
-    {
-      "id": "motion_sensor_1",
-      "type": "SENSOR_MOTION",
-      "groups": ["motion_sensor_group"]
-    }
-  ]
-}

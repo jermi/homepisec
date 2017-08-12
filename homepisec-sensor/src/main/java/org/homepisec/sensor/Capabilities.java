@@ -5,7 +5,12 @@ import java.util.List;
 public class Capabilities {
 
     private List<DeviceGpio> motionSensors;
+    private List<DeviceGpio> alarmRelays;
+    private List<DeviceGpio> relays;
 
+    /**
+     * default constructor for Jackson
+     */
     private Capabilities() {
     }
 
@@ -15,6 +20,14 @@ public class Capabilities {
 
     public List<DeviceGpio> getMotionSensors() {
         return motionSensors;
+    }
+
+    public List<DeviceGpio> getAlarmRelays() {
+        return alarmRelays;
+    }
+
+    public List<DeviceGpio> getRelays() {
+        return relays;
     }
 
     public static class DeviceGpio {

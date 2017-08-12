@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,8 +20,6 @@ public class GpioProvider {
 
     public boolean readPin(int pin) {
         try {
-            enablePin(pin);
-            setPinDirection(pin, Direction.IN);
             final String pinValuePath = GPIO + GPIO_PIN + pin + "/value";
             final String pinValue = new String(Files.readAllBytes(Paths.get(pinValuePath)), CHARSET_UTF8).trim();
             switch (pinValue) {
@@ -40,32 +37,54 @@ public class GpioProvider {
         }
     }
 
-    private void enablePin(int pin) {
+    public void writePin(int pin, boolean value) {
+        try {
+            logger.debug("setting pin {} to {}", pin, value);
+            // FIXME
+//            final String cmd = "echo " + (value ? "1" : "0") + " > " + pinValuePath;
+            final String cmd = "./change_pin.sh " + pin + " " + (value ? "1" : "0");
+            logger.debug("setting pin {} to {} with command: {}", pin, value, cmd);
+            final Process process = Runtime.getRuntime().exec(cmd);
+            checkExitCode(cmd, process);
+        } catch (Exception e) {
+            String msg = "failed to wrtie to pin " + pin + " value " + value + " because: " + e.getMessage();
+            logger.error(msg, e);
+            throw new GpioException(msg, e);
+        }
+    }
+
+    public void enablePin(int pin) {
         try {
             final boolean pinEnabled = new File(GPIO + GPIO_PIN + pin).exists();
             if (!pinEnabled) {
-                final String cmd = "echo 1 > " + GPIO + "/export/" + pin;
+                final String cmd = "echo " + pin + " > " + GPIO + "/export";
                 logger.debug("enabling pin with command: {}", cmd);
                 final Process process = Runtime.getRuntime().exec(cmd);
                 checkExitCode(cmd, process);
             } else {
                 logger.debug("pin {} already enabled", pin);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             final String msg = "failed to enable pin " + pin + ": " + e.getMessage();
             logger.error(msg, e);
             throw new GpioException(msg, e);
         }
     }
 
-    private void checkExitCode(final String cmd, final Process exec) {
-        final int exitValue = exec.exitValue();
-        if (exitValue != 0) {
-            logger.error("unexpected exit code {} when executing command {}", exitValue, cmd);
+    private void checkExitCode(final String cmd, final Process process) {
+        try {
+            final int exitValue = process.waitFor();
+            if (exitValue != 0) {
+                logger.error("unexpected exit code {} when executing command {}", exitValue, cmd);
+            }
+        } catch (InterruptedException e) {
+            final String msg = "failed to check exit code for command " + cmd + ": " + e.getMessage();
+            logger.error(msg, e);
+            throw new GpioException(msg, e);
         }
     }
 
-    private void setPinDirection(final int pin, final Direction direction) {
+    public void setPinDirection(final int pin, final Direction direction) {
         try {
             final String directionPath = GPIO + GPIO_PIN + pin + "/direction";
             final String directionString = new String(Files.readAllBytes(Paths.get(directionPath)), CHARSET_UTF8).trim();
