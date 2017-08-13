@@ -25,4 +25,12 @@ public class EnrichedEvent<PAYLOAD> extends Event<PAYLOAD> {
         return device;
     }
 
+    @Override
+    public String toString() {
+        return "EnrichedEvent{" +
+                "time=" + time +
+                ", device=" + device +
+                '}';
+    }
+
 }

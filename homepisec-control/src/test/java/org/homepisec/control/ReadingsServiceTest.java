@@ -21,7 +21,7 @@ public class ReadingsServiceTest {
         // given
         final ReadingsService instance = new ReadingsService(eventsSubject);
         // when
-        final List<EnrichedEvent> events = instance.readEvents(0, 10);
+        final List<EnrichedEvent> events = instance.readEvents();
         // then
         Assert.assertEquals(0, events.size());
     }
@@ -33,33 +33,14 @@ public class ReadingsServiceTest {
         final Device device = new Device("d1", DeviceType.SENSOR_MOTION);
         // when
         instance.handleDeviceRead(Arrays.asList(
-                new DeviceReading(device, "false"),
+                new DeviceReading(device, "true"),
                 new DeviceReading(device, "true"),
                 new DeviceReading(device, "false")
         ));
-        final List<EnrichedEvent> events = instance.readEvents(1, 1);
+        final List<EnrichedEvent> events = instance.readEvents();
         // then
         Assert.assertEquals(1, events.size());
-        Assert.assertEquals("true", events.get(0).getPayload());
-    }
-
-    @Test
-    public void readEventsUnknownDeviceTest() {
-        // given
-        final ReadingsService instance = new ReadingsService(eventsSubject);
-        final Device device = new Device("d1", DeviceType.SENSOR_MOTION);
-        // when
-        instance.handleDeviceRead(Arrays.asList(
-                new DeviceReading(device, "false"),
-                new DeviceReading(device, "true"),
-                new DeviceReading(device, "false")
-        ));
-        final List<EnrichedEvent> events = instance.readEvents(0, 10);
-        final Device device2 = instance.getDevice(device.getId());
-        // then
-        Assert.assertEquals(device.getId(), device2.getId());
-        Assert.assertEquals(DeviceType.SENSOR_MOTION, device2.getType());
-        Assert.assertEquals(3, events.size());
+        Assert.assertEquals("false", events.get(0).getPayload());
     }
 
 }

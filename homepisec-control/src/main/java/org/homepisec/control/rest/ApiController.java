@@ -45,17 +45,8 @@ public class ApiController {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
-    public List<EnrichedEvent> getReadings(
-            @RequestParam(name = "offset", required = false) Integer offset,
-            @RequestParam(name = "count", required = false) Integer count
-    ) {
-        if (offset == null) {
-            offset = 0;
-        }
-        if (count == null) {
-            count = 10;
-        }
-        return readingsService.readEvents(offset, count);
+    public List<EnrichedEvent> getReadings() {
+        return readingsService.readEvents();
     }
 
     @RequestMapping(
