@@ -1,7 +1,9 @@
-package org.homepisec.sensor;
+package org.homepisec.sensor.rest;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.homepisec.dto.ApiEndpoints;
+import org.homepisec.sensor.core.DeviceRegistry;
+import org.homepisec.sensor.core.RelayService;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,7 @@ public class SensorApiController {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
-    public List<Capabilities.DeviceGpio> getRelays() {
+    public List<DeviceRegistry.DeviceGpio> getRelays() {
         return relayService.getAllRelays();
     }
 
@@ -40,7 +42,7 @@ public class SensorApiController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public boolean switchRelay(@RequestParam("id") @NotEmpty String relayId, @RequestParam("value") Boolean value) {
-        final Optional<Capabilities.DeviceGpio> relay = relayService.getAllRelays().stream().filter(r -> r.getId().equals(relayId)).findFirst();
+        final Optional<DeviceRegistry.DeviceGpio> relay = relayService.getAllRelays().stream().filter(r -> r.getId().equals(relayId)).findFirst();
         return relay
                 .map(r -> relayService.switchRelay(r, value))
                 .orElse(false);

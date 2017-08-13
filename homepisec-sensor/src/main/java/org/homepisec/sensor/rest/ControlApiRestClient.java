@@ -1,4 +1,4 @@
-package org.homepisec.sensor;
+package org.homepisec.sensor.rest;
 
 import org.homepisec.dto.*;
 import org.slf4j.Logger;

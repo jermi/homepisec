@@ -1,8 +1,9 @@
-package org.homepisec.sensor;
+package org.homepisec.sensor.core;
 
 import org.homepisec.dto.Device;
 import org.homepisec.dto.DeviceReading;
 import org.homepisec.dto.DeviceType;
+import org.homepisec.sensor.rest.ControlApiRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,42 +14,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class SensorService {
+public class SensorReadingsService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ControlApiRestClient controlApiRestClient;
     private final GpioProvider gpioProvider;
-    private final CapabilitiesProvider capabilitiesProvider;
+    private final DeviceRegistryProvider deviceRegistryProvider;
 
     @Autowired
-    public SensorService(
+    public SensorReadingsService(
             ControlApiRestClient controlApiRestClient,
             GpioProvider gpioProvider,
-            CapabilitiesProvider capabilitiesProvider
+            DeviceRegistryProvider deviceRegistryProvider
     ) {
         this.controlApiRestClient = controlApiRestClient;
         this.gpioProvider = gpioProvider;
-        this.capabilitiesProvider = capabilitiesProvider;
+        this.deviceRegistryProvider = deviceRegistryProvider;
     }
 
     @Scheduled(fixedRateString = "${updateFrequency}")
     public void sendDataToControl() {
-        final Capabilities capabilities = capabilitiesProvider.loadCapabilities();
+        final DeviceRegistry deviceRegistry = deviceRegistryProvider.loadCapabilities();
         final List<DeviceReading> readings = new ArrayList<>();
-        populateGpioPinReadings(readings, capabilities.getMotionSensors(), GpioProvider.Direction.IN);
-        populateGpioPinReadings(readings, capabilities.getRelays(), GpioProvider.Direction.OUT);
-        populateGpioPinReadings(readings, capabilities.getAlarmRelays(), GpioProvider.Direction.OUT);
+        populateGpioPinReadings(readings, deviceRegistry.getMotionSensors(), DeviceType.SENSOR_MOTION);
+        populateGpioPinReadings(readings, deviceRegistry.getRelays(), DeviceType.RELAY);
+        populateGpioPinReadings(readings, deviceRegistry.getAlarmRelays(), DeviceType.RELAY);
         logger.debug("sending readings {} to control", readings);
         controlApiRestClient.postReadings(readings);
     }
 
-    private void populateGpioPinReadings(List<DeviceReading> readings, List<Capabilities.DeviceGpio> motionSensors, GpioProvider.Direction direction) {
-        for (Capabilities.DeviceGpio deviceGpio : motionSensors) {
+    private void populateGpioPinReadings(List<DeviceReading> readings, List<DeviceRegistry.DeviceGpio> devices, DeviceType deviceType) {
+        for (DeviceRegistry.DeviceGpio deviceGpio : devices) {
             final int pin = deviceGpio.getGpio();
-            gpioProvider.enablePin(pin);
-            gpioProvider.setPinDirection(pin, direction);
             final boolean value = gpioProvider.readPin(pin);
-            final Device device = new Device(deviceGpio.getId(), DeviceType.SENSOR_MOTION);
+            final Device device = new Device(deviceGpio.getId(), deviceType);
             final DeviceReading deviceReading = new DeviceReading(device, String.valueOf(value));
             readings.add(deviceReading);
         }

@@ -1,4 +1,4 @@
-package org.homepisec.control;
+package org.homepisec.control.rest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

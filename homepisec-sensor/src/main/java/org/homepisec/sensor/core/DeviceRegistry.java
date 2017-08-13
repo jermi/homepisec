@@ -1,8 +1,8 @@
-package org.homepisec.sensor;
+package org.homepisec.sensor.core;
 
 import java.util.List;
 
-public class Capabilities {
+public class DeviceRegistry {
 
     private List<DeviceGpio> motionSensors;
     private List<DeviceGpio> alarmRelays;
@@ -11,10 +11,10 @@ public class Capabilities {
     /**
      * default constructor for Jackson
      */
-    private Capabilities() {
+    private DeviceRegistry() {
     }
 
-    public Capabilities(List<DeviceGpio> motionSensors) {
+    public DeviceRegistry(List<DeviceGpio> motionSensors) {
         this.motionSensors = motionSensors;
     }
 

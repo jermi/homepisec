@@ -1,7 +1,8 @@
-package org.homepisec.control;
+package org.homepisec.control.rest;
 
-import org.homepisec.control.alarm.AlarmStatus;
-import org.homepisec.control.alarm.AlarmStatusService;
+import org.homepisec.control.core.ReadingsService;
+import org.homepisec.control.core.alarm.AlarmStatus;
+import org.homepisec.control.core.AlarmStatusService;
 import org.homepisec.dto.ApiEndpoints;
 import org.homepisec.dto.EnrichedEvent;
 import org.homepisec.dto.EventDeviceReading;

@@ -1,5 +1,6 @@
-package org.homepisec.control;
+package org.homepisec.control.config;
 
+import org.homepisec.control.core.ReadingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.info.Info;
 import org.springframework.boot.actuate.info.InfoContributor;

@@ -1,4 +1,4 @@
-package org.homepisec.sensor;
+package org.homepisec.sensor.rest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package org.homepisec.control.alarm.events;
+package org.homepisec.control.core.alarm.events;
 
 import org.homepisec.dto.Device;
 import org.homepisec.dto.EnrichedEvent;

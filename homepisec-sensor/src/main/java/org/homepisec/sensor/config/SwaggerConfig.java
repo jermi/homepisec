@@ -1,4 +1,4 @@
-package org.homepisec.sensor;
+package org.homepisec.sensor.config;
 
 import org.homepisec.dto.ApiEndpoints;
 import org.springframework.context.annotation.Bean;

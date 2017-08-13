@@ -1,4 +1,4 @@
-package org.homepisec.control;
+package org.homepisec.control.core;
 
 import io.reactivex.subjects.PublishSubject;
 import org.homepisec.dto.*;
@@ -59,7 +59,7 @@ public class ReadingsService {
         return events.subList(lowerBound, upperBound);
     }
 
-    List<Device> getDevices() {
+    public List<Device> getDevices() {
         return new ArrayList<>(devices.values());
     }
 }

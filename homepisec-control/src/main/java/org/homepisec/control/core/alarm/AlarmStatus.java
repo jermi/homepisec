@@ -1,4 +1,4 @@
-package org.homepisec.control.alarm;
+package org.homepisec.control.core.alarm;
 
 import java.util.Date;
 

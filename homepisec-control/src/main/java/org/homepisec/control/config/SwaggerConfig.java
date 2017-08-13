@@ -1,4 +1,4 @@
-package org.homepisec.control;
+package org.homepisec.control.config;
 
 import org.homepisec.dto.ApiEndpoints;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -20,4 +21,5 @@ public class SwaggerConfig {
                 .paths(PathSelectors.ant(ApiEndpoints.API + "/**"))
                 .build();
     }
+
 }

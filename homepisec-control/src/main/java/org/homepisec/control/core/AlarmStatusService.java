@@ -1,11 +1,13 @@
-package org.homepisec.control.alarm;
+package org.homepisec.control.core;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
-import org.homepisec.control.alarm.events.AlarmArmEvent;
-import org.homepisec.control.alarm.events.AlarmCountdownEvent;
-import org.homepisec.control.alarm.events.AlarmDisarmEvent;
-import org.homepisec.control.alarm.events.AlarmTriggeredEvent;
+import org.homepisec.control.core.alarm.AlarmState;
+import org.homepisec.control.core.alarm.AlarmStatus;
+import org.homepisec.control.core.alarm.events.AlarmArmEvent;
+import org.homepisec.control.core.alarm.events.AlarmCountdownEvent;
+import org.homepisec.control.core.alarm.events.AlarmDisarmEvent;
+import org.homepisec.control.core.alarm.events.AlarmTriggeredEvent;
 import org.homepisec.dto.DeviceType;
 import org.homepisec.dto.EnrichedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
