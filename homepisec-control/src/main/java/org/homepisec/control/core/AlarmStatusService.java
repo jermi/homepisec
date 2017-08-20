@@ -8,8 +8,8 @@ import org.homepisec.control.core.alarm.events.AlarmArmEvent;
 import org.homepisec.control.core.alarm.events.AlarmCountdownEvent;
 import org.homepisec.control.core.alarm.events.AlarmDisarmEvent;
 import org.homepisec.control.core.alarm.events.AlarmTriggeredEvent;
-import org.homepisec.dto.DeviceType;
-import org.homepisec.dto.EnrichedEvent;
+import org.homepisec.control.dto.DeviceType;
+import org.homepisec.control.dto.EnrichedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +102,7 @@ public class AlarmStatusService {
         logger.info("disarming alarm");
         alarmStatus.setState(AlarmState.DISARMED);
         if (scheduledFuture != null && !scheduledFuture.isCancelled() && !scheduledFuture.isDone()) {
+            logger.info("canceling alarm countdown");
             scheduledFuture.cancel(false);
             scheduledFuture = null;
         }

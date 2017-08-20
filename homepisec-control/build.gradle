@@ -28,7 +28,6 @@ swagger {
     lang = 'java'
 
     additionalProperties = [
-            "basePath"      : "https://rpi:7000",
             'library'       : 'resttemplate',
             'modelPackage'  : 'org.homepisec.control.rest.client',
             'apiPackage'    : 'org.homepisec.control.rest.client',
@@ -57,7 +56,6 @@ repositories {
 }
 
 dependencies {
-    compile project(':homepisec-dto')
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile "com.fasterxml.jackson.module:jackson-module-parameter-names:${rootProject.jacksonVersion}"

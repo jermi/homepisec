@@ -1,9 +1,9 @@
 package org.homepisec.control.rest.api;
 
+import org.homepisec.control.config.ControlApiEndpoints;
 import org.homepisec.control.core.ReadingsService;
-import org.homepisec.dto.ApiEndpoints;
-import org.homepisec.dto.EnrichedEvent;
-import org.homepisec.dto.EventDeviceReading;
+import org.homepisec.control.dto.EnrichedEvent;
+import org.homepisec.control.dto.EventDeviceReading;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApiEndpoints.API)
+@RequestMapping(ControlApiEndpoints.API)
 @Validated
 public class ReadingsController {
 
@@ -28,7 +28,7 @@ public class ReadingsController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.READINGS,
+            value = ControlApiEndpoints.READINGS,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
@@ -39,7 +39,7 @@ public class ReadingsController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.READINGS,
+            value = ControlApiEndpoints.READINGS,
             method = RequestMethod.GET,
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE

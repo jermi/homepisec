@@ -1,10 +1,10 @@
 package org.homepisec.control.core;
 
 import io.reactivex.subjects.PublishSubject;
-import org.homepisec.dto.Device;
-import org.homepisec.dto.DeviceReading;
-import org.homepisec.dto.EnrichedEvent;
-import org.homepisec.dto.EventType;
+import org.homepisec.control.dto.Device;
+import org.homepisec.control.dto.DeviceReading;
+import org.homepisec.control.dto.EnrichedEvent;
+import org.homepisec.control.dto.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

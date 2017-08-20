@@ -1,8 +1,8 @@
 package org.homepisec.control.rest.api;
 
+import org.homepisec.control.config.ControlApiEndpoints;
 import org.homepisec.control.core.AlarmStatusService;
 import org.homepisec.control.core.alarm.AlarmStatus;
-import org.homepisec.dto.ApiEndpoints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(ApiEndpoints.API)
+@RequestMapping(ControlApiEndpoints.API)
 @Validated
 public class AlarmController {
 
@@ -23,7 +23,7 @@ public class AlarmController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.ALARM,
+            value = ControlApiEndpoints.ALARM,
             method = RequestMethod.GET,
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
@@ -33,7 +33,7 @@ public class AlarmController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.ALARM_ARM,
+            value = ControlApiEndpoints.ALARM_ARM,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
@@ -43,7 +43,7 @@ public class AlarmController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.ALARM_DISARM,
+            value = ControlApiEndpoints.ALARM_DISARM,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )

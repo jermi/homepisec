@@ -2,9 +2,9 @@ package org.homepisec.control.core;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
+import org.homepisec.control.dto.EnrichedEvent;
 import org.homepisec.control.rest.client.SensorApiControllerApi;
 import org.homepisec.control.rest.client.SwitchRelayRequest;
-import org.homepisec.dto.EnrichedEvent;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

@@ -3,6 +3,8 @@ package org.homepisec.sensor.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.homepisec.sensor.rest.client.ApiClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,6 +28,13 @@ public class SensorAppBeans {
         return new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 ;
+    }
+
+    @Primary
+    @Bean
+    @Autowired
+    ApiClient apiClient(RestTemplate restTemplate) {
+        return new ApiClient(restTemplate).setBasePath("http://rpi:8080/");
     }
 
 }

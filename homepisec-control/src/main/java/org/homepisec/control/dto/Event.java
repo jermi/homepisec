@@ -1,4 +1,4 @@
-package org.homepisec.dto;
+package org.homepisec.control.dto;
 
 public class Event<PAYLOAD> {
 

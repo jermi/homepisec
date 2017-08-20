@@ -2,10 +2,10 @@ package org.homepisec.control;
 
 import io.reactivex.subjects.PublishSubject;
 import org.homepisec.control.core.ReadingsService;
-import org.homepisec.dto.Device;
-import org.homepisec.dto.DeviceReading;
-import org.homepisec.dto.DeviceType;
-import org.homepisec.dto.EnrichedEvent;
+import org.homepisec.control.dto.Device;
+import org.homepisec.control.dto.DeviceReading;
+import org.homepisec.control.dto.DeviceType;
+import org.homepisec.control.dto.EnrichedEvent;
 import org.junit.Assert;
 import org.junit.Test;
 

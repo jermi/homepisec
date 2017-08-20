@@ -1,8 +1,8 @@
 package org.homepisec.control.core.alarm.events;
 
-import org.homepisec.dto.Device;
-import org.homepisec.dto.EnrichedEvent;
-import org.homepisec.dto.EventType;
+import org.homepisec.control.dto.Device;
+import org.homepisec.control.dto.EnrichedEvent;
+import org.homepisec.control.dto.EventType;
 
 import java.util.Date;
 

@@ -1,6 +1,5 @@
 package org.homepisec.control.config;
 
-import org.homepisec.dto.ApiEndpoints;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -18,7 +17,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant(ApiEndpoints.API + "/**"))
+                .paths(PathSelectors.ant(ControlApiEndpoints.API + "/**"))
                 .build();
     }
 

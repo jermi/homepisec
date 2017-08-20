@@ -10,12 +10,44 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'org.detoeuf.swagger-codegen' version '1.7.4'
+}
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
+swagger {
+	inputSpec = 'http://rpi:8080/v2/api-docs'
+	outputDir = file('build/swagger')
+	lang = 'java'
+
+	additionalProperties = [
+			'library'       : 'resttemplate',
+			'modelPackage'  : 'org.homepisec.sensor.rest.client.model',
+			'apiPackage'    : 'org.homepisec.sensor.rest.client.api',
+			'invokerPackage': 'org.homepisec.sensor.rest.client',
+			'java8'         : 'true',
+			'dateLibrary'   : 'java8'
+	]
+}
+
+task genControlRestClient {
+	group 'build'
+	doLast {
+		copy {
+			from file("${project.buildDir.path}/swagger/src/main/java")
+			into "${project.projectDir}/src/main/java"
+		}
+	}
+}
+
+genControlRestClient.dependsOn('swagger')
+
 
 repositories {
 	mavenCentral()
@@ -25,7 +57,6 @@ repositories {
 }
 
 dependencies {
-	compile project(':homepisec-dto')
 	compile "org.springframework.boot:spring-boot-starter:${rootProject.springBootVersion}"
 	compile "org.springframework.boot:spring-boot-starter-web:${rootProject.springBootVersion}"
 	compile "io.springfox:springfox-swagger2:${rootProject.swaggerVersion}"

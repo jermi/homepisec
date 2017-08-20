@@ -1,3 +1,2 @@
 include 'homepisec-control'
-include 'homepisec-dto'
 include 'homepisec-sensor'

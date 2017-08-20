@@ -1,6 +1,5 @@
 package org.homepisec.sensor.rest;
 
-import org.homepisec.dto.ApiEndpoints;
 import org.homepisec.sensor.core.DeviceRegistry;
 import org.homepisec.sensor.core.RelayService;
 import org.springframework.http.MediaType;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(ApiEndpoints.API)
+@RequestMapping("/api")
 @Validated
 public class SensorApiController {
 
@@ -27,7 +26,7 @@ public class SensorApiController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.RELAYS,
+            value = "/relays",
             method = RequestMethod.GET,
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
@@ -44,7 +43,7 @@ public class SensorApiController {
     }
 
     @RequestMapping(
-            value = ApiEndpoints.RELAYS,
+            value = "/relays",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
