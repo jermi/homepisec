@@ -43,13 +43,16 @@ public class ReadingsService {
         });
     }
 
-    public List<EnrichedEvent> readEvents() {
+    public List<EnrichedEvent> getReadings() {
         return new ArrayList<>(readings);
     }
 
     public List<Device> getDevices() {
         synchronized (readings) {
-            return readings.stream().map(EnrichedEvent::getDevice).collect(Collectors.toList());
+            return readings
+                    .stream()
+                    .map(EnrichedEvent::getDevice)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -71,7 +74,10 @@ public class ReadingsService {
     @Scheduled(fixedRate = 1000)
     public void removeOldReadings() {
         synchronized (readings) {
-            final Date limit = Date.from(LocalDateTime.now().minus(READING_TTL_SECONDS, ChronoUnit.SECONDS).atZone(ZoneId.of("Europe/Warsaw")).toInstant());
+            final Date limit = Date.from(LocalDateTime.now()
+                    .minus(READING_TTL_SECONDS, ChronoUnit.SECONDS)
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
             final Iterator<EnrichedEvent> it = readings.descendingIterator();
             while (it.hasNext()) {
                 final EnrichedEvent entry = it.next();

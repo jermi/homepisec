@@ -10,6 +10,8 @@ import org.homepisec.control.core.alarm.events.AlarmDisarmEvent;
 import org.homepisec.control.core.alarm.events.AlarmTriggeredEvent;
 import org.homepisec.dto.DeviceType;
 import org.homepisec.dto.EnrichedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class AlarmStatusService {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final AlarmStatus alarmStatus = new AlarmStatus();
     private final int alarmCountdownSeconds;
     private final PublishSubject<EnrichedEvent> eventsSubject;
@@ -37,7 +40,10 @@ public class AlarmStatusService {
     private Disposable disposable;
 
     @Autowired
-    public AlarmStatusService(@Value("${alarmCountdownSeconds}") int alarmCountdownSeconds, PublishSubject<EnrichedEvent> eventsSubject) {
+    public AlarmStatusService(
+            @Value("${alarmCountdownSeconds}") int alarmCountdownSeconds,
+            PublishSubject<EnrichedEvent> eventsSubject
+    ) {
         this.alarmCountdownSeconds = alarmCountdownSeconds;
         this.eventsSubject = eventsSubject;
     }
@@ -76,6 +82,7 @@ public class AlarmStatusService {
 
     private void handleAlarmArm() {
         if (AlarmState.DISARMED.equals(alarmStatus.getState())) {
+            logger.info("arming alarm");
             alarmStatus.setState(AlarmState.ARMED);
         }
     }
@@ -92,6 +99,7 @@ public class AlarmStatusService {
     }
 
     private void handleAlarmDisarm() {
+        logger.info("disarming alarm");
         alarmStatus.setState(AlarmState.DISARMED);
         if (scheduledFuture != null && !scheduledFuture.isCancelled() && !scheduledFuture.isDone()) {
             scheduledFuture.cancel(false);
@@ -101,18 +109,22 @@ public class AlarmStatusService {
 
     private void handleAlarmCountdown() {
         if (alarmStatus.getState().equals(AlarmState.ARMED)) {
+            logger.info("starting alarm countdown");
             alarmStatus.setState(AlarmState.COUNTDOWN);
             alarmStatus.setCountdownStart(new Date());
             final LocalDateTime countdownEndDateTime = LocalDateTime.now()
                     .plus(alarmCountdownSeconds, ChronoUnit.SECONDS);
-            final Date countdownEnd = Date.from(countdownEndDateTime.atZone(ZoneId.of("Europe/Warsaw")).toInstant());
+            final Date countdownEnd = Date.from(countdownEndDateTime.atZone(ZoneId.systemDefault()).toInstant());
             alarmStatus.setCountdownEnd(countdownEnd);
-            delayAlarmTrigger();
+            triggerAlarmAfterCountdown();
         }
     }
 
-    private void delayAlarmTrigger() {
-        final Runnable runnable = () -> eventsSubject.onNext(new AlarmTriggeredEvent(new Date()));
+    private void triggerAlarmAfterCountdown() {
+        final Runnable runnable = () -> {
+            logger.info("triggering alarm");
+            eventsSubject.onNext(new AlarmTriggeredEvent(new Date()));
+        };
         scheduledFuture = scheduler.schedule(runnable, alarmCountdownSeconds, TimeUnit.SECONDS);
     }
 

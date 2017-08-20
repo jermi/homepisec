@@ -1,52 +1,25 @@
-package org.homepisec.control.rest;
+package org.homepisec.control.rest.api;
 
-import org.homepisec.control.core.ReadingsService;
-import org.homepisec.control.core.alarm.AlarmStatus;
 import org.homepisec.control.core.AlarmStatusService;
+import org.homepisec.control.core.alarm.AlarmStatus;
 import org.homepisec.dto.ApiEndpoints;
-import org.homepisec.dto.EnrichedEvent;
-import org.homepisec.dto.EventDeviceReading;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(ApiEndpoints.API)
 @Validated
-public class ApiController {
+public class AlarmController {
 
-    private final ReadingsService readingsService;
     private final AlarmStatusService alarmStatusService;
 
     @Autowired
-    public ApiController(ReadingsService readingsService, AlarmStatusService alarmStatusService) {
-        this.readingsService = readingsService;
+    public AlarmController(AlarmStatusService alarmStatusService) {
         this.alarmStatusService = alarmStatusService;
-    }
-
-    @RequestMapping(
-            value = ApiEndpoints.READINGS,
-            method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
-    )
-    public boolean postReadings(@RequestBody @Valid EventDeviceReading event) {
-        readingsService.handleDeviceRead(event.getPayload());
-        return true;
-    }
-
-    @RequestMapping(
-            value = ApiEndpoints.READINGS,
-            method = RequestMethod.GET,
-            consumes = MediaType.ALL_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
-    )
-    public List<EnrichedEvent> getReadings() {
-        return readingsService.readEvents();
     }
 
     @RequestMapping(
@@ -62,7 +35,6 @@ public class ApiController {
     @RequestMapping(
             value = ApiEndpoints.ALARM_ARM,
             method = RequestMethod.POST,
-            consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public AlarmStatus postAlarmArm() {
@@ -73,7 +45,6 @@ public class ApiController {
     @RequestMapping(
             value = ApiEndpoints.ALARM_DISARM,
             method = RequestMethod.POST,
-            consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public AlarmStatus postAlarmDisarm() {

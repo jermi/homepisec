@@ -20,48 +20,48 @@ public class DeviceRegistryProvider {
 
     private static final Charset CHARSET_UTF8 = Charsets.toCharset("UTF-8");
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final String capabilitiesPath;
+    private final String devicesPath;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public DeviceRegistryProvider(
-            @Value("${capabilitiesPath:#{null}}") String capabilitiesPath,
+            @Value("${devicesPath:#{null}}") String devicesPath,
             ObjectMapper objectMapper
     ) {
-        this.capabilitiesPath = capabilitiesPath;
+        this.devicesPath = devicesPath;
         this.objectMapper = objectMapper;
     }
 
     @PostConstruct
     public void init() {
-        if(capabilitiesPath != null) {
-            logger.info("device registry will be loaded from {}", capabilitiesPath);
+        if(devicesPath != null) {
+            logger.info("devices definition will be loaded from {}", devicesPath);
         } else {
-            logger.info("will be used default device registry");
+            logger.info("will use default devices definition");
         }
     }
 
     public DeviceRegistry loadCapabilities() {
         try {
-            final String capabilitiesJson;
-            if (capabilitiesPath != null) {
-                logger.debug("loading capabilities from file: {}", capabilitiesPath);
-                capabilitiesJson = new String(Files.readAllBytes(Paths.get(capabilitiesPath)), CHARSET_UTF8);
+            final String devicesJson;
+            if (devicesPath != null) {
+                logger.debug("loading devices definition from file: {}", devicesPath);
+                devicesJson = new String(Files.readAllBytes(Paths.get(devicesPath)), CHARSET_UTF8);
             } else {
-                logger.debug("loading default capabilities");
-                final InputStream is = getClass().getClassLoader().getResourceAsStream("deviceRegistry.json");
-                capabilitiesJson = new Scanner(is).useDelimiter("\\A").next();
+                logger.debug("loading default devices definition");
+                final InputStream is = getClass().getClassLoader().getResourceAsStream("devices.json");
+                devicesJson = new Scanner(is).useDelimiter("\\A").next();
             }
-            return objectMapper.readValue(capabilitiesJson, DeviceRegistry.class);
+            return objectMapper.readValue(devicesJson, DeviceRegistry.class);
         } catch (Exception e) {
-            final String msg = "error when loading capabilities: " + e.getMessage();
+            final String msg = "error when loading configuration: " + e.getMessage();
             logger.error(msg, e);
-            throw new CapabilitiesProviderException(msg, e);
+            throw new DeviceRegistryException(msg, e);
         }
     }
 
-    public static class CapabilitiesProviderException extends RuntimeException {
-        public CapabilitiesProviderException(String message, Throwable cause) {
+    public static class DeviceRegistryException extends RuntimeException {
+        public DeviceRegistryException(String message, Throwable cause) {
             super(message, cause);
         }
     }

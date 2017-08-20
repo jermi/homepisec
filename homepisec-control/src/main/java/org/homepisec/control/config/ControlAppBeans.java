@@ -6,7 +6,10 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.reactivex.subjects.PublishSubject;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.homepisec.control.rest.client.ApiClient;
 import org.homepisec.dto.EnrichedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -20,6 +23,7 @@ public class ControlAppBeans {
     RestTemplate restTemplate() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setReadTimeout(10000);
+        factory.setHttpClient(HttpClientBuilder.create().disableCookieManagement().build());
         return new RestTemplate(factory);
     }
 
@@ -37,6 +41,12 @@ public class ControlAppBeans {
     @Bean
     PublishSubject<EnrichedEvent> eventsSubject() {
         return PublishSubject.create();
+    }
+
+    @Bean
+    @Autowired
+    ApiClient apiClient(RestTemplate restTemplate) {
+        return new ApiClient(restTemplate).setBasePath("http://rpi:7000/");
     }
 
 }

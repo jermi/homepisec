@@ -1,46 +1,79 @@
 buildscript {
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${rootProject.springBootVersion}")
-	}
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${rootProject.springBootVersion}")
+    }
+}
+
+plugins {
+    id 'org.detoeuf.swagger-codegen' version '1.7.4'
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.detoeuf.swagger-codegen'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+swagger {
+    inputSpec = 'http://rpi:7000/v2/api-docs'
+    outputDir = file('build/swagger')
+    lang = 'java'
+
+    additionalProperties = [
+            "basePath"      : "https://rpi:7000",
+            'library'       : 'resttemplate',
+            'modelPackage'  : 'org.homepisec.control.rest.client',
+            'apiPackage'    : 'org.homepisec.control.rest.client',
+            'invokerPackage': 'org.homepisec.control.rest.client',
+            'java8'         : 'true',
+            'dateLibrary'   : 'java8'
+    ]
+}
+
+task genSensorRestClient {
+    group 'build'
+    doLast {
+        copy {
+            from file("${project.buildDir.path}/swagger/src/main/java")
+            into "${project.projectDir}/src/main/java"
+        }
+    }
+}
+
+genSensorRestClient.dependsOn('swagger')
+
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
-	compile project(':homepisec-dto')
-	compile("org.springframework.boot:spring-boot-starter-actuator")
-	compile("org.springframework.boot:spring-boot-starter-aop")
-	compile "com.fasterxml.jackson.module:jackson-module-parameter-names:${rootProject.jacksonVersion}"
-	compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${rootProject.jacksonVersion}")
-	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rootProject.jacksonVersion}")
+    compile project(':homepisec-dto')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-aop")
+    compile "com.fasterxml.jackson.module:jackson-module-parameter-names:${rootProject.jacksonVersion}"
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${rootProject.jacksonVersion}")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${rootProject.jacksonVersion}")
 //	compile('org.flywaydb:flyway-core')
 //	compile('org.springframework.boot:spring-boot-starter-jdbc')
-	compile("org.springframework.boot:spring-boot-starter-mustache:${rootProject.springBootVersion}")
-	compile("org.springframework.boot:spring-boot-starter-validation:${rootProject.springBootVersion}")
-	compile("org.springframework.boot:spring-boot-starter-web:${rootProject.springBootVersion}")
-	runtime("org.springframework.boot:spring-boot-devtools:${rootProject.springBootVersion}")
-	compile "io.springfox:springfox-swagger2:${rootProject.swaggerVersion}"
-	compile "io.springfox:springfox-swagger-ui:${rootProject.swaggerVersion}"
-	compile 'org.apache.httpcomponents:httpclient:4.5.2'
-	compile "io.reactivex.rxjava2:rxjava:2.1.2"
+    compile("org.springframework.boot:spring-boot-starter-mustache:${rootProject.springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-validation:${rootProject.springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${rootProject.springBootVersion}")
+    runtime("org.springframework.boot:spring-boot-devtools:${rootProject.springBootVersion}")
+    compile "io.springfox:springfox-swagger2:${rootProject.swaggerVersion}"
+    compile "io.springfox:springfox-swagger-ui:${rootProject.swaggerVersion}"
+    compile 'org.apache.httpcomponents:httpclient:4.5.2'
+    compile "io.reactivex.rxjava2:rxjava:2.1.2"
 //	runtime('com.h2database:h2')
 //	runtime('org.postgresql:postgresql')
-	testCompile("org.springframework.boot:spring-boot-starter-test:${rootProject.springBootVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${rootProject.springBootVersion}")
 }

@@ -5,25 +5,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Component
 public class GpioProvider {
 
-    private static final Charset CHARSET_UTF8 = Charsets.toCharset("UTF-8");
-    private static final String GPIO = "/sys/class/gpio";
-    private static final String GPIO_PIN = GPIO + "/gpio";
+    private static final String GPIO_PIN_PATH = "/sys/class/gpio/gpio";
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @PostConstruct
+    public void gpioCheck() {
+        final String cmd = "gpio -v";
+        try {
+            final Process process = Runtime.getRuntime().exec(cmd);
+            checkExitCode(cmd, process);
+        } catch (Exception e) {
+            logger.error("*** SERIOUS PROBLEM DETECTED! *** unable to execute gpio command \"" + cmd + "\": " + e.getMessage()
+                    + ", verify that Wiring Pi is installed and available under $PATH - consult http://wiringpi.com/download-and-install/");
+        }
+    }
 
     public boolean readPin(int pin) {
         try {
             enablePin(pin, getCurrentPinDirection(pin));
-            final String pinValuePath = GPIO_PIN + pin + "/value";
-            final String pinValue = new String(Files.readAllBytes(Paths.get(pinValuePath)), CHARSET_UTF8).trim();
+            final String pinValuePath = GPIO_PIN_PATH + pin + "/value";
+            final String pinValue = readFileContents(pinValuePath);
             switch (pinValue) {
                 case "1":
                     return true;
@@ -37,6 +47,10 @@ public class GpioProvider {
             logger.error(msg, e);
             throw new GpioException(msg, e);
         }
+    }
+
+    private static String readFileContents(String pinValuePath) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(pinValuePath)), Charsets.toCharset("UTF-8")).trim();
     }
 
     public void writePin(int pin, boolean value) {
@@ -56,7 +70,7 @@ public class GpioProvider {
 
     private void enablePin(int pin, final Direction direction) {
         try {
-            final boolean pinEnabled = new File(GPIO_PIN + pin).exists();
+            final boolean pinEnabled = new File(GPIO_PIN_PATH + pin).exists();
             if (!pinEnabled) {
                 final String cmd = "gpio -g export " + pin + " " + direction.code;
                 logger.debug("enabling pin with command: {}", cmd);
@@ -103,8 +117,8 @@ public class GpioProvider {
     }
 
     private static Direction getCurrentPinDirection(int pin) throws IOException {
-        final String directionPath = GPIO_PIN + pin + "/direction";
-        final String directionString = new String(Files.readAllBytes(Paths.get(directionPath)), CHARSET_UTF8).trim();
+        final String directionPath = GPIO_PIN_PATH + pin + "/direction";
+        final String directionString = readFileContents(directionPath);
         return Direction.getForCode(directionString);
     }
 

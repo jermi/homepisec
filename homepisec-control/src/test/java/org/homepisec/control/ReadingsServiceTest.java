@@ -21,7 +21,7 @@ public class ReadingsServiceTest {
         // given
         final ReadingsService instance = new ReadingsService(eventsSubject);
         // when
-        final List<EnrichedEvent> events = instance.readEvents();
+        final List<EnrichedEvent> events = instance.getReadings();
         // then
         Assert.assertEquals(0, events.size());
     }
@@ -37,7 +37,7 @@ public class ReadingsServiceTest {
                 new DeviceReading(device, "true"),
                 new DeviceReading(device, "false")
         ));
-        final List<EnrichedEvent> events = instance.readEvents();
+        final List<EnrichedEvent> events = instance.getReadings();
         // then
         Assert.assertEquals(1, events.size());
         Assert.assertEquals("false", events.get(0).getPayload());
