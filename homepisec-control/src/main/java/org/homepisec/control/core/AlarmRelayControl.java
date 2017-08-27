@@ -8,7 +8,6 @@ import org.homepisec.control.rest.dto.Device;
 import org.homepisec.control.rest.dto.DeviceEvent;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.stream.Stream;
 
@@ -17,8 +16,7 @@ public class AlarmRelayControl {
 
     private final SensorAppRegistry sensorAppRegistry;
     private final SensorApiControllerApi apiClient;
-    private final PublishSubject<DeviceEvent> eventsSubject;
-    private Disposable disposable;
+    private final Disposable disposable;
 
     public AlarmRelayControl(
             SensorAppRegistry sensorAppRegistry,
@@ -27,11 +25,6 @@ public class AlarmRelayControl {
     ) {
         this.sensorAppRegistry = sensorAppRegistry;
         this.apiClient = apiClient;
-        this.eventsSubject = eventsSubject;
-    }
-
-    @PostConstruct
-    public void init() {
         disposable = eventsSubject.subscribe(this::handleEvent);
     }
 
