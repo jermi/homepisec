@@ -11,7 +11,7 @@
  */
 
 
-package org.homepisec.control.rest.client;
+package org.homepisec.control.rest.client.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,17 +21,35 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * SwitchRelayRequest
+ * DeviceGpio
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T08:07:46.822+02:00")
-public class SwitchRelayRequest {
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T11:09:27.770+02:00")
+public class DeviceGpio {
+  @JsonProperty("gpio")
+  private Integer gpio = null;
+
   @JsonProperty("id")
   private String id = null;
 
-  @JsonProperty("value")
-  private Boolean value = null;
+  public DeviceGpio gpio(Integer gpio) {
+    this.gpio = gpio;
+    return this;
+  }
 
-  public SwitchRelayRequest id(String id) {
+   /**
+   * Get gpio
+   * @return gpio
+  **/
+  @ApiModelProperty(value = "")
+  public Integer getGpio() {
+    return gpio;
+  }
+
+  public void setGpio(Integer gpio) {
+    this.gpio = gpio;
+  }
+
+  public DeviceGpio id(String id) {
     this.id = id;
     return this;
   }
@@ -49,24 +67,6 @@ public class SwitchRelayRequest {
     this.id = id;
   }
 
-  public SwitchRelayRequest value(Boolean value) {
-    this.value = value;
-    return this;
-  }
-
-   /**
-   * Get value
-   * @return value
-  **/
-  @ApiModelProperty(value = "")
-  public Boolean getValue() {
-    return value;
-  }
-
-  public void setValue(Boolean value) {
-    this.value = value;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -76,24 +76,24 @@ public class SwitchRelayRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SwitchRelayRequest switchRelayRequest = (SwitchRelayRequest) o;
-    return Objects.equals(this.id, switchRelayRequest.id) &&
-        Objects.equals(this.value, switchRelayRequest.value);
+    DeviceGpio deviceGpio = (DeviceGpio) o;
+    return Objects.equals(this.gpio, deviceGpio.gpio) &&
+        Objects.equals(this.id, deviceGpio.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, value);
+    return Objects.hash(gpio, id);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class SwitchRelayRequest {\n");
+    sb.append("class DeviceGpio {\n");
     
+    sb.append("    gpio: ").append(toIndentedString(gpio)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");
     return sb.toString();
   }

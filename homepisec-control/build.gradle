@@ -29,8 +29,8 @@ swagger {
 
     additionalProperties = [
             'library'       : 'resttemplate',
-            'modelPackage'  : 'org.homepisec.control.rest.client',
-            'apiPackage'    : 'org.homepisec.control.rest.client',
+            'modelPackage'  : 'org.homepisec.control.rest.client.model',
+            'apiPackage'    : 'org.homepisec.control.rest.client.api',
             'invokerPackage': 'org.homepisec.control.rest.client',
             'java8'         : 'true',
             'dateLibrary'   : 'java8'

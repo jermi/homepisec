@@ -7,7 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.reactivex.subjects.PublishSubject;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.homepisec.control.dto.EnrichedEvent;
+import org.homepisec.control.rest.dto.DeviceEvent;
 import org.homepisec.control.rest.client.ApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,7 @@ public class ControlAppBeans {
     }
 
     @Bean
-    PublishSubject<EnrichedEvent> eventsSubject() {
+    PublishSubject<DeviceEvent> eventsSubject() {
         return PublishSubject.create();
     }
 

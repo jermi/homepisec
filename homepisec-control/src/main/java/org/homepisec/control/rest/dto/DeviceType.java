@@ -1,7 +1,7 @@
-package org.homepisec.control.dto;
+package org.homepisec.control.rest.dto;
 
 public enum DeviceType {
-    SENSOR,
+    SENSOR_APP,
     SENSOR_MOTION,
     SENSOR_TEMP,
     RELAY,

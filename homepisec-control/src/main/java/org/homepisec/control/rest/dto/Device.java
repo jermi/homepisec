@@ -1,8 +1,8 @@
-package org.homepisec.control.dto;
+package org.homepisec.control.rest.dto;
 
 public class Device {
 
-    public static final Device CONTROL = new Device("CONTROL", DeviceType.CONTROL);
+    public static final Device CONTROL = new Device(DeviceType.CONTROL.name(), DeviceType.CONTROL);
 
     private String id;
     private DeviceType type;

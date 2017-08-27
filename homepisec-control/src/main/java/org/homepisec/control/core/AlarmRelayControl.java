@@ -2,22 +2,30 @@ package org.homepisec.control.core;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
-import org.homepisec.control.dto.EnrichedEvent;
-import org.homepisec.control.rest.client.SensorApiControllerApi;
-import org.homepisec.control.rest.client.SwitchRelayRequest;
+import org.homepisec.control.rest.client.api.SensorApiControllerApi;
+import org.homepisec.control.rest.client.model.SwitchRelayRequest;
+import org.homepisec.control.rest.dto.Device;
+import org.homepisec.control.rest.dto.DeviceEvent;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.stream.Stream;
 
 @Service
 public class AlarmRelayControl {
 
+    private final SensorAppRegistry sensorAppRegistry;
     private final SensorApiControllerApi apiClient;
-    private final PublishSubject<EnrichedEvent> eventsSubject;
+    private final PublishSubject<DeviceEvent> eventsSubject;
     private Disposable disposable;
 
-    public AlarmRelayControl(SensorApiControllerApi apiClient, PublishSubject<EnrichedEvent> eventsSubject) {
+    public AlarmRelayControl(
+            SensorAppRegistry sensorAppRegistry,
+            SensorApiControllerApi apiClient,
+            PublishSubject<DeviceEvent> eventsSubject
+    ) {
+        this.sensorAppRegistry = sensorAppRegistry;
         this.apiClient = apiClient;
         this.eventsSubject = eventsSubject;
     }
@@ -32,7 +40,7 @@ public class AlarmRelayControl {
         disposable.dispose();
     }
 
-    private void handleEvent(EnrichedEvent event) {
+    private void handleEvent(DeviceEvent event) {
         switch (event.getType()) {
             case ALARM_DISARM:
                 handleAlarmDisarm();
@@ -46,11 +54,22 @@ public class AlarmRelayControl {
     }
 
     private void handleAlarmDisarm() {
-        apiClient.switchRelayUsingPOST(new SwitchRelayRequest().id("relay-alarm").value(false));
+        getAlarmRelaysIds().forEach(id -> invokeRelaySwitch(apiClient, id, false));
     }
 
     private void handleAlarmTrigger() {
-        apiClient.switchRelayUsingPOST(new SwitchRelayRequest().id("relay-alarm").value(true));
+        getAlarmRelaysIds().forEach(id -> invokeRelaySwitch(apiClient, id, true));
+    }
+
+    private Stream<String> getAlarmRelaysIds() {
+        return sensorAppRegistry.getEndpoints()
+                .stream()
+                .flatMap(l -> l.getAlarmRelays().stream())
+                .map(Device::getId);
+    }
+
+    private static void invokeRelaySwitch(SensorApiControllerApi apiClient, String id, boolean value) {
+        apiClient.switchRelayUsingPOST(new SwitchRelayRequest().id(id).value(value));
     }
 
 }

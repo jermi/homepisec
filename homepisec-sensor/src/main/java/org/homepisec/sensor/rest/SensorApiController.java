@@ -1,7 +1,9 @@
 package org.homepisec.sensor.rest;
 
+import org.homepisec.sensor.config.SensorApiEndpoints;
 import org.homepisec.sensor.core.DeviceRegistry;
 import org.homepisec.sensor.core.RelayService;
+import org.homepisec.sensor.rest.dto.SwitchRelayRequest;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(SensorApiEndpoints.API)
 @Validated
 public class SensorApiController {
 
@@ -26,7 +28,7 @@ public class SensorApiController {
     }
 
     @RequestMapping(
-            value = "/relays",
+            value = SensorApiEndpoints.RELAYS,
             method = RequestMethod.GET,
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
@@ -35,25 +37,20 @@ public class SensorApiController {
         return relayService.getAllRelays();
     }
 
-    public static class SwitchRelayRequest {
-        @NotNull
-        public String id;
-        @NotNull
-        public Boolean value;
-    }
-
     @RequestMapping(
-            value = "/relays",
+            value = SensorApiEndpoints.RELAYS,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public boolean switchRelay(@RequestBody @Valid @NotNull SwitchRelayRequest relayRequest) {
-        final Optional<DeviceRegistry.DeviceGpio> relay = relayService.getAllRelays().stream().filter(r -> r.getId().equals(relayRequest.id)).findFirst();
+        final Optional<DeviceRegistry.DeviceGpio> relay = relayService.getAllRelays()
+                .stream()
+                .filter(r -> r.getId().equals(relayRequest.getId()))
+                .findFirst();
         return relay
-                .map(r -> relayService.switchRelay(r, relayRequest.value))
+                .map(r -> relayService.switchRelay(r, relayRequest.getValue()))
                 .orElse(false);
     }
-
 
 }

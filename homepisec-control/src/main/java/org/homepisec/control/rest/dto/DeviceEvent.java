@@ -1,17 +1,17 @@
-package org.homepisec.control.dto;
+package org.homepisec.control.rest.dto;
 
 import java.util.Date;
 
-public class EnrichedEvent<PAYLOAD> extends Event<PAYLOAD> {
+public class DeviceEvent<PAYLOAD> extends Event<PAYLOAD> {
 
     private Date time;
     private Device device;
 
-    public EnrichedEvent() {
+    public DeviceEvent() {
         super(null, null);
     }
 
-    public EnrichedEvent(EventType type, Date time, Device device, PAYLOAD payload) {
+    public DeviceEvent(EventType type, Date time, Device device, PAYLOAD payload) {
         super(type, payload);
         this.time = time;
         this.device = device;
@@ -27,7 +27,7 @@ public class EnrichedEvent<PAYLOAD> extends Event<PAYLOAD> {
 
     @Override
     public String toString() {
-        return "EnrichedEvent{" +
+        return "DeviceEvent{" +
                 "time=" + time +
                 ", device=" + device +
                 '}';

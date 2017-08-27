@@ -2,8 +2,8 @@ package org.homepisec.control.rest.api;
 
 import org.homepisec.control.config.ControlApiEndpoints;
 import org.homepisec.control.core.ReadingsService;
-import org.homepisec.control.dto.EnrichedEvent;
-import org.homepisec.control.dto.EventDeviceReading;
+import org.homepisec.control.rest.dto.DeviceEvent;
+import org.homepisec.control.rest.dto.EventDeviceReading;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +34,7 @@ public class ReadingsController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public boolean postReadings(@RequestBody @Valid EventDeviceReading event) {
-        readingsService.handleDeviceRead(event.getPayload());
+        readingsService.emitDeviceReadEvent(event.getPayload());
         return true;
     }
 
@@ -44,7 +44,7 @@ public class ReadingsController {
             consumes = MediaType.ALL_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
-    public List<EnrichedEvent> getReadings() {
+    public List<DeviceEvent> getReadings() {
         return readingsService.getReadings();
     }
 

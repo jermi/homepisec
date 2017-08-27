@@ -8,8 +8,8 @@ import org.homepisec.control.core.alarm.events.AlarmArmEvent;
 import org.homepisec.control.core.alarm.events.AlarmCountdownEvent;
 import org.homepisec.control.core.alarm.events.AlarmDisarmEvent;
 import org.homepisec.control.core.alarm.events.AlarmTriggeredEvent;
-import org.homepisec.control.dto.DeviceType;
-import org.homepisec.control.dto.EnrichedEvent;
+import org.homepisec.control.rest.dto.DeviceEvent;
+import org.homepisec.control.rest.dto.DeviceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +33,18 @@ public class AlarmStatusService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final AlarmStatus alarmStatus = new AlarmStatus();
     private final int alarmCountdownSeconds;
-    private final PublishSubject<EnrichedEvent> eventsSubject;
-    private final ScheduledExecutorService scheduler =
-            Executors.newScheduledThreadPool(1);
+    private final PublishSubject<DeviceEvent> eventsSubject;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> scheduledFuture;
-    private Disposable disposable;
+    private final Disposable disposable;
 
     @Autowired
     public AlarmStatusService(
             @Value("${alarmCountdownSeconds}") int alarmCountdownSeconds,
-            PublishSubject<EnrichedEvent> eventsSubject
+            PublishSubject<DeviceEvent> eventsSubject
     ) {
         this.alarmCountdownSeconds = alarmCountdownSeconds;
         this.eventsSubject = eventsSubject;
-    }
-
-    @PostConstruct
-    public void init() {
         disposable = eventsSubject.subscribe(this::handleEvent);
     }
 
@@ -58,7 +53,7 @@ public class AlarmStatusService {
         disposable.dispose();
     }
 
-    private void handleEvent(EnrichedEvent event) {
+    private void handleEvent(DeviceEvent event) {
         switch (event.getType()) {
             case DEVICE_READ:
                 handleDeviceRead(event);
@@ -87,7 +82,7 @@ public class AlarmStatusService {
         }
     }
 
-    private void handleDeviceRead(EnrichedEvent event) {
+    private void handleDeviceRead(DeviceEvent event) {
         final boolean isAlarmArmed = alarmStatus.getState().equals(AlarmState.ARMED);
         final boolean isDeviceMotionSensor = DeviceType.SENSOR_MOTION.equals(event.getDevice().getType());
         if (isAlarmArmed && isDeviceMotionSensor) {

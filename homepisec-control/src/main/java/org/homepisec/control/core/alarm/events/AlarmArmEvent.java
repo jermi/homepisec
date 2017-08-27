@@ -1,12 +1,12 @@
 package org.homepisec.control.core.alarm.events;
 
-import org.homepisec.control.dto.Device;
-import org.homepisec.control.dto.EnrichedEvent;
-import org.homepisec.control.dto.EventType;
+import org.homepisec.control.rest.dto.Device;
+import org.homepisec.control.rest.dto.DeviceEvent;
+import org.homepisec.control.rest.dto.EventType;
 
 import java.util.Date;
 
-public class AlarmArmEvent extends EnrichedEvent<Object> {
+public class AlarmArmEvent extends DeviceEvent<Object> {
     public AlarmArmEvent(Date date) {
         super(EventType.ALARM_ARM, date, Device.CONTROL, null);
     }

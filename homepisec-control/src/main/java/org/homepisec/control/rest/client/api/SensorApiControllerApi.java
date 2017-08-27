@@ -1,9 +1,9 @@
-package org.homepisec.control.rest.client;
+package org.homepisec.control.rest.client.api;
 
 import org.homepisec.control.rest.client.ApiClient;
 
-import org.homepisec.control.rest.client.DeviceGpio;
-import org.homepisec.control.rest.client.SwitchRelayRequest;
+import org.homepisec.control.rest.client.model.DeviceGpio;
+import org.homepisec.control.rest.client.model.SwitchRelayRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +24,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T08:07:46.822+02:00")
-@Component("org.homepisec.control.rest.client.SensorApiControllerApi")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T11:09:27.770+02:00")
+@Component("org.homepisec.control.rest.client.api.SensorApiControllerApi")
 public class SensorApiControllerApi {
     private ApiClient apiClient;
 

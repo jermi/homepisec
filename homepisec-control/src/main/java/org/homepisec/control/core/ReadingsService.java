@@ -1,13 +1,14 @@
 package org.homepisec.control.core;
 
 import io.reactivex.subjects.PublishSubject;
-import org.homepisec.control.dto.Device;
-import org.homepisec.control.dto.DeviceReading;
-import org.homepisec.control.dto.EnrichedEvent;
-import org.homepisec.control.dto.EventType;
+import org.homepisec.control.rest.dto.Device;
+import org.homepisec.control.rest.dto.DeviceEvent;
+import org.homepisec.control.rest.dto.DeviceReading;
+import org.homepisec.control.rest.dto.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +21,23 @@ import java.util.stream.Collectors;
 @Service
 public class ReadingsService {
 
-    private static final int READING_TTL_SECONDS = 60;
+    private final int readingTtlSeconds;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final PublishSubject<EnrichedEvent> eventsSubject;
-    private final ArrayDeque<EnrichedEvent> readings = new ArrayDeque<>();
+    private final PublishSubject<DeviceEvent> eventsSubject;
+    private final ArrayDeque<DeviceEvent> readings = new ArrayDeque<>();
 
-    @Autowired
-    public ReadingsService(PublishSubject<EnrichedEvent> eventsSubject) {
+    public ReadingsService(
+            @Value(("${readingTtlSeconds"))
+            int readingTtlSeconds,
+            PublishSubject<DeviceEvent> eventsSubject
+    ) {
+        this.readingTtlSeconds = readingTtlSeconds;
         this.eventsSubject = eventsSubject;
     }
 
-    public void handleDeviceRead(List<DeviceReading> readings) {
+    public void emitDeviceReadEvent(List<DeviceReading> readings) {
         readings.forEach(reading -> {
-            final EnrichedEvent ee = new EnrichedEvent<>(
+            final DeviceEvent ee = new DeviceEvent<>(
                     EventType.DEVICE_READ,
                     new Date(),
                     reading.getDevice(),
@@ -43,7 +48,7 @@ public class ReadingsService {
         });
     }
 
-    public List<EnrichedEvent> getReadings() {
+    public List<DeviceEvent> getReadings() {
         return new ArrayList<>(readings);
     }
 
@@ -51,17 +56,17 @@ public class ReadingsService {
         synchronized (readings) {
             return readings
                     .stream()
-                    .map(EnrichedEvent::getDevice)
+                    .map(DeviceEvent::getDevice)
                     .collect(Collectors.toList());
         }
     }
 
-    private void addReading(EnrichedEvent event) {
+    private void addReading(DeviceEvent event) {
         final String deviceId = event.getDevice().getId();
         synchronized (readings) {
-            final Iterator<EnrichedEvent> it = readings.descendingIterator();
+            final Iterator<DeviceEvent> it = readings.descendingIterator();
             while (it.hasNext()) {
-                final EnrichedEvent entry = it.next();
+                final DeviceEvent entry = it.next();
                 if (entry.getDevice().getId().equals(deviceId)) {
                     it.remove();
                     break;
@@ -74,14 +79,14 @@ public class ReadingsService {
     @Scheduled(fixedRate = 1000)
     public void removeOldReadings() {
         synchronized (readings) {
-            final Date limit = Date.from(LocalDateTime.now()
-                    .minus(READING_TTL_SECONDS, ChronoUnit.SECONDS)
+            final Date ttlLimit = Date.from(LocalDateTime.now()
+                    .plus(readingTtlSeconds, ChronoUnit.SECONDS)
                     .atZone(ZoneId.systemDefault())
                     .toInstant());
-            final Iterator<EnrichedEvent> it = readings.descendingIterator();
+            final Iterator<DeviceEvent> it = readings.descendingIterator();
             while (it.hasNext()) {
-                final EnrichedEvent entry = it.next();
-                if (entry.getTime().compareTo(limit) < 0) {
+                final DeviceEvent entry = it.next();
+                if (ttlLimit.compareTo(entry.getTime()) < 0) {
                     logger.debug("removing old reading entry {}", entry);
                     it.remove();
                 }
