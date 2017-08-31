@@ -6,7 +6,6 @@ import org.homepisec.sensor.rest.client.model.DeviceReading;
 import org.homepisec.sensor.rest.client.model.EventDeviceReading;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +19,17 @@ public class SensorReadingsService {
     private final ReadingsControllerApi readingsControllerApi;
     private final GpioProvider gpioProvider;
     private final DeviceRegistryProvider deviceRegistryProvider;
+    private final W1TempReader w1TempReader;
 
     public SensorReadingsService(
             ReadingsControllerApi readingsControllerApi,
             GpioProvider gpioProvider,
-            DeviceRegistryProvider deviceRegistryProvider
-    ) {
+            DeviceRegistryProvider deviceRegistryProvider,
+            W1TempReader w1TempReader) {
         this.readingsControllerApi = readingsControllerApi;
         this.gpioProvider = gpioProvider;
         this.deviceRegistryProvider = deviceRegistryProvider;
+        this.w1TempReader = w1TempReader;
     }
 
     @Scheduled(fixedRateString = "${updateFrequency}")
@@ -38,6 +39,7 @@ public class SensorReadingsService {
         populateGpioPinReadings(readings, deviceRegistry.getMotionSensors(), Device.TypeEnum.SENSOR_MOTION);
         populateGpioPinReadings(readings, deviceRegistry.getRelays(), Device.TypeEnum.RELAY);
         populateGpioPinReadings(readings, deviceRegistry.getAlarmRelays(), Device.TypeEnum.RELAY);
+        readings.addAll(w1TempReader.getTempReadings(deviceRegistry.getTempSensors()));
         logger.debug("sending readings {} to control", readings);
         readingsControllerApi.postReadingsUsingPOST(new EventDeviceReading().payload(readings));
     }

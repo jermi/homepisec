@@ -7,6 +7,7 @@ public class DeviceRegistry {
     private List<DeviceGpio> motionSensors;
     private List<DeviceGpio> alarmRelays;
     private List<DeviceGpio> relays;
+    private List<DeviceW1> tempSensors;
 
     /**
      * default constructor for Jackson
@@ -30,6 +31,10 @@ public class DeviceRegistry {
         return relays;
     }
 
+    public List<DeviceW1> getTempSensors() {
+        return tempSensors;
+    }
+
     public static class DeviceGpio {
         private String id;
         private int gpio;
@@ -48,6 +53,21 @@ public class DeviceRegistry {
 
         public int getGpio() {
             return gpio;
+        }
+    }
+
+    public static class DeviceW1 {
+        private String id;
+
+        private DeviceW1() {
+        }
+
+        public DeviceW1(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
         }
     }
 

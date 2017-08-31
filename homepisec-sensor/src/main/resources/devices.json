@@ -20,5 +20,10 @@
       "id": "relay-3",
       "gpio": 21
     }
+  ],
+  "tempSensors": [
+    {
+      "id": "28-0516b2ea33ff"
+    }
   ]
 }

@@ -16,13 +16,18 @@ public class GpioProvider {
 
     private static final String GPIO_PIN_PATH = "/sys/class/gpio/gpio";
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final BashCmdHelper bashCmdHelper;
+
+    public GpioProvider(BashCmdHelper bashCmdHelper) {
+        this.bashCmdHelper = bashCmdHelper;
+    }
 
     @PostConstruct
     public void gpioCheck() {
         final String cmd = "gpio -v";
         try {
             final Process process = Runtime.getRuntime().exec(cmd);
-            checkExitCode(cmd, process);
+            bashCmdHelper.checkExitCode(cmd, process);
         } catch (Exception e) {
             logger.error("*** SERIOUS PROBLEM DETECTED! *** unable to execute gpio command \"" + cmd + "\": " + e.getMessage()
                     + ", verify that Wiring Pi is installed and available under $PATH - consult http://wiringpi.com/download-and-install/");
@@ -60,7 +65,7 @@ public class GpioProvider {
             final String cmd = "gpio -g write " + pin + " " + (value ? "1" : "0");
             logger.debug("setting pin {} to {} with command: {}", pin, value, cmd);
             final Process process = Runtime.getRuntime().exec(cmd);
-            checkExitCode(cmd, process);
+            bashCmdHelper.checkExitCode(cmd, process);
         } catch (Exception e) {
             String msg = "failed to wrtie to pin " + pin + " value " + value + " because: " + e.getMessage();
             logger.error(msg, e);
@@ -75,7 +80,7 @@ public class GpioProvider {
                 final String cmd = "gpio export " + pin + " " + direction.code;
                 logger.debug("enabling pin with command: {}", cmd);
                 final Process process = Runtime.getRuntime().exec(cmd);
-                checkExitCode(cmd, process);
+                bashCmdHelper.checkExitCode(cmd, process);
             } else {
                 logger.debug("pin {} already enabled", pin);
             }
@@ -83,19 +88,6 @@ public class GpioProvider {
             final String msg = "failed to enable pin " + pin + ": " + e.getMessage();
             logger.error(msg, e);
             throw new GpioException(msg, e);
-        }
-    }
-
-    private void checkExitCode(final String cmd, final Process process) {
-        try {
-            final int exitValue = process.waitFor();
-            if (exitValue != 0) {
-                logger.error("unexpected exit code {} when executing command {}", exitValue, cmd);
-            }
-        } catch (InterruptedException e) {
-            final String msg = "failed to check exit code for command " + cmd + ": " + e.getMessage();
-            logger.error(msg, e);
-            Thread.currentThread().interrupt();
         }
     }
 
@@ -107,7 +99,7 @@ public class GpioProvider {
                 final String cmd = "gpio -g mode " + pin + " " + direction.code;
                 logger.debug("changing pin {} direction from {} to {} with command: {}", pin, oldDirection, direction, cmd);
                 final Process process = Runtime.getRuntime().exec(cmd);
-                checkExitCode(cmd, process);
+                bashCmdHelper.checkExitCode(cmd, process);
             }
         } catch (Exception e) {
             final String msg = "failed to set pin " + pin + " direction to " + direction + ": " + e.getMessage();
