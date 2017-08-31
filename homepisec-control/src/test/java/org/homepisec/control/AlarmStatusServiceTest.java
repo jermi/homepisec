@@ -42,7 +42,7 @@ public class AlarmStatusServiceTest {
         subject.onNext(deviceReadEvent);
         // then
         Assert.assertEquals(AlarmState.COUNTDOWN, instance.getAlarmStatus().getState());
-        Thread.sleep(10);
+        Thread.sleep(5);
         Assert.assertEquals(AlarmState.TRIGGERED, instance.getAlarmStatus().getState());
     }
 
@@ -58,9 +58,9 @@ public class AlarmStatusServiceTest {
         subject.onNext(deviceReadEvent);
         // then
         Assert.assertEquals(AlarmState.COUNTDOWN, instance.getAlarmStatus().getState());
-        Thread.sleep(10);
+        Thread.sleep(5);
         instance.disarmAlarm();
-        Thread.sleep(10);
+        Thread.sleep(5);
         Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
     }
 

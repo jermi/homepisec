@@ -50,7 +50,7 @@ import org.homepisec.sensor.rest.client.auth.HttpBasicAuth;
 import org.homepisec.sensor.rest.client.auth.ApiKeyAuth;
 import org.homepisec.sensor.rest.client.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T10:24:19.852+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
 @Component("org.homepisec.sensor.rest.client.ApiClient")
 public class ApiClient {
     public enum CollectionFormat {

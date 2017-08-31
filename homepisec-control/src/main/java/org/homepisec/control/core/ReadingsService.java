@@ -27,7 +27,7 @@ public class ReadingsService {
     private final ArrayDeque<DeviceEvent> readings = new ArrayDeque<>();
 
     public ReadingsService(
-            @Value(("${readingTtlSeconds"))
+            @Value(("${readingTtlSeconds}"))
             int readingTtlSeconds,
             PublishSubject<DeviceEvent> eventsSubject
     ) {

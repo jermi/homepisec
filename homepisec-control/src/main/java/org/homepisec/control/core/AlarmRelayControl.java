@@ -2,29 +2,32 @@ package org.homepisec.control.core;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
+import org.homepisec.control.rest.client.ApiClient;
 import org.homepisec.control.rest.client.api.SensorApiControllerApi;
 import org.homepisec.control.rest.client.model.SwitchRelayRequest;
-import org.homepisec.control.rest.dto.Device;
 import org.homepisec.control.rest.dto.DeviceEvent;
+import org.homepisec.control.rest.dto.SensorAppEndpoint;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PreDestroy;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class AlarmRelayControl {
 
-    private final SensorAppRegistry sensorAppRegistry;
-    private final SensorApiControllerApi apiClient;
+    private final RestTemplate restTemplate;
+    private final EndpointRegistry endpointRegistry;
     private final Disposable disposable;
 
     public AlarmRelayControl(
-            SensorAppRegistry sensorAppRegistry,
-            SensorApiControllerApi apiClient,
+            RestTemplate restTemplate, EndpointRegistry endpointRegistry,
             PublishSubject<DeviceEvent> eventsSubject
     ) {
-        this.sensorAppRegistry = sensorAppRegistry;
-        this.apiClient = apiClient;
+        this.restTemplate = restTemplate;
+        this.endpointRegistry = endpointRegistry;
         disposable = eventsSubject.subscribe(this::handleEvent);
     }
 
@@ -47,22 +50,25 @@ public class AlarmRelayControl {
     }
 
     private void handleAlarmDisarm() {
-        getAlarmRelaysIds().forEach(id -> invokeRelaySwitch(apiClient, id, false));
+        switchAlarmRelays(endpointRegistry.getEndpoints(), false);
     }
 
     private void handleAlarmTrigger() {
-        getAlarmRelaysIds().forEach(id -> invokeRelaySwitch(apiClient, id, true));
+        switchAlarmRelays(endpointRegistry.getEndpoints(), true);
     }
 
-    private Stream<String> getAlarmRelaysIds() {
-        return sensorAppRegistry.getEndpoints()
-                .stream()
-                .flatMap(l -> l.getAlarmRelays().stream())
-                .map(Device::getId);
+    private void switchAlarmRelays(List<SensorAppEndpoint> endpoints, boolean value) {
+        final Map<String, SensorApiControllerApi> clientCache = new HashMap<>();
+        endpoints.forEach(e -> {
+            final String url = e.getUrl();
+            if (!clientCache.containsKey(url)) {
+                clientCache.put(url, new SensorApiControllerApi(new ApiClient(restTemplate).setBasePath(url)));
+            }
+            final SensorApiControllerApi sensorApiClient = clientCache.get(url);
+            e.getAlarmRelays().forEach(r -> {
+                final SwitchRelayRequest request = new SwitchRelayRequest().id(r.getId()).value(value);
+                sensorApiClient.switchRelayUsingPOST(request);
+            });
+        });
     }
-
-    private static void invokeRelaySwitch(SensorApiControllerApi apiClient, String id, boolean value) {
-        apiClient.switchRelayUsingPOST(new SwitchRelayRequest().id(id).value(value));
-    }
-
 }

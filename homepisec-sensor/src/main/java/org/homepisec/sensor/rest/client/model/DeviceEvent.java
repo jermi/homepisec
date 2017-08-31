@@ -23,10 +23,10 @@ import java.time.OffsetDateTime;
 import org.homepisec.sensor.rest.client.model.Device;
 
 /**
- * EnrichedEvent
+ * DeviceEvent
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T10:24:19.852+02:00")
-public class EnrichedEvent {
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
+public class DeviceEvent {
   @JsonProperty("device")
   private Device device = null;
 
@@ -80,7 +80,7 @@ public class EnrichedEvent {
   @JsonProperty("type")
   private TypeEnum type = null;
 
-  public EnrichedEvent device(Device device) {
+  public DeviceEvent device(Device device) {
     this.device = device;
     return this;
   }
@@ -98,7 +98,7 @@ public class EnrichedEvent {
     this.device = device;
   }
 
-  public EnrichedEvent payload(Object payload) {
+  public DeviceEvent payload(Object payload) {
     this.payload = payload;
     return this;
   }
@@ -116,7 +116,7 @@ public class EnrichedEvent {
     this.payload = payload;
   }
 
-  public EnrichedEvent time(OffsetDateTime time) {
+  public DeviceEvent time(OffsetDateTime time) {
     this.time = time;
     return this;
   }
@@ -134,7 +134,7 @@ public class EnrichedEvent {
     this.time = time;
   }
 
-  public EnrichedEvent type(TypeEnum type) {
+  public DeviceEvent type(TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -161,11 +161,11 @@ public class EnrichedEvent {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnrichedEvent enrichedEvent = (EnrichedEvent) o;
-    return Objects.equals(this.device, enrichedEvent.device) &&
-        Objects.equals(this.payload, enrichedEvent.payload) &&
-        Objects.equals(this.time, enrichedEvent.time) &&
-        Objects.equals(this.type, enrichedEvent.type);
+    DeviceEvent deviceEvent = (DeviceEvent) o;
+    return Objects.equals(this.device, deviceEvent.device) &&
+        Objects.equals(this.payload, deviceEvent.payload) &&
+        Objects.equals(this.time, deviceEvent.time) &&
+        Objects.equals(this.type, deviceEvent.type);
   }
 
   @Override
@@ -177,7 +177,7 @@ public class EnrichedEvent {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnrichedEvent {\n");
+    sb.append("class DeviceEvent {\n");
     
     sb.append("    device: ").append(toIndentedString(device)).append("\n");
     sb.append("    payload: ").append(toIndentedString(payload)).append("\n");

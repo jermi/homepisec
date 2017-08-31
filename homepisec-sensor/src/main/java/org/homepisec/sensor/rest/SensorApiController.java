@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(SensorApiEndpoints.API)
@@ -44,11 +43,10 @@ public class SensorApiController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public boolean switchRelay(@RequestBody @Valid @NotNull SwitchRelayRequest relayRequest) {
-        final Optional<DeviceRegistry.DeviceGpio> relay = relayService.getAllRelays()
+        return relayService.getAllRelays()
                 .stream()
                 .filter(r -> r.getId().equals(relayRequest.getId()))
-                .findFirst();
-        return relay
+                .findFirst()
                 .map(r -> relayService.switchRelay(r, relayRequest.getValue()))
                 .orElse(false);
     }

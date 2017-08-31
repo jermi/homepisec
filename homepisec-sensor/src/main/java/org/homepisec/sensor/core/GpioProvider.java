@@ -72,7 +72,7 @@ public class GpioProvider {
         try {
             final boolean pinEnabled = new File(GPIO_PIN_PATH + pin).exists();
             if (!pinEnabled) {
-                final String cmd = "gpio -g export " + pin + " " + direction.code;
+                final String cmd = "gpio export " + pin + " " + direction.code;
                 logger.debug("enabling pin with command: {}", cmd);
                 final Process process = Runtime.getRuntime().exec(cmd);
                 checkExitCode(cmd, process);
@@ -118,8 +118,11 @@ public class GpioProvider {
 
     private static Direction getCurrentPinDirection(int pin) throws IOException {
         final String directionPath = GPIO_PIN_PATH + pin + "/direction";
-        final String directionString = readFileContents(directionPath);
-        return Direction.getForCode(directionString);
+        if (new File(directionPath).exists()) {
+            final String directionString = readFileContents(directionPath);
+            return Direction.getForCode(directionString);
+        }
+        return Direction.IN;
     }
 
     public enum Direction {

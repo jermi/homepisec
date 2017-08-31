@@ -20,7 +20,7 @@ public class RelayService {
     }
 
     public List<DeviceRegistry.DeviceGpio> getAllRelays() {
-        final DeviceRegistry deviceRegistry = deviceRegistryProvider.loadCapabilities();
+        final DeviceRegistry deviceRegistry = deviceRegistryProvider.loadRegistry();
         final List<DeviceRegistry.DeviceGpio> alarmRelays = deviceRegistry.getAlarmRelays();
         final List<DeviceRegistry.DeviceGpio> relays = deviceRegistry.getRelays();
         final List<DeviceRegistry.DeviceGpio> allRelays = new ArrayList<>(alarmRelays.size() + relays.size());

@@ -1,10 +1,5 @@
 package org.homepisec.control.core;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
-import org.homepisec.control.rest.dto.DeviceEvent;
-import org.homepisec.control.rest.dto.DeviceType;
-import org.homepisec.control.rest.dto.EventType;
 import org.homepisec.control.rest.dto.SensorAppEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,32 +7,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class SensorAppRegistry {
+public class EndpointRegistry {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final int readingTtlSeconds;
-    private final Disposable disposable;
     private Map<String, EndpointHolder> endpoints = Collections.synchronizedMap(new HashMap<>());
 
-    public SensorAppRegistry(
-            @Value(("${readingTtlSeconds"))
-            int readingTtlSeconds,
-            PublishSubject<DeviceEvent> eventsSubject
+    public EndpointRegistry(
+            @Value("${readingTtlSeconds}") int readingTtlSeconds
     ) {
         this.readingTtlSeconds = readingTtlSeconds;
-        disposable = eventsSubject.subscribe(this::handleDeviceRead);
-    }
-
-    @PreDestroy
-    public void destroy() {
-        disposable.dispose();
     }
 
     @Scheduled(fixedRate = 1000)
@@ -54,14 +39,7 @@ public class SensorAppRegistry {
         }
     }
 
-    private void handleDeviceRead(DeviceEvent<?> event) {
-        if (EventType.DEVICE_READ.equals(event.getType()) && DeviceType.SENSOR_APP.equals(event.getDevice().getType())) {
-            handleSensorAppEvent((DeviceEvent<SensorAppEndpoint>) event);
-        }
-    }
-
-    private void handleSensorAppEvent(DeviceEvent<SensorAppEndpoint> event) {
-        final SensorAppEndpoint endpoint = event.getPayload();
+    public void addOrUpdate(final SensorAppEndpoint endpoint) {
         final String endpointUrl = endpoint.getUrl();
         EndpointHolder endpointHolder = endpoints.get(endpointUrl);
         if (endpointHolder == null) {

@@ -37,6 +37,8 @@ swagger {
 }
 
 task genControlRestClient {
+	inputs.dir("build/swagger")
+	outputs.dirs("${project.buildDir.path}/swagger/src/main/java/org/homepisec/sensor/rest/client/")
 	group 'build'
 	doLast {
 		copy {

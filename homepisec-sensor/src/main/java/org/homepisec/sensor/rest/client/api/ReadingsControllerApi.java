@@ -2,7 +2,7 @@ package org.homepisec.sensor.rest.client.api;
 
 import org.homepisec.sensor.rest.client.ApiClient;
 
-import org.homepisec.sensor.rest.client.model.EnrichedEvent;
+import org.homepisec.sensor.rest.client.model.DeviceEvent;
 import org.homepisec.sensor.rest.client.model.EventDeviceReading;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T10:24:19.852+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
 @Component("org.homepisec.sensor.rest.client.api.ReadingsControllerApi")
 public class ReadingsControllerApi {
     private ApiClient apiClient;
@@ -53,10 +53,10 @@ public class ReadingsControllerApi {
      * <p><b>401</b> - Unauthorized
      * <p><b>403</b> - Forbidden
      * <p><b>404</b> - Not Found
-     * @return List&lt;EnrichedEvent&gt;
+     * @return List&lt;DeviceEvent&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<EnrichedEvent> getReadingsUsingGET() throws RestClientException {
+    public List<DeviceEvent> getReadingsUsingGET() throws RestClientException {
         Object postBody = null;
         
         String path = UriComponentsBuilder.fromPath("/api/readings").build().toUriString();
@@ -76,7 +76,7 @@ public class ReadingsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<List<EnrichedEvent>> returnType = new ParameterizedTypeReference<List<EnrichedEvent>>() {};
+        ParameterizedTypeReference<List<DeviceEvent>> returnType = new ParameterizedTypeReference<List<DeviceEvent>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

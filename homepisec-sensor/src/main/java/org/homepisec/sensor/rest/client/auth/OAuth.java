@@ -3,7 +3,7 @@ package org.homepisec.sensor.rest.client.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-20T10:24:19.852+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
 public class OAuth implements Authentication {
     private String accessToken;
 

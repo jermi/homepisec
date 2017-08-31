@@ -17,30 +17,29 @@ import java.util.List;
 public class SensorReadingsService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final ReadingsControllerApi controlRestClient;
+    private final ReadingsControllerApi readingsControllerApi;
     private final GpioProvider gpioProvider;
     private final DeviceRegistryProvider deviceRegistryProvider;
 
-    @Autowired
     public SensorReadingsService(
-            ReadingsControllerApi controlRestClient,
+            ReadingsControllerApi readingsControllerApi,
             GpioProvider gpioProvider,
             DeviceRegistryProvider deviceRegistryProvider
     ) {
-        this.controlRestClient = controlRestClient;
+        this.readingsControllerApi = readingsControllerApi;
         this.gpioProvider = gpioProvider;
         this.deviceRegistryProvider = deviceRegistryProvider;
     }
 
     @Scheduled(fixedRateString = "${updateFrequency}")
     public void sendDataToControl() {
-        final DeviceRegistry deviceRegistry = deviceRegistryProvider.loadCapabilities();
+        final DeviceRegistry deviceRegistry = deviceRegistryProvider.loadRegistry();
         final List<DeviceReading> readings = new ArrayList<>();
         populateGpioPinReadings(readings, deviceRegistry.getMotionSensors(), Device.TypeEnum.SENSOR_MOTION);
         populateGpioPinReadings(readings, deviceRegistry.getRelays(), Device.TypeEnum.RELAY);
         populateGpioPinReadings(readings, deviceRegistry.getAlarmRelays(), Device.TypeEnum.RELAY);
         logger.debug("sending readings {} to control", readings);
-        controlRestClient.postReadingsUsingPOST(new EventDeviceReading().payload(readings));
+        readingsControllerApi.postReadingsUsingPOST(new EventDeviceReading().payload(readings));
     }
 
     private void populateGpioPinReadings(List<DeviceReading> readings, List<DeviceRegistry.DeviceGpio> devices, Device.TypeEnum deviceType) {
@@ -52,7 +51,5 @@ public class SensorReadingsService {
             readings.add(deviceReading);
         }
     }
-
-
 
 }

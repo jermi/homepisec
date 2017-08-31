@@ -23,7 +23,6 @@ public class DeviceRegistryProvider {
     private final String devicesPath;
     private final ObjectMapper objectMapper;
 
-    @Autowired
     public DeviceRegistryProvider(
             @Value("${devicesPath:#{null}}") String devicesPath,
             ObjectMapper objectMapper
@@ -35,13 +34,13 @@ public class DeviceRegistryProvider {
     @PostConstruct
     public void init() {
         if(devicesPath != null) {
-            logger.info("devices definition will be loaded from {}", devicesPath);
+            logger.info("devices registry will be loaded from {}", devicesPath);
         } else {
             logger.info("will use default devices definition");
         }
     }
 
-    public DeviceRegistry loadCapabilities() {
+    public DeviceRegistry loadRegistry() {
         try {
             final String devicesJson;
             if (devicesPath != null) {
