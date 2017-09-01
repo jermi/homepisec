@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class W1TempReader {
 
-    private static final BigDecimal TEMO_DIVISOR = new BigDecimal("1000");
+    private static final BigDecimal TEMP_DIVISOR = new BigDecimal("1000");
     private static final String READ_CMD = "cat /sys/bus/w1/devices/%s/w1_slave";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final BashCmdHelper bashCmdHelper;
@@ -45,7 +45,7 @@ public class W1TempReader {
                 final String tempString = line2.substring(line2.indexOf("t=") + 2).trim();
                 final BigDecimal temp = new BigDecimal(tempString)
                         .setScale(3, RoundingMode.HALF_UP)
-                        .divide(TEMO_DIVISOR, RoundingMode.HALF_UP);
+                        .divide(TEMP_DIVISOR, RoundingMode.HALF_UP);
                 final Device device = new Device().id(sensor.getId()).type(Device.TypeEnum.SENSOR_TEMP);
                 return new DeviceReading().device(device).value(temp.toPlainString());
             }
