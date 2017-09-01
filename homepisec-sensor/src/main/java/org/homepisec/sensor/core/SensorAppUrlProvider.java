@@ -24,7 +24,7 @@ public class SensorAppUrlProvider {
     private final int serverPort;
 
     public SensorAppUrlProvider(
-            @Value("${preferHttps:false") boolean preferHttps,
+            @Value("${preferHttps:#{false}") Boolean preferHttps,
             @Value("${preferredIp:#{null}") String preferredIp,
             @Value("${server.port}") int serverPort
     ) {
