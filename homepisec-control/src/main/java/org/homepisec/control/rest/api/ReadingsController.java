@@ -4,13 +4,13 @@ import org.homepisec.control.config.ControlApiEndpoints;
 import org.homepisec.control.core.ReadingsService;
 import org.homepisec.control.rest.dto.DeviceEvent;
 import org.homepisec.control.rest.dto.EventDeviceReading;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,10 +21,14 @@ import java.util.List;
 public class ReadingsController {
 
     private final ReadingsService readingsService;
+    private final ReadingsSseEmiterBuilder readingsSseEmiterBuilder;
 
-    @Autowired
-    public ReadingsController(ReadingsService readingsService) {
+    public ReadingsController(
+            ReadingsService readingsService,
+            ReadingsSseEmiterBuilder readingsSseEmiterBuilder
+    ) {
         this.readingsService = readingsService;
+        this.readingsSseEmiterBuilder = readingsSseEmiterBuilder;
     }
 
     @RequestMapping(
@@ -46,6 +50,14 @@ public class ReadingsController {
     )
     public List<DeviceEvent> getReadings() {
         return readingsService.getReadings();
+    }
+
+    @RequestMapping(
+            value = ControlApiEndpoints.READINGS + "/events",
+            method = RequestMethod.GET
+    )
+    public SseEmitter subscribeUpdates() {
+        return readingsSseEmiterBuilder.create();
     }
 
 }
