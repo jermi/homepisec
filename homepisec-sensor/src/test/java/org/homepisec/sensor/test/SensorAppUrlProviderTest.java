@@ -15,7 +15,7 @@ public class SensorAppUrlProviderTest {
         Assert.assertTrue(
                 url.startsWith("http://192.168.")
                 || url.startsWith("http://10.")
-                || url.startsWith("http://172.16.")
+                || url.startsWith("http://172.")
         );
     }
 

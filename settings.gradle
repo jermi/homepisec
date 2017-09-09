@@ -1,2 +1,3 @@
 include 'homepisec-control'
 include 'homepisec-sensor'
+include 'homepisec-android-app'

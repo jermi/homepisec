@@ -39,7 +39,7 @@ public class SensorAppUrlProvider {
         return proto + ip + ":" + serverPort;
     }
 
-    protected List<String> getHostIps() {
+    private List<String> getHostIps() {
         try {
             final List<InetAddress> ips = new ArrayList<>();
             final Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
