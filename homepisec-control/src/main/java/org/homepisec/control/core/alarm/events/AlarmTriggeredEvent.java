@@ -6,10 +6,10 @@ import org.homepisec.control.rest.dto.EventType;
 
 import java.util.Date;
 
-public class AlarmTriggeredEvent extends DeviceEvent<Object> {
+public class AlarmTriggeredEvent extends DeviceEvent {
 
-    public AlarmTriggeredEvent(Date date) {
-        super(EventType.ALARM_TRIGGER, date, Device.CONTROL, null);
+    public AlarmTriggeredEvent(Date date, String deviceIdTrigger) {
+        super(EventType.ALARM_TRIGGER, date, Device.CONTROL, deviceIdTrigger);
     }
 
 }

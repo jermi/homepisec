@@ -65,7 +65,7 @@ public class AlarmStatusService {
                 handleAlarmArm();
                 break;
             case ALARM_COUNTDOWN:
-                handleAlarmCountdown();
+                handleAlarmCountdown(event.getPayload());
                 break;
             case ALARM_TRIGGER:
                 handleAlarmTrigger();
@@ -86,9 +86,9 @@ public class AlarmStatusService {
         final boolean isAlarmArmed = alarmStatus.getState().equals(AlarmState.ARMED);
         final boolean isDeviceMotionSensor = DeviceType.SENSOR_MOTION.equals(event.getDevice().getType());
         if (isAlarmArmed && isDeviceMotionSensor) {
-            final Boolean isMotionDetected = Boolean.valueOf(event.getPayload().toString());
+            final Boolean isMotionDetected = Boolean.valueOf(event.getPayload());
             if (isMotionDetected) {
-                eventsSubject.onNext(new AlarmCountdownEvent(new Date()));
+                eventsSubject.onNext(new AlarmCountdownEvent(new Date(), event.getDevice().getId()));
             }
         }
     }
@@ -103,23 +103,23 @@ public class AlarmStatusService {
         }
     }
 
-    private void handleAlarmCountdown() {
+    private void handleAlarmCountdown(final String deviceTrigger) {
         if (alarmStatus.getState().equals(AlarmState.ARMED)) {
-            logger.info("starting alarm countdown");
+            logger.info("starting alarm countdown because of {}", deviceTrigger);
             alarmStatus.setState(AlarmState.COUNTDOWN);
             alarmStatus.setCountdownStart(new Date());
             final LocalDateTime countdownEndDateTime = LocalDateTime.now()
                     .plus(alarmCountdownSeconds, ChronoUnit.SECONDS);
             final Date countdownEnd = Date.from(countdownEndDateTime.atZone(ZoneId.systemDefault()).toInstant());
             alarmStatus.setCountdownEnd(countdownEnd);
-            triggerAlarmAfterCountdown();
+            triggerAlarmAfterCountdown(deviceTrigger);
         }
     }
 
-    private void triggerAlarmAfterCountdown() {
+    private void triggerAlarmAfterCountdown(final String deviceTrigger) {
         final Runnable runnable = () -> {
-            logger.info("triggering alarm");
-            eventsSubject.onNext(new AlarmTriggeredEvent(new Date()));
+            logger.info("triggering alarm because of {}", deviceTrigger);
+            eventsSubject.onNext(new AlarmTriggeredEvent(new Date(), deviceTrigger));
         };
         scheduledFuture = scheduler.schedule(runnable, alarmCountdownSeconds, TimeUnit.SECONDS);
     }

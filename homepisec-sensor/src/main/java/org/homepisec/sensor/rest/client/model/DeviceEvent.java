@@ -25,13 +25,13 @@ import org.homepisec.sensor.rest.client.model.Device;
 /**
  * DeviceEvent
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
 public class DeviceEvent {
   @JsonProperty("device")
   private Device device = null;
 
   @JsonProperty("payload")
-  private Object payload = null;
+  private String payload = null;
 
   @JsonProperty("time")
   private OffsetDateTime time = null;
@@ -98,7 +98,7 @@ public class DeviceEvent {
     this.device = device;
   }
 
-  public DeviceEvent payload(Object payload) {
+  public DeviceEvent payload(String payload) {
     this.payload = payload;
     return this;
   }
@@ -108,11 +108,11 @@ public class DeviceEvent {
    * @return payload
   **/
   @ApiModelProperty(value = "")
-  public Object getPayload() {
+  public String getPayload() {
     return payload;
   }
 
-  public void setPayload(Object payload) {
+  public void setPayload(String payload) {
     this.payload = payload;
   }
 

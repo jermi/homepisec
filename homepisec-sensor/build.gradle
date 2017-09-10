@@ -22,7 +22,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 swagger {
-	inputSpec = 'http://rpi:8080/v2/api-docs'
+	inputSpec = 'http://localhost:8080/v2/api-docs'
 	outputDir = file('build/swagger')
 	lang = 'java'
 

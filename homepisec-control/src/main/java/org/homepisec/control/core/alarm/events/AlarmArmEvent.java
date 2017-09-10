@@ -6,7 +6,7 @@ import org.homepisec.control.rest.dto.EventType;
 
 import java.util.Date;
 
-public class AlarmArmEvent extends DeviceEvent<Object> {
+public class AlarmArmEvent extends DeviceEvent {
     public AlarmArmEvent(Date date) {
         super(EventType.ALARM_ARM, date, Device.CONTROL, null);
     }

@@ -41,7 +41,7 @@ public class SensorReadingsService {
         populateGpioPinReadings(readings, deviceRegistry.getAlarmRelays(), Device.TypeEnum.RELAY);
         readings.addAll(w1TempReader.getTempReadings(deviceRegistry.getTempSensors()));
         logger.debug("sending readings {} to control", readings);
-        readingsControllerApi.postReadingsUsingPOST(new EventDeviceReading().payload(readings));
+        readingsControllerApi.postReadingsUsingPOST(readings);
     }
 
     private void populateGpioPinReadings(List<DeviceReading> readings, List<DeviceRegistry.DeviceGpio> devices, Device.TypeEnum deviceType) {

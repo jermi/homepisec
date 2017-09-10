@@ -3,7 +3,7 @@ package org.homepisec.control.rest.api;
 import org.homepisec.control.config.ControlApiEndpoints;
 import org.homepisec.control.core.ReadingsService;
 import org.homepisec.control.rest.dto.DeviceEvent;
-import org.homepisec.control.rest.dto.EventDeviceReading;
+import org.homepisec.control.rest.dto.DeviceReading;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +37,8 @@ public class ReadingsController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
-    public boolean postReadings(@RequestBody @Valid EventDeviceReading event) {
-        readingsService.emitDeviceReadEvent(event.getPayload());
+    public boolean postReadings(@RequestBody @Valid List<DeviceReading> readings) {
+        readingsService.emitDeviceReadEvent(readings);
         return true;
     }
 

@@ -19,53 +19,31 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.homepisec.sensor.rest.client.model.Device;
 
 /**
- * DeviceReading
+ * SseEmitter
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
-public class DeviceReading {
-  @JsonProperty("device")
-  private Device device = null;
+public class SseEmitter {
+  @JsonProperty("timeout")
+  private Long timeout = null;
 
-  @JsonProperty("value")
-  private String value = null;
-
-  public DeviceReading device(Device device) {
-    this.device = device;
+  public SseEmitter timeout(Long timeout) {
+    this.timeout = timeout;
     return this;
   }
 
    /**
-   * Get device
-   * @return device
+   * Get timeout
+   * @return timeout
   **/
   @ApiModelProperty(value = "")
-  public Device getDevice() {
-    return device;
+  public Long getTimeout() {
+    return timeout;
   }
 
-  public void setDevice(Device device) {
-    this.device = device;
-  }
-
-  public DeviceReading value(String value) {
-    this.value = value;
-    return this;
-  }
-
-   /**
-   * Get value
-   * @return value
-  **/
-  @ApiModelProperty(value = "")
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
+  public void setTimeout(Long timeout) {
+    this.timeout = timeout;
   }
 
 
@@ -77,24 +55,22 @@ public class DeviceReading {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DeviceReading deviceReading = (DeviceReading) o;
-    return Objects.equals(this.device, deviceReading.device) &&
-        Objects.equals(this.value, deviceReading.value);
+    SseEmitter sseEmitter = (SseEmitter) o;
+    return Objects.equals(this.timeout, sseEmitter.timeout);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(device, value);
+    return Objects.hash(timeout);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DeviceReading {\n");
+    sb.append("class SseEmitter {\n");
     
-    sb.append("    device: ").append(toIndentedString(device)).append("\n");
-    sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    sb.append("    timeout: ").append(toIndentedString(timeout)).append("\n");
     sb.append("}");
     return sb.toString();
   }

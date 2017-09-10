@@ -2,7 +2,7 @@ package org.homepisec.control.rest.dto;
 
 import java.util.Date;
 
-public class DeviceEvent<PAYLOAD> extends Event<PAYLOAD> {
+public class DeviceEvent extends Event {
 
     private Date time;
     private Device device;
@@ -11,7 +11,7 @@ public class DeviceEvent<PAYLOAD> extends Event<PAYLOAD> {
         super(null, null);
     }
 
-    public DeviceEvent(EventType type, Date time, Device device, PAYLOAD payload) {
+    public DeviceEvent(EventType type, Date time, Device device, String payload) {
         super(type, payload);
         this.time = time;
         this.device = device;

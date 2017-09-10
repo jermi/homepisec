@@ -35,7 +35,7 @@ public class AlarmStatusServiceTest {
         // given
         final PublishSubject<DeviceEvent> subject = PublishSubject.create();
         AlarmStatusService instance = new AlarmStatusService(0, subject);
-        final DeviceEvent<String> deviceReadEvent = new DeviceEvent<>(EventType.DEVICE_READ, new Date(), new Device("d1", DeviceType.SENSOR_MOTION), "true");
+        final DeviceEvent deviceReadEvent = new DeviceEvent(EventType.DEVICE_READ, new Date(), new Device("d1", DeviceType.SENSOR_MOTION), "true");
         Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
         // when
         instance.armAlarm();
@@ -51,7 +51,7 @@ public class AlarmStatusServiceTest {
         // given
         final PublishSubject<DeviceEvent> subject = PublishSubject.create();
         AlarmStatusService instance = new AlarmStatusService(1, subject);
-        final DeviceEvent<String> deviceReadEvent = new DeviceEvent<>(EventType.DEVICE_READ, new Date(), new Device("d1", DeviceType.SENSOR_MOTION), "true");
+        final DeviceEvent deviceReadEvent = new DeviceEvent(EventType.DEVICE_READ, new Date(), new Device("d1", DeviceType.SENSOR_MOTION), "true");
         Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
         // when
         instance.armAlarm();

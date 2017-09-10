@@ -3,7 +3,8 @@ package org.homepisec.sensor.rest.client.api;
 import org.homepisec.sensor.rest.client.ApiClient;
 
 import org.homepisec.sensor.rest.client.model.DeviceEvent;
-import org.homepisec.sensor.rest.client.model.EventDeviceReading;
+import org.homepisec.sensor.rest.client.model.DeviceReading;
+import org.homepisec.sensor.rest.client.model.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
 @Component("org.homepisec.sensor.rest.client.api.ReadingsControllerApi")
 public class ReadingsControllerApi {
     private ApiClient apiClient;
@@ -87,16 +88,16 @@ public class ReadingsControllerApi {
      * <p><b>401</b> - Unauthorized
      * <p><b>403</b> - Forbidden
      * <p><b>404</b> - Not Found
-     * @param event event
+     * @param readings readings
      * @return Boolean
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public Boolean postReadingsUsingPOST(EventDeviceReading event) throws RestClientException {
-        Object postBody = event;
+    public Boolean postReadingsUsingPOST(List<DeviceReading> readings) throws RestClientException {
+        Object postBody = readings;
         
-        // verify the required parameter 'event' is set
-        if (event == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'event' when calling postReadingsUsingPOST");
+        // verify the required parameter 'readings' is set
+        if (readings == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'readings' when calling postReadingsUsingPOST");
         }
         
         String path = UriComponentsBuilder.fromPath("/api/readings").build().toUriString();
@@ -118,5 +119,38 @@ public class ReadingsControllerApi {
 
         ParameterizedTypeReference<Boolean> returnType = new ParameterizedTypeReference<Boolean>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * subscribeUpdates
+     * 
+     * <p><b>200</b> - OK
+     * <p><b>401</b> - Unauthorized
+     * <p><b>403</b> - Forbidden
+     * <p><b>404</b> - Not Found
+     * @return SseEmitter
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public SseEmitter subscribeUpdatesUsingGET() throws RestClientException {
+        Object postBody = null;
+        
+        String path = UriComponentsBuilder.fromPath("/api/readings/events").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "*/*"
+        };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+        };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<SseEmitter> returnType = new ParameterizedTypeReference<SseEmitter>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

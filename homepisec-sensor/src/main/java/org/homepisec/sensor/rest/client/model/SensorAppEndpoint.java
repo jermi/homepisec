@@ -26,7 +26,7 @@ import org.homepisec.sensor.rest.client.model.Device;
 /**
  * SensorAppEndpoint
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-08-31T18:03:50.888+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
 public class SensorAppEndpoint {
   @JsonProperty("alarmRelays")
   private List<Device> alarmRelays = null;

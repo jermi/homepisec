@@ -35,9 +35,9 @@ public class ReadingsService {
         this.eventsSubject = eventsSubject;
     }
 
-    public void emitDeviceReadEvent(List<DeviceReading> readings) {
+    public void emitDeviceReadEvent(final List<DeviceReading> readings) {
         readings.forEach(reading -> {
-            final DeviceEvent ee = new DeviceEvent<>(
+            final DeviceEvent ee = new DeviceEvent(
                     EventType.DEVICE_READ,
                     new Date(),
                     reading.getDevice(),

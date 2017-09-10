@@ -1,14 +1,14 @@
 package org.homepisec.control.rest.dto;
 
-public class Event<PAYLOAD> {
+public class Event {
 
     private EventType type;
-    private PAYLOAD payload;
+    private String payload;
 
     private Event() {
     }
 
-    public Event(EventType type, PAYLOAD payload) {
+    public Event(EventType type, String payload) {
         this.type = type;
         this.payload = payload;
     }
@@ -17,7 +17,7 @@ public class Event<PAYLOAD> {
         return type;
     }
 
-    public PAYLOAD getPayload() {
+    public String getPayload() {
         return payload;
     }
 
