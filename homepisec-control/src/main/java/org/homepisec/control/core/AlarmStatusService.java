@@ -1,7 +1,5 @@
 package org.homepisec.control.core;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
 import org.homepisec.control.core.alarm.AlarmState;
 import org.homepisec.control.core.alarm.AlarmStatus;
 import org.homepisec.control.core.alarm.events.AlarmArmEvent;
@@ -16,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +22,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PreDestroy;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 
 @Service
 public class AlarmStatusService {
@@ -88,7 +89,10 @@ public class AlarmStatusService {
         if (isAlarmArmed && isDeviceMotionSensor) {
             final Boolean isMotionDetected = Boolean.valueOf(event.getPayload());
             if (isMotionDetected) {
-                eventsSubject.onNext(new AlarmCountdownEvent(new Date(), event.getDevice().getId()));
+                eventsSubject.onNext(new AlarmCountdownEvent(
+                        System.currentTimeMillis(),
+                        event.getDevice().getId()
+                ));
             }
         }
     }
@@ -119,7 +123,10 @@ public class AlarmStatusService {
     private void triggerAlarmAfterCountdown(final String deviceTrigger) {
         final Runnable runnable = () -> {
             logger.info("triggering alarm because of {}", deviceTrigger);
-            eventsSubject.onNext(new AlarmTriggeredEvent(new Date(), deviceTrigger));
+            eventsSubject.onNext(new AlarmTriggeredEvent(
+                    System.currentTimeMillis(),
+                    deviceTrigger
+            ));
         };
         scheduledFuture = scheduler.schedule(runnable, alarmCountdownSeconds, TimeUnit.SECONDS);
     }
@@ -132,11 +139,11 @@ public class AlarmStatusService {
     }
 
     public void disarmAlarm() {
-        eventsSubject.onNext(new AlarmDisarmEvent(new Date()));
+        eventsSubject.onNext(new AlarmDisarmEvent(System.currentTimeMillis()));
     }
 
     public void armAlarm() {
-        eventsSubject.onNext(new AlarmArmEvent(new Date()));
+        eventsSubject.onNext(new AlarmArmEvent(System.currentTimeMillis()));
     }
 
     public AlarmStatus getAlarmStatus() {

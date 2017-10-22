@@ -7,7 +7,7 @@ import org.homepisec.control.rest.dto.EventType;
 import java.util.Date;
 
 public class AlarmDisarmEvent extends DeviceEvent {
-    public AlarmDisarmEvent(Date date) {
-        super(EventType.ALARM_DISARM, date, Device.CONTROL, null);
+    public AlarmDisarmEvent(long time) {
+        super(EventType.ALARM_DISARM, time, Device.CONTROL, null);
     }
 }

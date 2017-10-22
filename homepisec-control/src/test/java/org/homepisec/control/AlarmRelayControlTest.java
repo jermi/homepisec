@@ -76,8 +76,8 @@ public class AlarmRelayControlTest {
                 .andExpect(content().string("{\"id\":\"" + alarmRelay2Id + "\",\"value\":false}"))
                 .andRespond(withSuccess("true", MediaType.APPLICATION_JSON_UTF8));
         // when
-        subject.onNext(new AlarmTriggeredEvent(new Date(), "motion-sensor-1"));
-        subject.onNext(new AlarmDisarmEvent(new Date()));
+        subject.onNext(new AlarmTriggeredEvent(System.currentTimeMillis(), "motion-sensor-1"));
+        subject.onNext(new AlarmDisarmEvent(System.currentTimeMillis()));
     }
 
 }

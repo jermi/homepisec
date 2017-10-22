@@ -39,7 +39,7 @@ public class ReadingsService {
         readings.forEach(reading -> {
             final DeviceEvent ee = new DeviceEvent(
                     EventType.DEVICE_READ,
-                    new Date(),
+                    System.currentTimeMillis(),
                     reading.getDevice(),
                     reading.getValue()
             );
@@ -79,14 +79,11 @@ public class ReadingsService {
     @Scheduled(fixedRate = 1000)
     public void removeOldReadings() {
         synchronized (readings) {
-            final Date ttlLimit = Date.from(LocalDateTime.now()
-                    .plus(readingTtlSeconds, ChronoUnit.SECONDS)
-                    .atZone(ZoneId.systemDefault())
-                    .toInstant());
+            final long ttlLimit = System.currentTimeMillis() + readingTtlSeconds * 1000;
             final Iterator<DeviceEvent> it = readings.descendingIterator();
             while (it.hasNext()) {
                 final DeviceEvent entry = it.next();
-                if (ttlLimit.compareTo(entry.getTime()) < 0) {
+                if (ttlLimit - entry.getTime() < 0) {
                     logger.debug("removing old reading entry {}", entry);
                     it.remove();
                 }

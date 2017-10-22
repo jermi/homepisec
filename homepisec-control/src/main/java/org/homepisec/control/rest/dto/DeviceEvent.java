@@ -1,23 +1,21 @@
 package org.homepisec.control.rest.dto;
 
-import java.util.Date;
-
 public class DeviceEvent extends Event {
 
-    private Date time;
+    private long time;
     private Device device;
 
     public DeviceEvent() {
         super(null, null);
     }
 
-    public DeviceEvent(EventType type, Date time, Device device, String payload) {
+    public DeviceEvent(EventType type, long time, Device device, String payload) {
         super(type, payload);
         this.time = time;
         this.device = device;
     }
 
-    public Date getTime() {
+    public long getTime() {
         return time;
     }
 

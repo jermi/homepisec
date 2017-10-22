@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class AlarmTriggeredEvent extends DeviceEvent {
 
-    public AlarmTriggeredEvent(Date date, String deviceIdTrigger) {
-        super(EventType.ALARM_TRIGGER, date, Device.CONTROL, deviceIdTrigger);
+    public AlarmTriggeredEvent(long time, String deviceIdTrigger) {
+        super(EventType.ALARM_TRIGGER, time, Device.CONTROL, deviceIdTrigger);
     }
 
 }

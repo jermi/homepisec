@@ -17,7 +17,7 @@ public class DeviceEventsDeltaFilterTest {
         // given
         DeviceEventsDeltaFilter filter = new DeviceEventsDeltaFilter();
         Device d1 = new Device("d1", DeviceType.SENSOR_MOTION);
-        DeviceEvent event1 = new DeviceEvent(EventType.DEVICE_READ, new Date(), d1, "false");
+        DeviceEvent event1 = new DeviceEvent(EventType.DEVICE_READ, System.currentTimeMillis(), d1, "false");
         // when
         boolean firstTest = filter.test(event1);
         boolean secondTest = filter.test(event1);
@@ -31,8 +31,8 @@ public class DeviceEventsDeltaFilterTest {
         // given
         DeviceEventsDeltaFilter filter = new DeviceEventsDeltaFilter();
         Device d1 = new Device("d1", DeviceType.SENSOR_MOTION);
-        DeviceEvent event1 = new DeviceEvent(EventType.DEVICE_READ, new Date(), d1, "false");
-        DeviceEvent event2 = new DeviceEvent(EventType.DEVICE_READ, new Date(), d1, "true");
+        DeviceEvent event1 = new DeviceEvent(EventType.DEVICE_READ, System.currentTimeMillis(), d1, "false");
+        DeviceEvent event2 = new DeviceEvent(EventType.DEVICE_READ, System.currentTimeMillis(), d1, "true");
         // when
         boolean firstTest = filter.test(event1);
         boolean secondTest = filter.test(event2);

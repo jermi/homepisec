@@ -7,7 +7,7 @@ import org.homepisec.control.rest.dto.EventType;
 import java.util.Date;
 
 public class AlarmCountdownEvent extends DeviceEvent {
-    public AlarmCountdownEvent(Date date, String deviceIdTrigger) {
-        super(EventType.ALARM_COUNTDOWN, date, Device.CONTROL, deviceIdTrigger);
+    public AlarmCountdownEvent(long time, String deviceIdTrigger) {
+        super(EventType.ALARM_COUNTDOWN, time, Device.CONTROL, deviceIdTrigger);
     }
 }
