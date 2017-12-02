@@ -23,14 +23,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import org.homepisec.android.homepisecapp.control.rest.client.model.Device;
-import org.joda.time.DateTime;
 import android.os.Parcelable;
 import android.os.Parcel;
 
 /**
  * DeviceEvent
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-10-15T21:11:19.348+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-10-22T09:06:11.385+02:00")
 public class DeviceEvent implements Parcelable {
   @SerializedName("device")
   private Device device = null;
@@ -39,7 +38,7 @@ public class DeviceEvent implements Parcelable {
   private String payload = null;
 
   @SerializedName("time")
-  private DateTime time = null;
+  private Long time = null;
 
   /**
    * Gets or Sets type
@@ -133,7 +132,7 @@ public class DeviceEvent implements Parcelable {
     this.payload = payload;
   }
 
-  public DeviceEvent time(DateTime time) {
+  public DeviceEvent time(Long time) {
     this.time = time;
     return this;
   }
@@ -143,11 +142,11 @@ public class DeviceEvent implements Parcelable {
    * @return time
   **/
   @ApiModelProperty(value = "")
-  public DateTime getTime() {
+  public Long getTime() {
     return time;
   }
 
-  public void setTime(DateTime time) {
+  public void setTime(Long time) {
     this.time = time;
   }
 
@@ -234,7 +233,7 @@ public class DeviceEvent implements Parcelable {
     
     device = (Device)in.readValue(Device.class.getClassLoader());
     payload = (String)in.readValue(null);
-    time = (DateTime)in.readValue(DateTime.class.getClassLoader());
+    time = (Long)in.readValue(null);
     type = (TypeEnum)in.readValue(null);
   }
   

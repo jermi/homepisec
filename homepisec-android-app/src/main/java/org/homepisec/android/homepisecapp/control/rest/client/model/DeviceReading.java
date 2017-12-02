@@ -29,7 +29,7 @@ import android.os.Parcel;
 /**
  * DeviceReading
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-10-15T21:11:19.348+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-10-22T09:06:11.385+02:00")
 public class DeviceReading implements Parcelable {
   @SerializedName("device")
   private Device device = null;
