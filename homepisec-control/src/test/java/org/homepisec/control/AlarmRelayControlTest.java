@@ -27,7 +27,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class AlarmRelayControlTest {
 
     @Test
-    public void switch_relay_alarm_trigger_and_disarm() throws InterruptedException {
+    public void switch_relay_alarm_trigger_and_disarm() {
         // given
         final PublishSubject<DeviceEvent> subject = PublishSubject.create();
         final String alarmRelay1Id = "alarm-relay";

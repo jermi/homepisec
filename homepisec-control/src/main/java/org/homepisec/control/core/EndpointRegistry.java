@@ -41,7 +41,7 @@ public class EndpointRegistry {
 
     public void addOrUpdate(final SensorAppEndpoint endpoint) {
         final String endpointUrl = endpoint.getUrl();
-        EndpointHolder endpointHolder = endpoints.get(endpointUrl);
+        EndpointHolder endpointHolder = endpoints.computeIfAbsent(endpointUrl, url -> new EndpointHolder(endpoint));
         if (endpointHolder == null) {
             endpointHolder = new EndpointHolder(endpoint);
             logger.info("adding new endpoint {}", endpointUrl);

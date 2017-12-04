@@ -6,14 +6,14 @@
     android:padding="6dip">
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/deviceReadingIcon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
-        android:contentDescription="TODO"
-        app:srcCompat="@drawable/ic_info_black_24dp" />
+        app:srcCompat="@drawable/ic_info_black_24dp"
+        android:tint="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/deviceReadingValue"
@@ -23,9 +23,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toRightOf="@id/deviceReadingIcon"
         android:gravity="center_vertical"
-        android:text="List item text"
+        android:text="Value"
         android:textSize="16sp" />
 
     <TextView
@@ -34,10 +34,19 @@
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toRightOf="@id/deviceReadingIcon"
         android:ellipsize="marquee"
         android:text="Description"
         android:textSize="12sp"
         android:singleLine="true" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:text="ToggleButton" />
 
 </RelativeLayout>

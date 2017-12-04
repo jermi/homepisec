@@ -5,5 +5,6 @@ public enum EventType {
     ALARM_DISARM,
     ALARM_ARM,
     ALARM_COUNTDOWN,
-    ALARM_TRIGGER
+    ALARM_TRIGGER,
+    SWITCH_RELAY
 }

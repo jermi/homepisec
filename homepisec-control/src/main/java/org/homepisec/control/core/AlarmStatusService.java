@@ -46,7 +46,7 @@ public class AlarmStatusService {
     ) {
         this.alarmCountdownSeconds = alarmCountdownSeconds;
         this.eventsSubject = eventsSubject;
-        disposable = eventsSubject.subscribe(this::handleEvent);
+        this.disposable = eventsSubject.subscribe(this::handleEvent);
     }
 
     @PreDestroy

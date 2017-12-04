@@ -21,6 +21,7 @@ public class DeviceEventMockProducer {
     private final ReadingsService readingsService;
     private final List<Device> devices;
     private final Map<String, BigDecimal> tempValues = new HashMap<>();
+    private final Map<String, Boolean> relayValues = new HashMap<>();
 
     public DeviceEventMockProducer(ReadingsService readingsService) {
         this.readingsService = readingsService;
@@ -29,6 +30,13 @@ public class DeviceEventMockProducer {
             final Device d = new Device(
                     "mocked-device-" + i,
                     i % 2 == 0 ? DeviceType.SENSOR_MOTION : DeviceType.SENSOR_TEMP
+            );
+            devices.add(d);
+        }
+        for (int i = 0; i < 3; i++) {
+            final Device d = new Device(
+                    "mocked-relay-" + i,
+                    DeviceType.RELAY
             );
             devices.add(d);
         }
@@ -63,9 +71,16 @@ public class DeviceEventMockProducer {
                 tempValues.put(device.getId(), newVal);
                 payload = newVal.toString();
                 break;
-            default:
+            case SENSOR_MOTION:
                 payload = String.valueOf(Math.random() > 0.5);
                 break;
+            case RELAY:
+                final Boolean value = relayValues.get(device.getId());
+                payload = String.valueOf(Boolean.TRUE.equals(value));
+                break;
+            default:
+                throw new IllegalArgumentException("not supported device - " + device);
+
         }
         return payload;
     }

@@ -1,64 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        android:id="@+id/readingsLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="org.homepisec.android.homepisecapp.MainActivity">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
 
-
-        <RelativeLayout
-            android:id="@+id/layout"
+        <org.homepisec.android.homepisecapp.DeviceReadingRowView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.467"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.174"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            android:layout_height="wrap_content"
+            custom:descriptionLabel="descr 1"
+            custom:valueLabel="value 1"
+            custom:type="SENSOR_TEMP"
+            />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="14dp"
-                android:text="Hello World!" />
+        <org.homepisec.android.homepisecapp.DeviceReadingRowView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:descriptionLabel="descree"
+            custom:valueLabel="valueeee" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="26dp"
-                android:onClick="onButtonClick"
-                android:text="Button" />
+        <org.homepisec.android.homepisecapp.DeviceReadingRowView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:descriptionLabel="descree"
+            custom:valueLabel="valueeee" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+        <org.homepisec.android.homepisecapp.DeviceReadingRowView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:descriptionLabel="descree"
+            custom:valueLabel="valueeee" />
 
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/button"
-                android:layout_marginTop="13dp">
 
-                <ListView
-                    android:id="@+id/readingsListView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
-            </RelativeLayout>
-        </RelativeLayout>
+    </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
 </ScrollView>
