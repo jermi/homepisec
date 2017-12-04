@@ -31,7 +31,7 @@ import android.os.Parcel;
 /**
  * SensorAppEndpoint
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-10-22T09:06:11.385+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-12-04T23:34:34.549+01:00")
 public class SensorAppEndpoint implements Parcelable {
   @SerializedName("alarmRelays")
   private List<Device> alarmRelays = null;

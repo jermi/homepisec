@@ -3,10 +3,6 @@
     <declare-styleable name="DeviceReadingRow">
         <attr name="valueLabel" format="string" />
         <attr name="descriptionLabel" format="string" />
-        <attr name="type" format="enum" >
-            <enum name="SENSOR_MOTION" value="SENSOR_MOTION" />
-            <enum name="SENSOR_TEMP" value="SENSOR_TEMP" />
-            <enum name="RELAY" value="RELAY" />
-        </attr>
+        <attr name="type" format="string" />
     </declare-styleable>
 </resources>

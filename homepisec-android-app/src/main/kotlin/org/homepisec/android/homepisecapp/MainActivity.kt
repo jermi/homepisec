@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import org.homepisec.android.homepisecapp.control.rest.client.ApiClient
 import org.homepisec.android.homepisecapp.control.rest.client.api.ReadingsControllerApi
+import org.homepisec.android.homepisecapp.control.rest.client.api.RelayControllerApi
 import org.homepisec.android.homepisecapp.control.rest.client.model.Device
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val apiClient = ApiClient()
         apiClient.basePath = "http://192.168.100.3:8080"
         val readingsControllerApi = ReadingsControllerApi(apiClient)
+        val relayControllerApi = RelayControllerApi(apiClient)
         Thread(Runnable {
             while (!isDestroyed && readingsLayout != null) {
                 val readingsUsingGET = readingsControllerApi.readingsUsingGET
@@ -36,6 +38,11 @@ class MainActivity : AppCompatActivity() {
                             deviceReadingRowView.descriptionLabel = reading.device.id
                             deviceReadingRowView.valueLabel = reading.payload
                             deviceReadingRowView.switchable = Device.TypeEnum.RELAY == reading.device.type
+                            deviceReadingRowView.deviceId = reading.device.id
+                            deviceReadingRowView.type = reading.device.type.value
+                            deviceReadingRowView.switchListener = { deviceId, value ->
+                                Thread(Runnable { relayControllerApi.switchRelayUsingPOST(deviceId, value) }).start()
+                            }
                             layout.addView(deviceReadingRowView, layoutParams)
                         })
                     }

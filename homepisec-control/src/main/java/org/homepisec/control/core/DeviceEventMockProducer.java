@@ -1,12 +1,13 @@
 package org.homepisec.control.core;
 
-import org.homepisec.control.rest.dto.Device;
-import org.homepisec.control.rest.dto.DeviceReading;
-import org.homepisec.control.rest.dto.DeviceType;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
+import org.homepisec.control.rest.dto.*;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +19,17 @@ import java.util.stream.Collectors;
 @Profile("mock")
 public class DeviceEventMockProducer {
 
+    private final Disposable disposable;
     private final ReadingsService readingsService;
     private final List<Device> devices;
     private final Map<String, BigDecimal> tempValues = new HashMap<>();
     private final Map<String, Boolean> relayValues = new HashMap<>();
 
-    public DeviceEventMockProducer(ReadingsService readingsService) {
+    public DeviceEventMockProducer(
+            PublishSubject<DeviceEvent> eventsSubject,
+            ReadingsService readingsService
+    ) {
+        disposable = eventsSubject.subscribe(this::handleEvent);
         this.readingsService = readingsService;
         devices = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -40,6 +46,19 @@ public class DeviceEventMockProducer {
             );
             devices.add(d);
         }
+    }
+
+    private void handleEvent(final DeviceEvent deviceEvent) {
+        if (deviceEvent.getType().equals(EventType.SWITCH_RELAY)) {
+            final String id = deviceEvent.getDevice().getId();
+            final Boolean value = Boolean.valueOf(deviceEvent.getPayload());
+            relayValues.put(id, value);
+        }
+    }
+
+    @PreDestroy
+    public void destroy() {
+        disposable.dispose();
     }
 
     @Scheduled(fixedRate = 1000)

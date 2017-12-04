@@ -15,20 +15,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             custom:descriptionLabel="descr 1"
-            custom:valueLabel="value 1"
-            custom:type="SENSOR_TEMP"
-            />
+            custom:type="SENSOR_MOTION"
+            custom:valueLabel="value 1" />
 
         <org.homepisec.android.homepisecapp.DeviceReadingRowView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             custom:descriptionLabel="descree"
+            custom:type="SENSOR_TEMP"
             custom:valueLabel="valueeee" />
 
         <org.homepisec.android.homepisecapp.DeviceReadingRowView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             custom:descriptionLabel="descree"
+            custom:type="RELAY"
+            custom:valueLabel="valueeee" />
+
+        <org.homepisec.android.homepisecapp.DeviceReadingRowView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:descriptionLabel="descree"
+            custom:type="RELAY"
             custom:valueLabel="valueeee" />
 
         <org.homepisec.android.homepisecapp.DeviceReadingRowView

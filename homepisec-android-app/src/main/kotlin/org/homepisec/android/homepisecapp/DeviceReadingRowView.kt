@@ -4,10 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.ToggleButton
 import org.homepisec.android.homepisecapp.control.rest.client.model.Device
 
 /**
@@ -15,10 +15,12 @@ import org.homepisec.android.homepisecapp.control.rest.client.model.Device
  */
 class DeviceReadingRowView(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
-    var descriptionLabel: String? = null
-    var valueLabel: String? = null
+    var deviceId: String = ""
+    var switchListener: ((deviceId: String, value: Boolean) -> Unit) = { _, _ -> }
+    var descriptionLabel: String = ""
+    var valueLabel: String = ""
     var switchable: Boolean = false
-    var type: String? = null
+    var type: String = ""
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
@@ -30,8 +32,11 @@ class DeviceReadingRowView(context: Context, attrs: AttributeSet?) : RelativeLay
         valueTextView?.text = valueLabel
         val descriptionTextView = findViewById<TextView>(R.id.deviceReadingDescription)
         descriptionTextView?.text = descriptionLabel
-        val toggleButton = findViewById<ToggleButton>(R.id.toggleButton)
+        val toggleButton = findViewById<Button>(R.id.toggleButton)
         toggleButton.visibility = if (switchable) View.VISIBLE else View.INVISIBLE
+        if (switchable) {
+            toggleButton.setOnClickListener({ switchListener.invoke(deviceId, !valueLabel.toBoolean()) })
+        }
         val iconImgView = findViewById<ImageView>(R.id.deviceReadingIcon)
         val iconRes: Int = when (type) {
             Device.TypeEnum.RELAY.value -> R.drawable.ic_power_black_24dp
@@ -47,7 +52,7 @@ class DeviceReadingRowView(context: Context, attrs: AttributeSet?) : RelativeLay
             val a = context.obtainStyledAttributes(attrs, R.styleable.DeviceReadingRow, 0, 0)
             this.valueLabel = a.getString(R.styleable.DeviceReadingRow_valueLabel)
             this.descriptionLabel = a.getString(R.styleable.DeviceReadingRow_descriptionLabel)
-            this.type = a.getString(R.styleable.DeviceReadingRow_type)
+            this.type = if (a.hasValue(R.styleable.DeviceReadingRow_type)) a.getString(R.styleable.DeviceReadingRow_type) else ""
             this.switchable = this.type == "RELAY"
             a.recycle()
         } else {
