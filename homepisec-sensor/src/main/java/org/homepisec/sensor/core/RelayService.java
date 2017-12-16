@@ -13,10 +13,12 @@ public class RelayService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final DeviceRegistryProvider deviceRegistryProvider;
     private final GpioProvider gpioProvider;
+    private final GpioDebounceService gpioDebounceService;
 
-    public RelayService(DeviceRegistryProvider deviceRegistryProvider, GpioProvider gpioProvider) {
+    public RelayService(DeviceRegistryProvider deviceRegistryProvider, GpioProvider gpioProvider, GpioDebounceService gpioDebounceService) {
         this.deviceRegistryProvider = deviceRegistryProvider;
         this.gpioProvider = gpioProvider;
+        this.gpioDebounceService = gpioDebounceService;
     }
 
     public List<DeviceRegistry.DeviceGpio> getAllRelays() {
@@ -29,12 +31,28 @@ public class RelayService {
         return allRelays;
     }
 
-    public boolean switchRelay(DeviceRegistry.DeviceGpio relay, boolean value) {
-        logger.debug("switching relay {} to {}", relay, value);
+    public boolean switchRelay(final String relayId, final boolean value) {
+        logger.debug("switching relay {} to {}", relayId, value);
+        return getAllRelays()
+                .stream()
+                .filter(r -> r.getId().equals(relayId))
+                .findFirst()
+                .map(r -> {
+                    switchRelayGpio(r, value);
+                    return true;
+                })
+                .orElse(false);
+    }
+
+    private void switchRelayGpio(final DeviceRegistry.DeviceGpio relay, final boolean value) {
         final int pin = relay.getGpio();
         gpioProvider.setPinDirection(pin, GpioProvider.Direction.OUT);
         gpioProvider.writePin(pin, value);
-        return true;
+        final Integer delay = relay.getDebounceDelay();
+        final boolean debounceValueDifferent = value != relay.isDebounceValue();
+        if(delay != null && delay > 0 && debounceValueDifferent) {
+            gpioDebounceService.registerDebounce(relay);
+        }
     }
 
 }

@@ -43,12 +43,7 @@ public class SensorApiController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public boolean switchRelay(@RequestBody @Valid @NotNull SwitchRelayRequest relayRequest) {
-        return relayService.getAllRelays()
-                .stream()
-                .filter(r -> r.getId().equals(relayRequest.getId()))
-                .findFirst()
-                .map(r -> relayService.switchRelay(r, relayRequest.getValue()))
-                .orElse(false);
+        return relayService.switchRelay(relayRequest.getId(), relayRequest.getValue());
     }
 
 }
