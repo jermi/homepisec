@@ -4,7 +4,7 @@ buildscript {
         springBootVersion = '1.5.6.RELEASE'
         jacksonVersion = '2.8.9'
         rxJavaVersion = "2.1.2"
-        kotlinVersion = '1.1.51'
+        kotlinVersion = '1.2.10'
     }
     repositories {
         jcenter()

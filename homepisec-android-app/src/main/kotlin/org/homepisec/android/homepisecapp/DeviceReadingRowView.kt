@@ -50,14 +50,14 @@ class DeviceReadingRowView(context: Context, attrs: AttributeSet?) : RelativeLay
     init {
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.DeviceReadingRow, 0, 0)
-            this.valueLabel = a.getString(R.styleable.DeviceReadingRow_valueLabel)
-            this.descriptionLabel = a.getString(R.styleable.DeviceReadingRow_descriptionLabel)
-            this.type = if (a.hasValue(R.styleable.DeviceReadingRow_type)) a.getString(R.styleable.DeviceReadingRow_type) else ""
-            this.switchable = this.type == "RELAY"
+            valueLabel = a.getString(R.styleable.DeviceReadingRow_valueLabel)
+            descriptionLabel = a.getString(R.styleable.DeviceReadingRow_descriptionLabel)
+            type = if (a.hasValue(R.styleable.DeviceReadingRow_type)) a.getString(R.styleable.DeviceReadingRow_type) else ""
+            switchable = this.type == "RELAY"
             a.recycle()
         } else {
-            this.valueLabel = "";
-            this.descriptionLabel = "";
+            valueLabel = "";
+            descriptionLabel = "";
         }
         LayoutInflater.from(context).inflate(R.layout.device_reading_row, this)
         updateView()
