@@ -17,7 +17,7 @@ class DrawerItem(val id: Int, val icon: Int, val text: String) {
     }
 }
 
-class DrawerItemAdapter(context: Context, objects: List<DrawerItem>) : ArrayAdapter<DrawerItem>(context, R.layout.drawer_list_item, objects) {
+class DrawerItemAdapter(context: Context, objects: List<DrawerItem>, val menuSelectCallback: (menuId: Int) -> Unit) : ArrayAdapter<DrawerItem>(context, R.layout.drawer_list_item, objects) {
 
     class ViewHolder {
         var icon: ImageView? = null
@@ -43,7 +43,7 @@ class DrawerItemAdapter(context: Context, objects: List<DrawerItem>) : ArrayAdap
         viewHolder.textView!!.text = item.text
         viewHolder.icon!!.setImageResource(item.icon)
         view.setOnClickListener({ _ ->
-            Toast.makeText(context, "menu " + item.id, Toast.LENGTH_SHORT).show()
+            menuSelectCallback(item.id)
         })
         return view
     }

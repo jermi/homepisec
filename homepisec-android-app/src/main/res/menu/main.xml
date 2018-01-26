@@ -1,36 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_item_11"
+        android:id="@+id/nav_item_all_devices"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="My item 1" />
+        android:title="All devices" />
     <item
-        android:id="@+id/nav_item_22"
+        android:id="@+id/nav_item_motion_sensors"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="My item 2" />
-
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_item_1"
-            android:icon="@drawable/ic_info_black_24dp"
-            android:title="My item 1" />
-        <item
-            android:id="@+id/nav_item_2"
-            android:icon="@drawable/ic_info_black_24dp"
-            android:title="My item 2" />
-    </group>
-
-    <item android:title="Sub items">
-        <menu>
-            <item
-                android:id="@+id/nav_sub_1"
-                android:icon="@drawable/ic_info_black_24dp"
-                android:title="My sub item 1" />
-            <item
-                android:id="@+id/nav_sub_2"
-                android:icon="@drawable/ic_info_black_24dp"
-                android:title="My sub item 2" />
-        </menu>
-    </item>
-
+        android:title="Motion sensors" />
+    <item
+        android:id="@+id/nav_item_temp_sensors"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="Temperature sensors" />
 </menu>

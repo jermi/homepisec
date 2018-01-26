@@ -1,8 +1,10 @@
 package org.homepisec.android.homepisecapp
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +12,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ListView
+import android.widget.Toast
+import android.preference.PreferenceActivity
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,9 +31,26 @@ class MainActivity : AppCompatActivity() {
                 DrawerItem(DrawerItem.READINGS, R.drawable.ic_tune_black_24dp, "Readings"),
                 DrawerItem(DrawerItem.SETTINGS, R.drawable.ic_power_black_24dp, "Settings")
         )
-        listView.adapter = DrawerItemAdapter(this, drawerItems)
 
         val draweLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        listView.adapter = DrawerItemAdapter(this, drawerItems, { menuId ->
+            Toast.makeText(this, "menu " + menuId, Toast.LENGTH_SHORT).show()
+            draweLayout.closeDrawer(GravityCompat.START)
+//            val activityClass = if(DrawerItem.READINGS == menuId) then
+//                MainActivity.class else SettingsActivity.class
+//            }
+
+            val targetActivityClass: Class<*> = when (menuId) {
+                DrawerItem.READINGS -> MainActivity::class.java
+                DrawerItem.SETTINGS -> SettingsActivity::class.java
+                else -> throw IllegalArgumentException("invalid menu id " + menuId)
+            }
+
+            val intent = Intent(this, targetActivityClass)
+            intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralSettingsFragment.FRAGMENT_NAME)
+            intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true)
+            startActivity(intent)
+        })
         drawerToggle = object : ActionBarDrawerToggle(
                 this, /* host Activity */
                 draweLayout, /* DrawerLayout object */
