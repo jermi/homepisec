@@ -33,11 +33,12 @@ public class AlarmRelayControlTest {
         final String alarmRelay1Id = "alarm-relay";
         final String alarmRelay2Id = "alarm-relay2";
         final String endpointUrl = "http://nowhere.org:8080";
+        final Device device = new Device(alarmRelay1Id, DeviceType.RELAY);
         final SensorAppEndpoint sensorAppEndpoint = new SensorAppEndpoint(
                 endpointUrl,
                 Collections.emptyList(),
                 Arrays.asList(
-                        new Device(alarmRelay1Id, DeviceType.RELAY),
+                        device,
                         new Device(alarmRelay2Id, DeviceType.RELAY)
                 )
         );
@@ -76,7 +77,7 @@ public class AlarmRelayControlTest {
                 .andExpect(content().string("{\"id\":\"" + alarmRelay2Id + "\",\"value\":false}"))
                 .andRespond(withSuccess("true", MediaType.APPLICATION_JSON_UTF8));
         // when
-        subject.onNext(new AlarmTriggeredEvent(System.currentTimeMillis(), "motion-sensor-1"));
+        subject.onNext(new AlarmTriggeredEvent(System.currentTimeMillis(), device));
         subject.onNext(new AlarmDisarmEvent(System.currentTimeMillis()));
     }
 

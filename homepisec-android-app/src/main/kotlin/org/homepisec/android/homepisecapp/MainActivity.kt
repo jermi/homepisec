@@ -17,5 +17,5 @@ class MainActivity : CustomDrawerActivity() {
         inflater.inflate(R.menu.main, menu)
         return true
     }
-    
+
 }
