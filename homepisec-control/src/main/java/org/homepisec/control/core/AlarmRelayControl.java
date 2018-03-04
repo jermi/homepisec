@@ -7,6 +7,8 @@ import org.homepisec.control.rest.client.api.SensorApiControllerApi;
 import org.homepisec.control.rest.client.model.SwitchRelayRequest;
 import org.homepisec.control.rest.dto.DeviceEvent;
 import org.homepisec.control.rest.dto.SensorAppEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +20,7 @@ import java.util.Map;
 @Service
 public class AlarmRelayControl {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final RestTemplate restTemplate;
     private final EndpointRegistry endpointRegistry;
     private final Disposable disposable;
@@ -37,15 +40,19 @@ public class AlarmRelayControl {
     }
 
     private void handleEvent(DeviceEvent event) {
-        switch (event.getType()) {
-            case ALARM_DISARM:
-                handleAlarmDisarm();
-                break;
-            case ALARM_TRIGGER:
-                handleAlarmTrigger();
-                break;
-            default:
-                break;
+        try {
+            switch (event.getType()) {
+                case ALARM_DISARM:
+                    handleAlarmDisarm();
+                    break;
+                case ALARM_TRIGGER:
+                    handleAlarmTrigger();
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            logger.error("failed to switch relay for event " + event + ": " + e.getMessage(), e);
         }
     }
 

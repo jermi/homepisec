@@ -54,24 +54,28 @@ public class AlarmStatusService {
     }
 
     private void handleEvent(DeviceEvent event) {
-        switch (event.getType()) {
-            case DEVICE_READ:
-                handleDeviceRead(event);
-                break;
-            case ALARM_DISARM:
-                handleAlarmDisarm();
-                break;
-            case ALARM_ARM:
-                handleAlarmArm();
-                break;
-            case ALARM_COUNTDOWN:
-                handleAlarmCountdown((AlarmCountdownEvent) event);
-                break;
-            case ALARM_TRIGGER:
-                handleAlarmTrigger((AlarmTriggeredEvent) event);
-                break;
-            default:
-                break;
+        try {
+            switch (event.getType()) {
+                case DEVICE_READ:
+                    handleDeviceRead(event);
+                    break;
+                case ALARM_DISARM:
+                    handleAlarmDisarm();
+                    break;
+                case ALARM_ARM:
+                    handleAlarmArm();
+                    break;
+                case ALARM_COUNTDOWN:
+                    handleAlarmCountdown((AlarmCountdownEvent) event);
+                    break;
+                case ALARM_TRIGGER:
+                    handleAlarmTrigger((AlarmTriggeredEvent) event);
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            logger.error("unexpected error for event " + event + ": " + e.getMessage(), e);
         }
     }
 

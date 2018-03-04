@@ -6,6 +6,8 @@ import org.homepisec.control.rest.client.ApiClient;
 import org.homepisec.control.rest.client.api.SensorApiControllerApi;
 import org.homepisec.control.rest.client.model.SwitchRelayRequest;
 import org.homepisec.control.rest.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 @Service
 public class RelayControl {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final RestTemplate restTemplate;
     private final EndpointRegistry endpointRegistry;
     private final Disposable disposable;
@@ -47,14 +50,19 @@ public class RelayControl {
     }
 
     private void handleEvent(DeviceEvent event) {
-        if (EventType.SWITCH_RELAY.equals(event.getType())) {
-            handleSwitchRelayEvent(event);
+        try {
+            if (EventType.SWITCH_RELAY.equals(event.getType())) {
+                handleSwitchRelayEvent(event);
+            }
+        } catch (Exception e) {
+            logger.error("failed to switch relay for evet " + event + ": " + e.getMessage(), e);
         }
     }
 
     private void handleSwitchRelayEvent(DeviceEvent event) {
         final String deviceId = event.getDevice().getId();
         final boolean switchState = Boolean.parseBoolean(event.getPayload());
+        logger.info("switch relay {} to {}", deviceId, switchState);
         final Optional<SensorAppEndpoint> endpoint = endpointRegistry.getEndpoints().stream()
                 .filter(e -> e.getRelays().stream().anyMatch(r -> r.getId().equals(deviceId)))
                 .findFirst();
