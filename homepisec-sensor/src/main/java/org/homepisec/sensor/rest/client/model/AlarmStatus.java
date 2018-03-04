@@ -20,14 +20,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.OffsetDateTime;
+import org.homepisec.sensor.rest.client.model.Device;
 
 /**
  * AlarmStatus
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-03-04T09:14:48.656+01:00")
 public class AlarmStatus {
   @JsonProperty("countdownEnd")
   private OffsetDateTime countdownEnd = null;
+
+  @JsonProperty("countdownSource")
+  private Device countdownSource = null;
 
   @JsonProperty("countdownStart")
   private OffsetDateTime countdownStart = null;
@@ -74,6 +78,9 @@ public class AlarmStatus {
   @JsonProperty("state")
   private StateEnum state = null;
 
+  @JsonProperty("triggerSource")
+  private Device triggerSource = null;
+
   @JsonProperty("triggerStart")
   private OffsetDateTime triggerStart = null;
 
@@ -93,6 +100,24 @@ public class AlarmStatus {
 
   public void setCountdownEnd(OffsetDateTime countdownEnd) {
     this.countdownEnd = countdownEnd;
+  }
+
+  public AlarmStatus countdownSource(Device countdownSource) {
+    this.countdownSource = countdownSource;
+    return this;
+  }
+
+   /**
+   * Get countdownSource
+   * @return countdownSource
+  **/
+  @ApiModelProperty(value = "")
+  public Device getCountdownSource() {
+    return countdownSource;
+  }
+
+  public void setCountdownSource(Device countdownSource) {
+    this.countdownSource = countdownSource;
   }
 
   public AlarmStatus countdownStart(OffsetDateTime countdownStart) {
@@ -131,6 +156,24 @@ public class AlarmStatus {
     this.state = state;
   }
 
+  public AlarmStatus triggerSource(Device triggerSource) {
+    this.triggerSource = triggerSource;
+    return this;
+  }
+
+   /**
+   * Get triggerSource
+   * @return triggerSource
+  **/
+  @ApiModelProperty(value = "")
+  public Device getTriggerSource() {
+    return triggerSource;
+  }
+
+  public void setTriggerSource(Device triggerSource) {
+    this.triggerSource = triggerSource;
+  }
+
   public AlarmStatus triggerStart(OffsetDateTime triggerStart) {
     this.triggerStart = triggerStart;
     return this;
@@ -160,14 +203,16 @@ public class AlarmStatus {
     }
     AlarmStatus alarmStatus = (AlarmStatus) o;
     return Objects.equals(this.countdownEnd, alarmStatus.countdownEnd) &&
+        Objects.equals(this.countdownSource, alarmStatus.countdownSource) &&
         Objects.equals(this.countdownStart, alarmStatus.countdownStart) &&
         Objects.equals(this.state, alarmStatus.state) &&
+        Objects.equals(this.triggerSource, alarmStatus.triggerSource) &&
         Objects.equals(this.triggerStart, alarmStatus.triggerStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(countdownEnd, countdownStart, state, triggerStart);
+    return Objects.hash(countdownEnd, countdownSource, countdownStart, state, triggerSource, triggerStart);
   }
 
 
@@ -177,8 +222,10 @@ public class AlarmStatus {
     sb.append("class AlarmStatus {\n");
     
     sb.append("    countdownEnd: ").append(toIndentedString(countdownEnd)).append("\n");
+    sb.append("    countdownSource: ").append(toIndentedString(countdownSource)).append("\n");
     sb.append("    countdownStart: ").append(toIndentedString(countdownStart)).append("\n");
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
+    sb.append("    triggerSource: ").append(toIndentedString(triggerSource)).append("\n");
     sb.append("    triggerStart: ").append(toIndentedString(triggerStart)).append("\n");
     sb.append("}");
     return sb.toString();

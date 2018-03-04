@@ -19,13 +19,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.OffsetDateTime;
 import org.homepisec.sensor.rest.client.model.Device;
 
 /**
  * DeviceEvent
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-03-04T09:14:48.656+01:00")
 public class DeviceEvent {
   @JsonProperty("device")
   private Device device = null;
@@ -34,7 +33,7 @@ public class DeviceEvent {
   private String payload = null;
 
   @JsonProperty("time")
-  private OffsetDateTime time = null;
+  private Long time = null;
 
   /**
    * Gets or Sets type
@@ -48,7 +47,9 @@ public class DeviceEvent {
     
     ALARM_COUNTDOWN("ALARM_COUNTDOWN"),
     
-    ALARM_TRIGGER("ALARM_TRIGGER");
+    ALARM_TRIGGER("ALARM_TRIGGER"),
+    
+    SWITCH_RELAY("SWITCH_RELAY");
 
     private String value;
 
@@ -116,7 +117,7 @@ public class DeviceEvent {
     this.payload = payload;
   }
 
-  public DeviceEvent time(OffsetDateTime time) {
+  public DeviceEvent time(Long time) {
     this.time = time;
     return this;
   }
@@ -126,11 +127,11 @@ public class DeviceEvent {
    * @return time
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getTime() {
+  public Long getTime() {
     return time;
   }
 
-  public void setTime(OffsetDateTime time) {
+  public void setTime(Long time) {
     this.time = time;
   }
 

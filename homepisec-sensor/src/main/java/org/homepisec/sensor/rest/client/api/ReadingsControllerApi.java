@@ -25,7 +25,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-03-04T09:14:48.656+01:00")
 @Component("org.homepisec.sensor.rest.client.api.ReadingsControllerApi")
 public class ReadingsControllerApi {
     private ApiClient apiClient;

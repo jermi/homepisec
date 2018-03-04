@@ -35,7 +35,7 @@ public class EndpointRegistryTest {
     }
 
     @Test
-    public void remove_endpoint() throws InterruptedException {
+    public void remove_endpoint() {
         // given
         final EndpointRegistry endpointRegistry = new EndpointRegistry(-1);
         Assert.assertEquals(0, endpointRegistry.getEndpoints().size());

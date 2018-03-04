@@ -24,8 +24,8 @@ public class BashCmdHelper {
         }
     }
 
-    public static class CmdException extends RuntimeException {
-        public CmdException(String message) {
+    private static class CmdException extends RuntimeException {
+        CmdException(String message) {
             super(message);
         }
     }

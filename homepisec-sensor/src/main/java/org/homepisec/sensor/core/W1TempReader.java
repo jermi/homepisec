@@ -51,18 +51,18 @@ public class W1TempReader {
             }
             throw new W1ReaderException("invalid first line of temp reading: " + line1 + "\nfor read command: " + cmd);
         } catch (Exception e) {
-            final String msg = "unable to read temp with command: " + cmd;
+            final String msg = "read temp with command: " + cmd + " failed with error: " + e.getMessage();
             logger.error(msg, e);
             throw new W1ReaderException(msg, e);
         }
     }
 
-    public static class W1ReaderException extends RuntimeException {
-        public W1ReaderException(String message) {
+    private static class W1ReaderException extends RuntimeException {
+        W1ReaderException(String message) {
             super(message);
         }
 
-        public W1ReaderException(String message, Throwable cause) {
+        W1ReaderException(String message, Throwable cause) {
             super(message, cause);
         }
     }

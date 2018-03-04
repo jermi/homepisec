@@ -24,7 +24,7 @@ import org.homepisec.sensor.rest.client.model.Device;
 /**
  * DeviceReading
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2017-09-09T21:11:41.784+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-03-04T09:14:48.656+01:00")
 public class DeviceReading {
   @JsonProperty("device")
   private Device device = null;

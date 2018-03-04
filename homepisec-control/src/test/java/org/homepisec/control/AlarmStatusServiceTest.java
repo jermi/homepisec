@@ -38,7 +38,12 @@ public class AlarmStatusServiceTest {
         final PublishSubject<DeviceEvent> subject = PublishSubject.create();
         AlarmStatusService instance = new AlarmStatusService(0, subject);
         final Device sensor = new Device("d1", DeviceType.SENSOR_MOTION);
-        final DeviceEvent deviceReadEvent = new DeviceEvent(EventType.DEVICE_READ, System.currentTimeMillis(), sensor, "true");
+        final DeviceEvent deviceReadEvent = new DeviceEvent(
+                EventType.DEVICE_READ,
+                System.currentTimeMillis(),
+                sensor,
+                "true"
+        );
         Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
         Assert.assertNull(instance.getAlarmStatus().getCountdownSource());
         // when alarm armed and motion detected
@@ -68,7 +73,12 @@ public class AlarmStatusServiceTest {
         // given
         final PublishSubject<DeviceEvent> subject = PublishSubject.create();
         AlarmStatusService instance = new AlarmStatusService(1, subject);
-        final DeviceEvent deviceReadEvent = new DeviceEvent(EventType.DEVICE_READ, System.currentTimeMillis(), new Device("d1", DeviceType.SENSOR_MOTION), "true");
+        final DeviceEvent deviceReadEvent = new DeviceEvent(
+                EventType.DEVICE_READ,
+                System.currentTimeMillis(),
+                new Device("d1", DeviceType.SENSOR_MOTION),
+                "true"
+        );
         Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
         // when alarm armed and motion detected
         instance.armAlarm();
