@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'org.detoeuf.swagger-codegen' version '1.7.4'
+}
+
+swagger {
+    inputSpec = 'http://localhost:8080/v2/api-docs'
+    outputDir = file('swagger-codegen')
+    lang = 'typescript-fetch'
+
+    additionalProperties = [
+            'supportsES6': 'true'
+    ]
+}
+
+task genTSControlRestClient {
+	inputs.dir("swagger-codegen/api.ts")
+	outputs.dir("${project.projectDir}/src/control-api.ts")
+	group 'build'
+    doLast {
+        copy {
+            from file("swagger-codegen/api.ts")
+            into "${project.projectDir}/src/generated"
+        }
+        delete "swagger-codegen"
+    }
+}
+
+genTSControlRestClient.dependsOn('swagger')
