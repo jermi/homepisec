@@ -10,7 +10,7 @@ plugins {
 
 swagger {
     inputSpec = 'http://localhost:8080/v2/api-docs'
-    outputDir = file('swagger-codegen')
+    outputDir = file('./swagger-codegen')
     lang = 'typescript-fetch'
 
     additionalProperties = [
@@ -19,8 +19,8 @@ swagger {
 }
 
 task genTSControlRestClient {
-	inputs.dir("swagger-codegen")
-	outputs.dir("${project.projectDir}/src/generated")
+//	inputs.dir("swagger-codegen")
+//	outputs.dir("${project.projectDir}/src/generated")
 	group 'build'
     doLast {
         copy {
@@ -28,7 +28,7 @@ task genTSControlRestClient {
             into "${project.projectDir}/src/generated"
         }
         file("${project.projectDir}/src/generated/api.ts").renameTo("${project.projectDir}/src/generated/control-api.ts")
-//        delete "swagger-codegen"
+        delete "swagger-codegen"
     }
 }
 

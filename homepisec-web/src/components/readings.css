@@ -1,14 +1,40 @@
 .readings-container {
+  margin-left: 1em;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
 }
 
 .readings-item {
-
+  display: inline-grid;
+  grid-template-columns: 4em auto;
+  grid-template-rows: 3em 1em;
+  grid-column-gap: 1em;
 }
 
 .readings-item-icon {
-  width: 1em;
-  height: 1em;
+  height: 4em;
+}
+
+.readings-item-icon {
+  grid-column: 1;
+  grid-row: 1/2;
+}
+
+.readings-item-primary {
+  font-size: 3em;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.readings-item-secondary {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.readings-item-relay-switch-button {
+  vertical-align: middle;
+  margin-left: 1.5em;
 }

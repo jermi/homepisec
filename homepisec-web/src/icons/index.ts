@@ -1,1 +1,0 @@
-// export const therm:Promise<SVGElement> = import('./therm.svg');

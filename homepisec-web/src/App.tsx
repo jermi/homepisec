@@ -5,22 +5,22 @@ import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Menu} from "./components/Menu";
 import {Readings} from "./components/Readings";
-import {Settings} from "./components/Settings";
+import {Alarm} from "./components/Alarm";
 import {
   AlarmcontrollerApi,
-  AlarmStatus,
+  AlarmStatus, DeviceEvent,
   DeviceReading,
   ReadingscontrollerApi
 } from "./generated/control-api"
 
 interface AppState {
-  readings: DeviceReading[]
+  readings: DeviceEvent[]
 }
 
 class App extends React.Component<{}, AppState> {
 
-  private api = new AlarmcontrollerApi(fetch, ".");
-  private readingsApi = new ReadingscontrollerApi(fetch, ".");
+  private static api = new AlarmcontrollerApi(fetch, ".");
+  private static readingsApi = new ReadingscontrollerApi(fetch, ".");
 
   constructor(props: {}) {
     super(props);
@@ -28,14 +28,14 @@ class App extends React.Component<{}, AppState> {
   }
 
   componentDidMount() {
-    this.readingsApi.getReadingsUsingGET().then(readings => {
+    App.readingsApi.getReadingsUsingGET().then((readings: DeviceEvent[]) => {
       this.setState({readings});
     });
   };
 
   public render() {
 
-    this.api.getAlarmStatusUsingGET().then((alarmStatus: AlarmStatus) => {
+    App.api.getAlarmStatusUsingGET().then((alarmStatus: AlarmStatus) => {
       // tslint:disable-next-line
       console.log("got status", alarmStatus)
 
@@ -47,8 +47,8 @@ class App extends React.Component<{}, AppState> {
         <MuiThemeProvider>
           <div>
             <Menu/>
-            <Settings/>
-            <Readings readings={this.state.readings || []}/>
+            <Alarm/>
+            <Readings readings={this.state.readings}/>
           </div>
         </MuiThemeProvider>
     );

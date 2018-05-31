@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const Settings = () => (
+export const Alarm = () => (
     <div>
         settings
     </div>
