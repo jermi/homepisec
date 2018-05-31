@@ -11,6 +11,10 @@ import org.homepisec.android.homepisecapp.control.rest.client.ApiClient
 import org.homepisec.android.homepisecapp.control.rest.client.api.ReadingsControllerApi
 import org.homepisec.android.homepisecapp.control.rest.client.api.RelayControllerApi
 import org.homepisec.android.homepisecapp.control.rest.client.model.Device
+import android.preference.PreferenceManager
+import android.content.SharedPreferences
+
+
 
 class DeviceListFragment : Fragment() {
 
@@ -30,7 +34,8 @@ class DeviceListFragment : Fragment() {
     private fun refreshReadingsPeriodically() {
         val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         val apiClient = ApiClient()
-        apiClient.basePath = "http://192.168.100.6:8080"
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this.activity)
+        apiClient.basePath = prefs.getString("pref_key_homepisec_control_endpoint", "${homepisec_control_default_url}")
         val readingsControllerApi = ReadingsControllerApi(apiClient)
         val relayControllerApi = RelayControllerApi(apiClient)
         Thread(Runnable {

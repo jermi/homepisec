@@ -1,0 +1,14 @@
+.readings-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+}
+
+.readings-item {
+
+}
+
+.readings-item-icon {
+  width: 1em;
+  height: 1em;
+}

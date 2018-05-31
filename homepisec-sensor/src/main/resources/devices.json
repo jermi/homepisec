@@ -14,7 +14,8 @@
   "relays": [
     {
       "id": "relay-2",
-      "gpio": 20
+      "gpio": 20,
+      "debounceDelay": 2000
     },
     {
       "id": "relay-3",

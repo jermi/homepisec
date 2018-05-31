@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 buildscript {
     repositories {
         jcenter()
@@ -11,6 +13,10 @@ buildscript {
 
 plugins {
     id 'org.detoeuf.swagger-codegen' version '1.7.4'
+}
+
+ext {
+    homepisec_control_default_url="http://87.101.38.212:8888/homepisec-control"
 }
 
 repositories {
@@ -75,11 +81,24 @@ task genControlRestClientAndroid {
 
 genControlRestClientAndroid.dependsOn('swagger')
 
+task filter(type: Copy) {
+    from 'src/main/'
+    into 'build/generated/substituted-src'
+    // Substitute property tokens in files
+    expand(copyright: '2009', version: '2.3.1')
+    expand(project.properties)
+    filter(ReplaceTokens, tokens: [copyright: '2009', version: '2.3.1'])
+    // Use a closure to filter each line
+    filter { String line ->
+        "[$line]"
+    }
+}
+
 dependencies {
     implementation 'com.android.support:support-v4:26.0.2'
     implementation 'com.android.support:support-vector-drawable:26.0.2'
     implementation 'com.android.support:design:26.1.0'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -94,6 +113,6 @@ dependencies {
     compile "com.squareup.okhttp:logging-interceptor:${okHttpVersion}"
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'net.danlew:android.joda:2.9.9'
-    compile "javax.annotation:javax.annotation-api:1.2"
+    compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'io.swagger:swagger-annotations:1.5.16'
 }

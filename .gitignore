@@ -1,5 +1,6 @@
 local.properties
 out/
+swagger-codegen/
 
 # Created by https://www.gitignore.io/api/java,node,gradle,intellij+all
 

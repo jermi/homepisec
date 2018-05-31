@@ -1,9 +1,17 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "rules": {
+    "interface-name" : [false, "never-prefix"],
+    "member-access": false,
+    "ordered-imports": false,
+    "jsx-self-close": false
+  },
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
-      "node_modules/**/*.ts"
+      "node_modules/**/*.ts",
+      "src/generated/**",
+      "swagger-codegen/**"
     ]
   }
 }

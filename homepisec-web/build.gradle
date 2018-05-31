@@ -19,15 +19,16 @@ swagger {
 }
 
 task genTSControlRestClient {
-	inputs.dir("swagger-codegen/api.ts")
-	outputs.dir("${project.projectDir}/src/control-api.ts")
+	inputs.dir("swagger-codegen")
+	outputs.dir("${project.projectDir}/src/generated")
 	group 'build'
     doLast {
         copy {
             from file("swagger-codegen/api.ts")
             into "${project.projectDir}/src/generated"
         }
-        delete "swagger-codegen"
+        file("${project.projectDir}/src/generated/api.ts").renameTo("${project.projectDir}/src/generated/control-api.ts")
+//        delete "swagger-codegen"
     }
 }
 

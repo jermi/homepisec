@@ -8,8 +8,8 @@
         android:title="General settings">
 
         <EditTextPreference
-            android:defaultValue="http://192.168.100.6:8080"
-            android:key="pref_key_auto_delete"
+            android:defaultValue="http://87.101.38.212:8888/homepisec-control"
+            android:key="pref_key_homepisec_control_endpoint"
             android:summary="URL under which control is accessible"
             android:title="Control endpoint" />
 
