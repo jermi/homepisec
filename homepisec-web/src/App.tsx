@@ -8,13 +8,14 @@ import {Readings} from "./components/Readings";
 import {Alarm} from "./components/Alarm";
 import {
   AlarmcontrollerApi,
-  AlarmStatus, DeviceEvent,
-  DeviceReading,
+  AlarmStatus,
+  DeviceEvent,
   ReadingscontrollerApi
 } from "./generated/control-api"
 
 interface AppState {
   readings: DeviceEvent[]
+  alarmStatus?: AlarmStatus
 }
 
 class App extends React.Component<{}, AppState> {
@@ -29,25 +30,21 @@ class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     App.readingsApi.getReadingsUsingGET().then((readings: DeviceEvent[]) => {
-      this.setState({readings});
+      this.setState({readings, alarmStatus: this.state.alarmStatus});
+    });
+    App.api.getAlarmStatusUsingGET().then((alarmStatus: AlarmStatus) => {
+      this.setState({readings: this.state.readings, alarmStatus})
     });
   };
 
   public render() {
-
-    App.api.getAlarmStatusUsingGET().then((alarmStatus: AlarmStatus) => {
-      // tslint:disable-next-line
-      console.log("got status", alarmStatus)
-
-    }, (error) => {
-      // tslint:disable-next-line
-      console.error("failed to get alarm status", ...error)
-    });
     return (
         <MuiThemeProvider>
           <div>
             <Menu/>
-            <Alarm/>
+            {this.state.alarmStatus && (
+                <Alarm status={this.state.alarmStatus}/>
+            )}
             <Readings readings={this.state.readings}/>
           </div>
         </MuiThemeProvider>

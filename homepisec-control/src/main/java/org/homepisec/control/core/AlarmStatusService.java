@@ -119,11 +119,11 @@ public class AlarmStatusService {
         if (alarmStatus.getState().equals(AlarmState.ARMED)) {
             logger.info("starting alarm countdown because of {}", event.getSource().getId());
             alarmStatus.setState(AlarmState.COUNTDOWN);
-            alarmStatus.setCountdownStart(new Date());
+            alarmStatus.setCountdownStart(System.currentTimeMillis());
             final LocalDateTime countdownEndDateTime = LocalDateTime.now()
                     .plus(alarmCountdownSeconds, ChronoUnit.SECONDS);
             final Date countdownEnd = Date.from(countdownEndDateTime.atZone(ZoneId.systemDefault()).toInstant());
-            alarmStatus.setCountdownEnd(countdownEnd);
+            alarmStatus.setCountdownEnd(countdownEnd.getTime());
             alarmStatus.setCountdownSource(event.getSource());
             triggerAlarmAfterCountdown(event.getSource());
         }
@@ -142,7 +142,7 @@ public class AlarmStatusService {
             final Device source = event.getSource();
             logger.info("triggering alarm because of {}", source.getId());
             alarmStatus.setState(AlarmState.TRIGGERED);
-            alarmStatus.setTriggerStart(new Date());
+            alarmStatus.setTriggerStart(System.currentTimeMillis());
             alarmStatus.setTriggerSource(source);
         }
     }

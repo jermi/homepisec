@@ -36,12 +36,12 @@ export class BaseAPI {
 };
 
 export interface AlarmStatus {
-    "countdownEnd"?: Date;
+    "countdownEnd"?: number;
     "countdownSource"?: Device;
-    "countdownStart"?: Date;
+    "countdownStart"?: number;
     "state"?: AlarmStatusStateEnum;
     "triggerSource"?: Device;
-    "triggerStart"?: Date;
+    "triggerStart"?: number;
 }
 
 export type AlarmStatusStateEnum = "DISARMED" | "ARMED" | "COUNTDOWN" | "TRIGGERED";

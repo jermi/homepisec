@@ -7,10 +7,10 @@ import java.util.Date;
 public class AlarmStatus {
 
     private AlarmState state = AlarmState.DISARMED;
-    private Date countdownStart;
-    private Date countdownEnd;
+    private Long countdownStart;
+    private Long countdownEnd;
     private Device countdownSource;
-    private Date triggerStart;
+    private Long triggerStart;
     private Device triggerSource;
 
     public AlarmState getState() {
@@ -21,27 +21,27 @@ public class AlarmStatus {
         this.state = state;
     }
 
-    public Date getCountdownStart() {
+    public Long getCountdownStart() {
         return countdownStart;
     }
 
-    public void setCountdownStart(Date countdownStart) {
+    public void setCountdownStart(Long countdownStart) {
         this.countdownStart = countdownStart;
     }
 
-    public Date getCountdownEnd() {
+    public Long getCountdownEnd() {
         return countdownEnd;
     }
 
-    public void setCountdownEnd(Date countdownEnd) {
+    public void setCountdownEnd(Long countdownEnd) {
         this.countdownEnd = countdownEnd;
     }
 
-    public Date getTriggerStart() {
+    public Long getTriggerStart() {
         return triggerStart;
     }
 
-    public void setTriggerStart(Date triggerStart) {
+    public void setTriggerStart(Long triggerStart) {
         this.triggerStart = triggerStart;
     }
 

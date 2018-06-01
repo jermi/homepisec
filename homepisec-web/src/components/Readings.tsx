@@ -1,29 +1,62 @@
 import * as React from 'react';
+import {ReactNode} from 'react';
 import {DeviceEvent, DeviceTypeEnum, RelaycontrollerApiFp} from "../generated/control-api";
-import ThermIcon from '../icons/therm.svg';
-import InfoIcon from '../icons/baseline-info-24px.svg';
-import RelayOnIcon from "../icons/baseline-power-24px.svg";
-import RelayOffIcon from "../icons/baseline-power_off-24px.svg";
-import MotionIcon from "../icons/baseline-rss_feed-24px.svg";
+
 import "./readings.css";
+import {InfoIcon, MotionIcon, RelayOffIcon, RelayOnIcon, ThermIcon} from "../icons";
+
+interface ReadingsProps {
+  readings: DeviceEvent[]
+}
+
+export const Readings: React.SFC<ReadingsProps> = (props) =>
+    <div className="readings-container">
+      {props.readings.map(r => {
+        const itemProps: ReadingItemProps = {
+          icon: determineIcon(r.device!.type!, r.payload!),
+          primary: r.payload!,
+          secondary: r.device!.id!
+        };
+        return renderItem(r, itemProps);
+      })}
+    </div>;
+
+function renderItem(r: DeviceEvent, itemProps: ReadingItemProps) {
+  if (r.device!.type === "RELAY") {
+    return <RelayReadingListItem
+        key={r.device!.id!}
+        {...itemProps}
+    />;
+  } else if (r.device!.type! === "SENSOR_MOTION") {
+    return <MotionReadingListItem
+        key={r.device!.id!}
+        {...itemProps}
+    />;
+  } else {
+    return <ReadingListItem
+        key={r.device!.id!}
+        {...itemProps}
+    />;
+  }
+}
 
 interface ReadingItemProps {
-  icon: string;
+  icon: ReactNode;
   primary: string;
   secondary: string;
 }
 
-export const ReadingListItem: React.SFC<ReadingItemProps> = (props) =>
+const ReadingListItem: React.SFC<ReadingItemProps> = (props) =>
     <div className="readings-item">
-      <img className="readings-item-icon" src={props.icon}/>
+      {props.icon}
       <div className="readings-item-primary">{props.primary}</div>
       <div className="readings-item-secondary">{props.secondary}</div>
     </div>
 ;
 
-export const RelayReadingListItem: React.SFC<ReadingItemProps> = (props) =>
+const RelayReadingListItem: React.SFC<ReadingItemProps> = (props) =>
     <div className="readings-item">
-      <img className="readings-item-icon" src={props.icon}/>
+      {props.icon}
       <div className="readings-item-primary">
         <span>{props.primary === "true" ? "ON" : "OFF"}</span>
         <button
@@ -37,58 +70,59 @@ export const RelayReadingListItem: React.SFC<ReadingItemProps> = (props) =>
     </div>
 ;
 
-export const MotionReadingListItem: React.SFC<ReadingItemProps> = (props) =>
+const MotionReadingListItem: React.SFC<ReadingItemProps> = (props) =>
     <div className="readings-item">
-      <img className="readings-item-icon" src={props.icon}/>
+      {props.icon}
       <div className="readings-item-primary">{props.primary === "true" ? "MOVEMENT" : "CLEAR"}</div>
       <div className="readings-item-secondary">{props.secondary}</div>
     </div>
 ;
 
-interface ReadingsProps {
-  readings: DeviceEvent[]
-}
-
-export const Readings: React.SFC<ReadingsProps> = (props) =>
-    <div className="readings-container">
-      {props.readings.map(r => {
-            const itemProps: ReadingItemProps = {
-              icon: determineIcon(r.device!.type!, r.payload!),
-              primary: r.payload!,
-              secondary: r.device!.id!
-            };
-            if (r.device!.type === "RELAY") {
-              return <RelayReadingListItem
-                  key={r.device!.id!}
-                  {...itemProps}
-              />;
-            } else if (r.device!.type! === "SENSOR_MOTION") {
-              return <MotionReadingListItem
-                  key={r.device!.id!}
-                  {...itemProps}
-              />;
-            } else {
-              return <ReadingListItem
-                  key={r.device!.id!}
-                  {...itemProps}
-              />;
-            }
-          }
-      )}
-    </div>;
-
 function determineIcon(type: DeviceTypeEnum, payload: string) {
-  let icon = InfoIcon;
+  let icon;
   if (type === "SENSOR_TEMP") {
-    icon = ThermIcon;
+    icon = <ThermIcon
+        className="readings-item-icon"
+        style={{stroke: determineThermIconColor(parseInt(payload, 10))}}
+    />;
   } else if (type === "SENSOR_MOTION") {
-    icon = MotionIcon;
+    icon = <MotionIcon
+        className="readings-item-icon"
+        style={{fill: payload === 'true' ? '#000000' : '#cdcdcd'}}
+    />;
   } else if (type === "RELAY" && payload === "true") {
-    icon = RelayOnIcon;
+    icon = <RelayOnIcon
+        className="readings-item-icon"
+        style={{filter: payload === 'true' ? "drop-shadow( 0px 0px 4px #ffff00 )" : "none"}}
+    />;
   } else if (type === "RELAY" && payload === "false") {
-    icon = RelayOffIcon;
+    icon = <RelayOffIcon className="readings-item-icon"/>;
+  } else {
+    icon = <InfoIcon className="readings-item-icon"/>
   }
   return icon;
+}
+
+function determineThermIconColor(temperature: number): string {
+  let color;
+  if (!isNaN(temperature)) {
+    if (temperature > 40) {
+      color = '#FF0000';
+    } else if (temperature <= 40 && temperature > 25) {
+      color = '#ff9900';
+    } else if (temperature <= 25 && temperature > 15) {
+      color = '#00ce10';
+    } else if (temperature <= 15 && temperature > 0) {
+      color = '#07dfff';
+    } else if (temperature <= 0 && temperature > -15) {
+      color = '#0095ff';
+    } else {
+      color = '#0015ff';
+    }
+  } else {
+    color = '#000000';
+  }
+  return color;
 }
 
 function switchRelay(relayId: string, value: boolean): () => void {

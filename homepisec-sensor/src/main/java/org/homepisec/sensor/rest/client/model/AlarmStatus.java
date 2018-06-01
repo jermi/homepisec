@@ -19,22 +19,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.OffsetDateTime;
 import org.homepisec.sensor.rest.client.model.Device;
 
 /**
  * AlarmStatus
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-03-04T09:14:48.656+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-01T11:19:00.103+02:00")
 public class AlarmStatus {
   @JsonProperty("countdownEnd")
-  private OffsetDateTime countdownEnd = null;
+  private Long countdownEnd = null;
 
   @JsonProperty("countdownSource")
   private Device countdownSource = null;
 
   @JsonProperty("countdownStart")
-  private OffsetDateTime countdownStart = null;
+  private Long countdownStart = null;
 
   /**
    * Gets or Sets state
@@ -82,9 +81,9 @@ public class AlarmStatus {
   private Device triggerSource = null;
 
   @JsonProperty("triggerStart")
-  private OffsetDateTime triggerStart = null;
+  private Long triggerStart = null;
 
-  public AlarmStatus countdownEnd(OffsetDateTime countdownEnd) {
+  public AlarmStatus countdownEnd(Long countdownEnd) {
     this.countdownEnd = countdownEnd;
     return this;
   }
@@ -94,11 +93,11 @@ public class AlarmStatus {
    * @return countdownEnd
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getCountdownEnd() {
+  public Long getCountdownEnd() {
     return countdownEnd;
   }
 
-  public void setCountdownEnd(OffsetDateTime countdownEnd) {
+  public void setCountdownEnd(Long countdownEnd) {
     this.countdownEnd = countdownEnd;
   }
 
@@ -120,7 +119,7 @@ public class AlarmStatus {
     this.countdownSource = countdownSource;
   }
 
-  public AlarmStatus countdownStart(OffsetDateTime countdownStart) {
+  public AlarmStatus countdownStart(Long countdownStart) {
     this.countdownStart = countdownStart;
     return this;
   }
@@ -130,11 +129,11 @@ public class AlarmStatus {
    * @return countdownStart
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getCountdownStart() {
+  public Long getCountdownStart() {
     return countdownStart;
   }
 
-  public void setCountdownStart(OffsetDateTime countdownStart) {
+  public void setCountdownStart(Long countdownStart) {
     this.countdownStart = countdownStart;
   }
 
@@ -174,7 +173,7 @@ public class AlarmStatus {
     this.triggerSource = triggerSource;
   }
 
-  public AlarmStatus triggerStart(OffsetDateTime triggerStart) {
+  public AlarmStatus triggerStart(Long triggerStart) {
     this.triggerStart = triggerStart;
     return this;
   }
@@ -184,11 +183,11 @@ public class AlarmStatus {
    * @return triggerStart
   **/
   @ApiModelProperty(value = "")
-  public OffsetDateTime getTriggerStart() {
+  public Long getTriggerStart() {
     return triggerStart;
   }
 
-  public void setTriggerStart(OffsetDateTime triggerStart) {
+  public void setTriggerStart(Long triggerStart) {
     this.triggerStart = triggerStart;
   }
 
