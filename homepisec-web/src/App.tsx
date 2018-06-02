@@ -14,13 +14,27 @@ import {
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import {Paper} from "material-ui";
+import {Paper, TabsProps} from "material-ui";
 import {AlarmIcon, ReadingsIcon} from "./icons";
+import {
+  HashRouter,
+  Redirect,
+  Route,
+  RouteComponentProps,
+  Switch,
+  withRouter
+} from 'react-router-dom';
+import {StaticContext} from "react-router";
+import {TabProps} from "@material-ui/core/Tab/Tab";
 
 interface AppState {
-  currentTab: number
   readings: DeviceEvent[]
   alarmStatus?: AlarmStatus
+}
+
+enum Routes {
+  ALARM = "/alarm",
+  READINGS = "/readings"
 }
 
 class App extends React.Component<{}, AppState> {
@@ -30,7 +44,7 @@ class App extends React.Component<{}, AppState> {
 
   constructor(props: {}) {
     super(props);
-    this.state = {currentTab: 0, readings: []};
+    this.state = {readings: []};
   }
 
   componentDidMount() {
@@ -42,40 +56,100 @@ class App extends React.Component<{}, AppState> {
     });
   };
 
-  tabOnClickHandler = (event: any, currentTab: number) => {
-    this.setState({currentTab});
-  };
-
   public render() {
     return (
         <MuiThemeProvider>
-          <div>
-            <AppBar position="static">
-              <Tabs value={this.state.currentTab} onChange={this.tabOnClickHandler}>
-                <Tab label="Alarm" icon={<AlarmIcon className="menu-icon"/>}/>
-                <Tab label="Readings" icon={<ReadingsIcon className="menu-icon"/>}/>
-              </Tabs>
-            </AppBar>
-            {this.state.currentTab === 0 && !this.state.alarmStatus && (
-                <Paper style={{margin: "1em", padding: "1em"}}>
-                  <span>No alarm state?</span>
-                </Paper>
-            )}
-            {this.state.currentTab === 0 && this.state.alarmStatus && (
-                <Paper style={{margin: "1em", padding: "1em"}}>
-                  <Alarm status={this.state.alarmStatus}/>
-                </Paper>
-            )}
-            {this.state.currentTab === 1 && (
-                <div style={{padding: "1em"}}>
-                  <Readings readings={this.state.readings}/>
-                </div>
-            )}
-          </div>
+          <HashRouter>
+            <div>
+              <AppBar position="static">
+                <TabsWithRouter>
+                  <TabWithRouter
+                      label="Alarm"
+                      icon={<AlarmIcon className="menu-icon"/>}
+                      url={Routes.ALARM}
+                  />
+                  <TabWithRouter
+                      label="Readings"
+                      icon={<ReadingsIcon className="menu-icon"/>}
+                      url={Routes.READINGS}
+                  />
+                </TabsWithRouter>
+              </AppBar>
+              {renderRoutes(this.state.readings, this.state.alarmStatus)}
+            </div>
+          </HashRouter>
         </MuiThemeProvider>
     );
   }
-
 }
+
+const TabWithRouter = withRouter<{ url: string } & RouteComponentProps<any, StaticContext> & TabProps>((props) => {
+      // router not ts friendly, need wrap tab component...
+      // also...
+      // cannot into lambda cauze perf issua!!!!oneoneone
+      function _onClickHandler() {
+        props.history.push(props.url)
+      }
+
+      return <Tab
+          {...props}
+          onClick={_onClickHandler}
+      />
+    }
+);
+
+function determineCurrentTab(pathname: string): number | undefined {
+  switch (pathname) {
+    case Routes.ALARM:
+      return 0;
+    case Routes.READINGS:
+      return 1;
+    default:
+      return undefined;
+  }
+}
+
+const TabsWithRouter = withRouter<RouteComponentProps<any, StaticContext> & TabsProps>((props) =>
+    <Tabs
+        value={determineCurrentTab(props.location.pathname)}
+    >
+      {props.children}
+    </Tabs>
+);
+
+const renderRoutes = (readings: DeviceEvent[], alarmStatus?: AlarmStatus) =>
+    <Switch>
+      <Route
+          path={`${Routes.ALARM}`}
+          component={renderAlarmView.bind(null, alarmStatus)}
+      />
+      <Route
+          path={`${Routes.READINGS}`}
+          component={renderReadingView.bind(null, readings)}
+      />
+      <Redirect exact={true} from="/" to={`${Routes.ALARM}`}/>
+      <Route component={NotFoundView}/>
+    </Switch>
+;
+
+const renderAlarmView = (props?: AlarmStatus) =>
+    <Paper style={{margin: "1em", padding: "1em"}}>
+      {!props && (
+          <span>No alarm state?</span>
+      )}
+      {props && (
+          <Alarm status={props}/>
+      )}
+    </Paper>;
+
+const renderReadingView = (readings: DeviceEvent[]) =>
+    <div style={{padding: "1em"}}>
+      <Readings readings={readings}/>
+    </div>;
+
+const NotFoundView: React.SFC = () =>
+    <Paper style={{margin: "1em", padding: "1em", fontSize: "2em"}}>
+      <span>Here comes nothing... <br/><br/>404 error</span>
+    </Paper>;
 
 export default App;
