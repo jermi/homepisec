@@ -4,6 +4,8 @@ import {DeviceEvent, DeviceTypeEnum, RelaycontrollerApiFp} from "../generated/co
 
 import "./readings.css";
 import {InfoIcon, MotionIcon, RelayOffIcon, RelayOnIcon, ThermIcon} from "../icons";
+import {Paper} from "material-ui";
+import {Button} from "@material-ui/core";
 
 interface ReadingsProps {
   readings: DeviceEvent[]
@@ -17,24 +19,23 @@ export const Readings: React.SFC<ReadingsProps> = (props) =>
           primary: r.payload!,
           secondary: r.device!.id!
         };
-        return renderItem(r, itemProps);
+        return <Paper key={r.device!.id!} style={{padding: "1em"}}>
+          {renderItem(r, itemProps)}
+        </Paper>
       })}
     </div>;
 
 function renderItem(r: DeviceEvent, itemProps: ReadingItemProps) {
   if (r.device!.type === "RELAY") {
     return <RelayReadingListItem
-        key={r.device!.id!}
         {...itemProps}
     />;
   } else if (r.device!.type! === "SENSOR_MOTION") {
     return <MotionReadingListItem
-        key={r.device!.id!}
         {...itemProps}
     />;
   } else {
     return <ReadingListItem
-        key={r.device!.id!}
         {...itemProps}
     />;
   }
@@ -59,12 +60,13 @@ const RelayReadingListItem: React.SFC<ReadingItemProps> = (props) =>
       {props.icon}
       <div className="readings-item-primary">
         <span>{props.primary === "true" ? "ON" : "OFF"}</span>
-        <button
-            className="readings-item-relay-switch-button"
+        <Button
+            variant="raised"
+            style={{marginLeft: "5em", verticalAlign: "baseline"}}
             onClick={switchRelay(props.secondary, props.primary !== "true")}
         >
           Switch
-        </button>
+        </Button>
       </div>
       <div className="readings-item-secondary">{props.secondary}</div>
     </div>

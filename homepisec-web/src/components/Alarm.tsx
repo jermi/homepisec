@@ -2,6 +2,7 @@ import * as React from 'react';
 import {AlarmcontrollerApiFp, AlarmStatus, AlarmStatusStateEnum} from "../generated/control-api";
 import "./alarm.css";
 import {ErrorIcon, OkIcon, WarningIcon} from "../icons";
+import {Button} from "@material-ui/core";
 
 interface AlarmProps {
   status: AlarmStatus
@@ -9,20 +10,23 @@ interface AlarmProps {
 
 export const Alarm: React.SFC<AlarmProps> = (props) =>
     <div className="alarm-container">
-      <div>Alarm status</div>
-        <div>State - {getDisplayState(props.status.state!)}</div>
-        {props.status.triggerStart &&
-        <div>Triggered at {new Date(props.status.triggerStart).toString()}</div>}
-        {props.status.triggerSource && <div>Triggered by {props.status.triggerSource.id}</div>}
-        {props.status.countdownStart &&
-        <div>Countdown started at {new Date(props.status.countdownStart).toString()}</div>}
-        {props.status.countdownEnd && props.status.countdownEnd > Date.now() && (
-            <div>Countdown end
-              in {Math.floor((props.status.countdownEnd - Date.now()) / 1000)} seconds</div>
-        )}
+      <div>State - {getDisplayState(props.status.state!)}</div>
+      {props.status.triggerStart &&
+      <div>Triggered at {new Date(props.status.triggerStart).toString()}</div>}
+      {props.status.triggerSource && <div>Triggered by {props.status.triggerSource.id}</div>}
+      {props.status.countdownStart &&
+      <div>Countdown started at {new Date(props.status.countdownStart).toString()}</div>}
+      {props.status.countdownEnd && props.status.countdownEnd > Date.now() && (
+          <div>Countdown end
+            in {Math.floor((props.status.countdownEnd - Date.now()) / 1000)} seconds</div>
+      )}
       <div className="alarm-actions">
-        <button onClick={ArmAlarm}>Arm</button>
-        <button onClick={DisarmAlarm}>Disarm</button>
+        <Button variant="raised" color="primary" onClick={ArmAlarm}>
+          Arm
+        </Button>
+        <Button variant="raised" color="secondary" onClick={DisarmAlarm}>
+          Disarm
+        </Button>
       </div>
     </div>
 ;

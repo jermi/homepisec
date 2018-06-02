@@ -3,7 +3,6 @@ import * as React from 'react';
 import './App.css';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {Menu} from "./components/Menu";
 import {Readings} from "./components/Readings";
 import {Alarm} from "./components/Alarm";
 import {
@@ -12,8 +11,14 @@ import {
   DeviceEvent,
   ReadingscontrollerApi
 } from "./generated/control-api"
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import {Paper} from "material-ui";
+import {AlarmIcon, ReadingsIcon} from "./icons";
 
 interface AppState {
+  currentTab: number
   readings: DeviceEvent[]
   alarmStatus?: AlarmStatus
 }
@@ -25,7 +30,7 @@ class App extends React.Component<{}, AppState> {
 
   constructor(props: {}) {
     super(props);
-    this.state = {readings: []};
+    this.state = {currentTab: 0, readings: []};
   }
 
   componentDidMount() {
@@ -37,15 +42,35 @@ class App extends React.Component<{}, AppState> {
     });
   };
 
+  tabOnClickHandler = (event: any, currentTab: number) => {
+    this.setState({currentTab});
+  };
+
   public render() {
     return (
         <MuiThemeProvider>
           <div>
-            <Menu/>
-            {this.state.alarmStatus && (
-                <Alarm status={this.state.alarmStatus}/>
+            <AppBar position="static">
+              <Tabs value={this.state.currentTab} onChange={this.tabOnClickHandler}>
+                <Tab label="Alarm" icon={<AlarmIcon className="menu-icon"/>}/>
+                <Tab label="Readings" icon={<ReadingsIcon className="menu-icon"/>}/>
+              </Tabs>
+            </AppBar>
+            {this.state.currentTab === 0 && !this.state.alarmStatus && (
+                <Paper style={{margin: "1em", padding: "1em"}}>
+                  <span>No alarm state?</span>
+                </Paper>
             )}
-            <Readings readings={this.state.readings}/>
+            {this.state.currentTab === 0 && this.state.alarmStatus && (
+                <Paper style={{margin: "1em", padding: "1em"}}>
+                  <Alarm status={this.state.alarmStatus}/>
+                </Paper>
+            )}
+            {this.state.currentTab === 1 && (
+                <div style={{padding: "1em"}}>
+                  <Readings readings={this.state.readings}/>
+                </div>
+            )}
           </div>
         </MuiThemeProvider>
     );

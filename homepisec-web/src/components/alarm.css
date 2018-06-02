@@ -1,14 +1,14 @@
 .alarm-container {
-  margin-left: 1em;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
   grid-column-gap: 1em;
   grid-row-gap: 1em;
+  font-size: 2em;
 }
 
 .alarm-actions > button:first-child {
-  margin-right: 1em;
+  margin-right: 2em;
 }
 
 .alarm-state.green {

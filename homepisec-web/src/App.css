@@ -26,3 +26,8 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.menu-icon > svg {
+  fill: white;
+  /*filter: drop-shadow(0 0 2px black);*/
+}

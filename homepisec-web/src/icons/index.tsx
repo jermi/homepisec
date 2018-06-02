@@ -2,6 +2,11 @@ import * as React from 'react';
 
 // workaround handling of SVG files by CRA
 
+import AlarmIconSvgHtml from '!raw-loader!./baseline-security-24px.svg';
+export const AlarmIcon: React.SFC<React.DetailedHTMLProps<React.HTMLAttributes<any>, any>> = (props: any) => <span dangerouslySetInnerHTML={{__html:AlarmIconSvgHtml}} {...props}/>;
+import ReadingsIconSvgHtml from '!raw-loader!./baseline-router-24px.svg';
+export const ReadingsIcon: React.SFC<React.DetailedHTMLProps<React.HTMLAttributes<any>, any>> = (props: any) => <span dangerouslySetInnerHTML={{__html:ReadingsIconSvgHtml}} {...props}/>;
+
 import ThermIconSvgHtml from '!raw-loader!./therm.svg';
 export const ThermIcon: React.SFC<React.DetailedHTMLProps<React.HTMLAttributes<any>, any>> = (props: any) => <span dangerouslySetInnerHTML={{__html:ThermIconSvgHtml}} {...props}/>;
 import InfoIconSvgHtml from '!raw-loader!./baseline-info-24px.svg';
