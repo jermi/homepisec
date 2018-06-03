@@ -19,21 +19,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.homepisec.sensor.rest.client.model.Device;
+import org.homepisec.sensor.rest.client.model.CountdownStatus;
+import org.homepisec.sensor.rest.client.model.TriggerStatus;
 
 /**
  * AlarmStatus
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-01T11:19:00.103+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-03T20:44:31.883+02:00")
 public class AlarmStatus {
-  @JsonProperty("countdownEnd")
-  private Long countdownEnd = null;
-
-  @JsonProperty("countdownSource")
-  private Device countdownSource = null;
-
-  @JsonProperty("countdownStart")
-  private Long countdownStart = null;
+  @JsonProperty("countdown")
+  private CountdownStatus countdown = null;
 
   /**
    * Gets or Sets state
@@ -77,64 +72,25 @@ public class AlarmStatus {
   @JsonProperty("state")
   private StateEnum state = null;
 
-  @JsonProperty("triggerSource")
-  private Device triggerSource = null;
+  @JsonProperty("trigger")
+  private TriggerStatus trigger = null;
 
-  @JsonProperty("triggerStart")
-  private Long triggerStart = null;
-
-  public AlarmStatus countdownEnd(Long countdownEnd) {
-    this.countdownEnd = countdownEnd;
+  public AlarmStatus countdown(CountdownStatus countdown) {
+    this.countdown = countdown;
     return this;
   }
 
    /**
-   * Get countdownEnd
-   * @return countdownEnd
+   * Get countdown
+   * @return countdown
   **/
   @ApiModelProperty(value = "")
-  public Long getCountdownEnd() {
-    return countdownEnd;
+  public CountdownStatus getCountdown() {
+    return countdown;
   }
 
-  public void setCountdownEnd(Long countdownEnd) {
-    this.countdownEnd = countdownEnd;
-  }
-
-  public AlarmStatus countdownSource(Device countdownSource) {
-    this.countdownSource = countdownSource;
-    return this;
-  }
-
-   /**
-   * Get countdownSource
-   * @return countdownSource
-  **/
-  @ApiModelProperty(value = "")
-  public Device getCountdownSource() {
-    return countdownSource;
-  }
-
-  public void setCountdownSource(Device countdownSource) {
-    this.countdownSource = countdownSource;
-  }
-
-  public AlarmStatus countdownStart(Long countdownStart) {
-    this.countdownStart = countdownStart;
-    return this;
-  }
-
-   /**
-   * Get countdownStart
-   * @return countdownStart
-  **/
-  @ApiModelProperty(value = "")
-  public Long getCountdownStart() {
-    return countdownStart;
-  }
-
-  public void setCountdownStart(Long countdownStart) {
-    this.countdownStart = countdownStart;
+  public void setCountdown(CountdownStatus countdown) {
+    this.countdown = countdown;
   }
 
   public AlarmStatus state(StateEnum state) {
@@ -146,7 +102,7 @@ public class AlarmStatus {
    * Get state
    * @return state
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public StateEnum getState() {
     return state;
   }
@@ -155,40 +111,22 @@ public class AlarmStatus {
     this.state = state;
   }
 
-  public AlarmStatus triggerSource(Device triggerSource) {
-    this.triggerSource = triggerSource;
+  public AlarmStatus trigger(TriggerStatus trigger) {
+    this.trigger = trigger;
     return this;
   }
 
    /**
-   * Get triggerSource
-   * @return triggerSource
+   * Get trigger
+   * @return trigger
   **/
   @ApiModelProperty(value = "")
-  public Device getTriggerSource() {
-    return triggerSource;
+  public TriggerStatus getTrigger() {
+    return trigger;
   }
 
-  public void setTriggerSource(Device triggerSource) {
-    this.triggerSource = triggerSource;
-  }
-
-  public AlarmStatus triggerStart(Long triggerStart) {
-    this.triggerStart = triggerStart;
-    return this;
-  }
-
-   /**
-   * Get triggerStart
-   * @return triggerStart
-  **/
-  @ApiModelProperty(value = "")
-  public Long getTriggerStart() {
-    return triggerStart;
-  }
-
-  public void setTriggerStart(Long triggerStart) {
-    this.triggerStart = triggerStart;
+  public void setTrigger(TriggerStatus trigger) {
+    this.trigger = trigger;
   }
 
 
@@ -201,17 +139,14 @@ public class AlarmStatus {
       return false;
     }
     AlarmStatus alarmStatus = (AlarmStatus) o;
-    return Objects.equals(this.countdownEnd, alarmStatus.countdownEnd) &&
-        Objects.equals(this.countdownSource, alarmStatus.countdownSource) &&
-        Objects.equals(this.countdownStart, alarmStatus.countdownStart) &&
+    return Objects.equals(this.countdown, alarmStatus.countdown) &&
         Objects.equals(this.state, alarmStatus.state) &&
-        Objects.equals(this.triggerSource, alarmStatus.triggerSource) &&
-        Objects.equals(this.triggerStart, alarmStatus.triggerStart);
+        Objects.equals(this.trigger, alarmStatus.trigger);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(countdownEnd, countdownSource, countdownStart, state, triggerSource, triggerStart);
+    return Objects.hash(countdown, state, trigger);
   }
 
 
@@ -220,12 +155,9 @@ public class AlarmStatus {
     StringBuilder sb = new StringBuilder();
     sb.append("class AlarmStatus {\n");
     
-    sb.append("    countdownEnd: ").append(toIndentedString(countdownEnd)).append("\n");
-    sb.append("    countdownSource: ").append(toIndentedString(countdownSource)).append("\n");
-    sb.append("    countdownStart: ").append(toIndentedString(countdownStart)).append("\n");
+    sb.append("    countdown: ").append(toIndentedString(countdown)).append("\n");
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
-    sb.append("    triggerSource: ").append(toIndentedString(triggerSource)).append("\n");
-    sb.append("    triggerStart: ").append(toIndentedString(triggerStart)).append("\n");
+    sb.append("    trigger: ").append(toIndentedString(trigger)).append("\n");
     sb.append("}");
     return sb.toString();
   }

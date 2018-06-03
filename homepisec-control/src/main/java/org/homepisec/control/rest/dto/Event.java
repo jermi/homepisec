@@ -1,8 +1,15 @@
 package org.homepisec.control.rest.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
+
 public class Event {
 
+    @NotNull
+    @ApiModelProperty(required = true)
     private EventType type;
+    @NotNull
+    @ApiModelProperty(required = true)
     private String payload;
 
     private Event() {

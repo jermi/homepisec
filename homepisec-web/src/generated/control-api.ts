@@ -36,42 +36,50 @@ export class BaseAPI {
 };
 
 export interface AlarmStatus {
-    "countdownEnd"?: number;
-    "countdownSource"?: Device;
-    "countdownStart"?: number;
-    "state"?: AlarmStatusStateEnum;
-    "triggerSource"?: Device;
-    "triggerStart"?: number;
+    "countdown"?: CountdownStatus;
+    "state": AlarmStatusStateEnum;
+    "trigger"?: TriggerStatus;
 }
 
 export type AlarmStatusStateEnum = "DISARMED" | "ARMED" | "COUNTDOWN" | "TRIGGERED";
+export interface CountdownStatus {
+    "end": number;
+    "source": Device;
+    "start": number;
+}
+
 export interface Device {
-    "id"?: string;
-    "type"?: DeviceTypeEnum;
+    "id": string;
+    "type": DeviceTypeEnum;
 }
 
 export type DeviceTypeEnum = "SENSOR_MOTION" | "SENSOR_TEMP" | "RELAY" | "CONTROL";
 export interface DeviceEvent {
-    "device"?: Device;
-    "payload"?: string;
-    "time"?: number;
-    "type"?: DeviceEventTypeEnum;
+    "device": Device;
+    "payload": string;
+    "time": number;
+    "type": DeviceEventTypeEnum;
 }
 
 export type DeviceEventTypeEnum = "DEVICE_READ" | "ALARM_DISARM" | "ALARM_ARM" | "ALARM_COUNTDOWN" | "ALARM_TRIGGER" | "SWITCH_RELAY";
 export interface DeviceReading {
-    "device"?: Device;
-    "value"?: string;
+    "device": Device;
+    "value": string;
 }
 
 export interface SensorAppEndpoint {
-    "alarmRelays"?: Array<Device>;
-    "relays"?: Array<Device>;
-    "url"?: string;
+    "alarmRelays": Array<Device>;
+    "relays": Array<Device>;
+    "url": string;
 }
 
 export interface SseEmitter {
     "timeout"?: number;
+}
+
+export interface TriggerStatus {
+    "source": Device;
+    "start": number;
 }
 
 

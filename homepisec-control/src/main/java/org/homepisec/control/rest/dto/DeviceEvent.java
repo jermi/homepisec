@@ -1,8 +1,15 @@
 package org.homepisec.control.rest.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
+
 public class DeviceEvent extends Event {
 
+    @NotNull
+    @ApiModelProperty(required = true)
     private long time;
+    @NotNull
+    @ApiModelProperty(required = true)
     private Device device;
 
     public DeviceEvent() {

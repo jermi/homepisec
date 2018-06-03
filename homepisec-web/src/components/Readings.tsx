@@ -15,22 +15,22 @@ export const Readings: React.SFC<ReadingsProps> = (props) =>
     <div className="readings-container">
       {props.readings.map(r => {
         const itemProps: ReadingItemProps = {
-          icon: determineIcon(r.device!.type!, r.payload!),
-          primary: r.payload!,
-          secondary: r.device!.id!
+          icon: determineIcon(r.device.type, r.payload),
+          primary: r.payload,
+          secondary: r.device.id
         };
-        return <Paper key={r.device!.id!} style={{padding: "1em"}}>
+        return <Paper key={r.device.id} style={{padding: "1em"}}>
           {renderItem(r, itemProps)}
         </Paper>
       })}
     </div>;
 
 function renderItem(r: DeviceEvent, itemProps: ReadingItemProps) {
-  if (r.device!.type === "RELAY") {
+  if (r.device.type === "RELAY") {
     return <RelayReadingListItem
         {...itemProps}
     />;
-  } else if (r.device!.type! === "SENSOR_MOTION") {
+  } else if (r.device.type === "SENSOR_MOTION") {
     return <MotionReadingListItem
         {...itemProps}
     />;

@@ -26,13 +26,13 @@ import org.homepisec.sensor.rest.client.model.Device;
 /**
  * SensorAppEndpoint
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-01T11:19:00.103+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-03T20:44:31.883+02:00")
 public class SensorAppEndpoint {
   @JsonProperty("alarmRelays")
-  private List<Device> alarmRelays = null;
+  private List<Device> alarmRelays = new ArrayList<Device>();
 
   @JsonProperty("relays")
-  private List<Device> relays = null;
+  private List<Device> relays = new ArrayList<Device>();
 
   @JsonProperty("url")
   private String url = null;
@@ -43,9 +43,6 @@ public class SensorAppEndpoint {
   }
 
   public SensorAppEndpoint addAlarmRelaysItem(Device alarmRelaysItem) {
-    if (this.alarmRelays == null) {
-      this.alarmRelays = new ArrayList<Device>();
-    }
     this.alarmRelays.add(alarmRelaysItem);
     return this;
   }
@@ -54,7 +51,7 @@ public class SensorAppEndpoint {
    * Get alarmRelays
    * @return alarmRelays
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public List<Device> getAlarmRelays() {
     return alarmRelays;
   }
@@ -69,9 +66,6 @@ public class SensorAppEndpoint {
   }
 
   public SensorAppEndpoint addRelaysItem(Device relaysItem) {
-    if (this.relays == null) {
-      this.relays = new ArrayList<Device>();
-    }
     this.relays.add(relaysItem);
     return this;
   }
@@ -80,7 +74,7 @@ public class SensorAppEndpoint {
    * Get relays
    * @return relays
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public List<Device> getRelays() {
     return relays;
   }
@@ -98,7 +92,7 @@ public class SensorAppEndpoint {
    * Get url
    * @return url
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getUrl() {
     return url;
   }

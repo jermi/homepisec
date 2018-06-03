@@ -51,6 +51,11 @@ class App extends React.Component<{}, AppState> {
     App.readingsApi.getReadingsUsingGET().then((readings: DeviceEvent[]) => {
       this.setState({readings, alarmStatus: this.state.alarmStatus});
     });
+    const es = new EventSource("api/readings/events");
+    es.onmessage = function _onMsg(reading) {
+      // tslint:disable-next-line
+      console.log("reading", reading);
+    };
     App.api.getAlarmStatusUsingGET().then((alarmStatus: AlarmStatus) => {
       this.setState({readings: this.state.readings, alarmStatus})
     });

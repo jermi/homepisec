@@ -1,8 +1,15 @@
 package org.homepisec.control.rest.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
+
 public class DeviceReading {
 
+    @NotNull
+    @ApiModelProperty(required = true)
     private Device device;
+    @NotNull
+    @ApiModelProperty(required = true)
     private String value;
 
     private DeviceReading() {

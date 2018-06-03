@@ -4,6 +4,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 import org.homepisec.control.core.alarm.AlarmState;
 import org.homepisec.control.core.alarm.AlarmStatus;
+import org.homepisec.control.core.alarm.AlarmStatus.CountdownStatus;
 import org.homepisec.control.core.alarm.events.AlarmArmEvent;
 import org.homepisec.control.core.alarm.events.AlarmCountdownEvent;
 import org.homepisec.control.core.alarm.events.AlarmDisarmEvent;
@@ -103,11 +104,8 @@ public class AlarmStatusService {
     private synchronized void handleAlarmDisarm() {
         logger.info("disarming alarm");
         alarmStatus.setState(AlarmState.DISARMED);
-        alarmStatus.setCountdownSource(null);
-        alarmStatus.setTriggerStart(null);
-        alarmStatus.setTriggerSource(null);
-        alarmStatus.setCountdownStart(null);
-        alarmStatus.setCountdownEnd(null);
+        alarmStatus.setCountdown(null);
+        alarmStatus.setTrigger(null);
         if (scheduledFuture != null && !scheduledFuture.isCancelled() && !scheduledFuture.isDone()) {
             logger.info("canceling alarm countdown");
             scheduledFuture.cancel(false);
@@ -119,12 +117,14 @@ public class AlarmStatusService {
         if (alarmStatus.getState().equals(AlarmState.ARMED)) {
             logger.info("starting alarm countdown because of {}", event.getSource().getId());
             alarmStatus.setState(AlarmState.COUNTDOWN);
-            alarmStatus.setCountdownStart(System.currentTimeMillis());
             final LocalDateTime countdownEndDateTime = LocalDateTime.now()
                     .plus(alarmCountdownSeconds, ChronoUnit.SECONDS);
             final Date countdownEnd = Date.from(countdownEndDateTime.atZone(ZoneId.systemDefault()).toInstant());
-            alarmStatus.setCountdownEnd(countdownEnd.getTime());
-            alarmStatus.setCountdownSource(event.getSource());
+            alarmStatus.setCountdown(new CountdownStatus(
+                    System.currentTimeMillis(),
+                    countdownEnd.getTime(),
+                    event.getSource()
+            ));
             triggerAlarmAfterCountdown(event.getSource());
         }
     }
@@ -142,8 +142,10 @@ public class AlarmStatusService {
             final Device source = event.getSource();
             logger.info("triggering alarm because of {}", source.getId());
             alarmStatus.setState(AlarmState.TRIGGERED);
-            alarmStatus.setTriggerStart(System.currentTimeMillis());
-            alarmStatus.setTriggerSource(source);
+            alarmStatus.setTrigger(new AlarmStatus.TriggerStatus(
+                    System.currentTimeMillis(),
+                    source
+            ));
         }
     }
 

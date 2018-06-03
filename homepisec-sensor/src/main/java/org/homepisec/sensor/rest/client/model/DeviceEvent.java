@@ -24,7 +24,7 @@ import org.homepisec.sensor.rest.client.model.Device;
 /**
  * DeviceEvent
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-01T11:19:00.103+02:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-03T20:44:31.883+02:00")
 public class DeviceEvent {
   @JsonProperty("device")
   private Device device = null;
@@ -90,7 +90,7 @@ public class DeviceEvent {
    * Get device
    * @return device
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Device getDevice() {
     return device;
   }
@@ -108,7 +108,7 @@ public class DeviceEvent {
    * Get payload
    * @return payload
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public String getPayload() {
     return payload;
   }
@@ -126,7 +126,7 @@ public class DeviceEvent {
    * Get time
    * @return time
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public Long getTime() {
     return time;
   }
@@ -144,7 +144,7 @@ public class DeviceEvent {
    * Get type
    * @return type
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public TypeEnum getType() {
     return type;
   }

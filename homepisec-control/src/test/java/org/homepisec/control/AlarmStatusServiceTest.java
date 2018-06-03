@@ -45,27 +45,28 @@ public class AlarmStatusServiceTest {
                 "true"
         );
         Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
-        Assert.assertNull(instance.getAlarmStatus().getCountdownSource());
+        Assert.assertNull(instance.getAlarmStatus().getCountdown());
+        Assert.assertNull(instance.getAlarmStatus().getTrigger());
         // when alarm armed and motion detected
         instance.armAlarm();
         subject.onNext(deviceReadEvent);
         // then trigger countdown
         Assert.assertEquals(AlarmState.COUNTDOWN, instance.getAlarmStatus().getState());
-        Assert.assertEquals(sensor.getId(), instance.getAlarmStatus().getCountdownSource().getId());
-        Assert.assertEquals(sensor.getType(), instance.getAlarmStatus().getCountdownSource().getType());
+        Assert.assertEquals(sensor.getId(), instance.getAlarmStatus().getCountdown().getSource().getId());
+        Assert.assertEquals(sensor.getType(), instance.getAlarmStatus().getCountdown().getSource().getType());
         // then trigger alarm
         Awaitility.await()
                 .atMost(1, TimeUnit.SECONDS)
                 .until(() -> AlarmState.TRIGGERED.equals(instance.getAlarmStatus().getState()));
-        Assert.assertEquals(sensor.getId(), instance.getAlarmStatus().getTriggerSource().getId());
-        Assert.assertEquals(sensor.getType(), instance.getAlarmStatus().getTriggerSource().getType());
+        Assert.assertEquals(sensor.getId(), instance.getAlarmStatus().getTrigger().getSource().getId());
+        Assert.assertEquals(sensor.getType(), instance.getAlarmStatus().getTrigger().getSource().getType());
         // then disarm
         subject.onNext(new AlarmDisarmEvent(System.currentTimeMillis()));
         Awaitility.await()
                 .atMost(1, TimeUnit.SECONDS)
                 .until(() -> AlarmState.DISARMED.equals(instance.getAlarmStatus().getState()));
-        Assert.assertNull(instance.getAlarmStatus().getTriggerSource());
-        Assert.assertNull(instance.getAlarmStatus().getCountdownSource());
+        Assert.assertNull(instance.getAlarmStatus().getTrigger());
+        Assert.assertNull(instance.getAlarmStatus().getCountdown());
     }
 
     @Test

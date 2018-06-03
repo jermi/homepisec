@@ -19,91 +19,53 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.homepisec.sensor.rest.client.model.Device;
 
 /**
- * Device
+ * TriggerStatus
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-03T20:44:31.883+02:00")
-public class Device {
-  @JsonProperty("id")
-  private String id = null;
+public class TriggerStatus {
+  @JsonProperty("source")
+  private Device source = null;
 
-  /**
-   * Gets or Sets type
-   */
-  public enum TypeEnum {
-    SENSOR_MOTION("SENSOR_MOTION"),
-    
-    SENSOR_TEMP("SENSOR_TEMP"),
-    
-    RELAY("RELAY"),
-    
-    CONTROL("CONTROL");
+  @JsonProperty("start")
+  private Long start = null;
 
-    private String value;
-
-    TypeEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeEnum fromValue(String text) {
-      for (TypeEnum b : TypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
-  @JsonProperty("type")
-  private TypeEnum type = null;
-
-  public Device id(String id) {
-    this.id = id;
+  public TriggerStatus source(Device source) {
+    this.source = source;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get source
+   * @return source
   **/
   @ApiModelProperty(required = true, value = "")
-  public String getId() {
-    return id;
+  public Device getSource() {
+    return source;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setSource(Device source) {
+    this.source = source;
   }
 
-  public Device type(TypeEnum type) {
-    this.type = type;
+  public TriggerStatus start(Long start) {
+    this.start = start;
     return this;
   }
 
    /**
-   * Get type
-   * @return type
+   * Get start
+   * @return start
   **/
   @ApiModelProperty(required = true, value = "")
-  public TypeEnum getType() {
-    return type;
+  public Long getStart() {
+    return start;
   }
 
-  public void setType(TypeEnum type) {
-    this.type = type;
+  public void setStart(Long start) {
+    this.start = start;
   }
 
 
@@ -115,24 +77,24 @@ public class Device {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Device device = (Device) o;
-    return Objects.equals(this.id, device.id) &&
-        Objects.equals(this.type, device.type);
+    TriggerStatus triggerStatus = (TriggerStatus) o;
+    return Objects.equals(this.source, triggerStatus.source) &&
+        Objects.equals(this.start, triggerStatus.start);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, type);
+    return Objects.hash(source, start);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Device {\n");
+    sb.append("class TriggerStatus {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
+    sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("}");
     return sb.toString();
   }

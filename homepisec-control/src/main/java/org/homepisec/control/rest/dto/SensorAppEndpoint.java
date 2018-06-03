@@ -1,11 +1,19 @@
 package org.homepisec.control.rest.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 public class SensorAppEndpoint {
 
+    @NotNull
+    @ApiModelProperty(required = true)
     private String url;
+    @NotNull
+    @ApiModelProperty(required = true)
     private List<Device> relays;
+    @NotNull
+    @ApiModelProperty(required = true)
     private List<Device> alarmRelays;
 
     private SensorAppEndpoint() {

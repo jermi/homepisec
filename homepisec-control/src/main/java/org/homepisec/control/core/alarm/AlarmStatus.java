@@ -1,17 +1,114 @@
 package org.homepisec.control.core.alarm;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.homepisec.control.rest.dto.Device;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 public class AlarmStatus {
 
+    public static class CountdownStatus {
+
+        @NotNull
+        @ApiModelProperty(required = true)
+        private Long start;
+        @NotNull
+        @ApiModelProperty(required = true)
+        private Long end;
+        @NotNull
+        @ApiModelProperty(required = true)
+        private Device source;
+
+        private CountdownStatus() {
+        }
+
+        public CountdownStatus(Long start, Long end, Device source) {
+            this.start = start;
+            this.end = end;
+            this.source = source;
+        }
+
+        public Long getStart() {
+            return start;
+        }
+
+        public void setStart(@NotNull Long start) {
+            this.start = start;
+        }
+
+        public Long getEnd() {
+            return end;
+        }
+
+        public void setEnd(@NotNull Long end) {
+            this.end = end;
+        }
+
+        public Device getSource() {
+            return source;
+        }
+
+        public void setSource(@NotNull Device source) {
+            this.source = source;
+        }
+
+        @Override
+        public String toString() {
+            return "CountDown{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    ", source=" + source +
+                    '}';
+        }
+    }
+
+    public static class TriggerStatus {
+
+        @NotNull
+        @ApiModelProperty(required = true)
+        private Long start;
+        @NotNull
+        @ApiModelProperty(required = true)
+        private Device source;
+
+        private TriggerStatus() {
+        }
+
+        public TriggerStatus(@NotNull Long start, @NotNull Device source) {
+            this.start = start;
+            this.source = source;
+        }
+
+        public Long getStart() {
+            return start;
+        }
+
+        public void setStart(Long start) {
+            this.start = start;
+        }
+
+        public Device getSource() {
+            return source;
+        }
+
+        public void setSource(Device source) {
+            this.source = source;
+        }
+
+        @Override
+        public String toString() {
+            return "TriggeredStatus{" +
+                    "start=" + start +
+                    ", source=" + source +
+                    '}';
+        }
+    }
+
+    @NotNull
+    @ApiModelProperty(required = true)
     private AlarmState state = AlarmState.DISARMED;
-    private Long countdownStart;
-    private Long countdownEnd;
-    private Device countdownSource;
-    private Long triggerStart;
-    private Device triggerSource;
+    private CountdownStatus countdown;
+    private TriggerStatus trigger;
 
     public AlarmState getState() {
         return state;
@@ -21,56 +118,28 @@ public class AlarmStatus {
         this.state = state;
     }
 
-    public Long getCountdownStart() {
-        return countdownStart;
+    public CountdownStatus getCountdown() {
+        return countdown;
     }
 
-    public void setCountdownStart(Long countdownStart) {
-        this.countdownStart = countdownStart;
+    public void setCountdown(CountdownStatus countdown) {
+        this.countdown = countdown;
     }
 
-    public Long getCountdownEnd() {
-        return countdownEnd;
+    public TriggerStatus getTrigger() {
+        return trigger;
     }
 
-    public void setCountdownEnd(Long countdownEnd) {
-        this.countdownEnd = countdownEnd;
-    }
-
-    public Long getTriggerStart() {
-        return triggerStart;
-    }
-
-    public void setTriggerStart(Long triggerStart) {
-        this.triggerStart = triggerStart;
-    }
-
-    public Device getCountdownSource() {
-        return countdownSource;
-    }
-
-    public void setCountdownSource(Device countdownSource) {
-        this.countdownSource = countdownSource;
-    }
-
-    public Device getTriggerSource() {
-        return triggerSource;
-    }
-
-    public void setTriggerSource(Device triggerSource) {
-        this.triggerSource = triggerSource;
+    public void setTrigger(TriggerStatus trigger) {
+        this.trigger = trigger;
     }
 
     @Override
     public String toString() {
         return "AlarmStatus{" +
                 "state=" + state +
-                ", countdownStart=" + countdownStart +
-                ", countdownEnd=" + countdownEnd +
-                ", countdownSource=" + countdownSource +
-                ", triggerStart=" + triggerStart +
-                ", triggerSource=" + triggerSource +
+                ", countdown=" + countdown +
+                ", trigger=" + trigger +
                 '}';
     }
-
 }

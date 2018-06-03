@@ -19,91 +19,74 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.homepisec.sensor.rest.client.model.Device;
 
 /**
- * Device
+ * CountdownStatus
  */
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-06-03T20:44:31.883+02:00")
-public class Device {
-  @JsonProperty("id")
-  private String id = null;
+public class CountdownStatus {
+  @JsonProperty("end")
+  private Long end = null;
 
-  /**
-   * Gets or Sets type
-   */
-  public enum TypeEnum {
-    SENSOR_MOTION("SENSOR_MOTION"),
-    
-    SENSOR_TEMP("SENSOR_TEMP"),
-    
-    RELAY("RELAY"),
-    
-    CONTROL("CONTROL");
+  @JsonProperty("source")
+  private Device source = null;
 
-    private String value;
+  @JsonProperty("start")
+  private Long start = null;
 
-    TypeEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeEnum fromValue(String text) {
-      for (TypeEnum b : TypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
-  @JsonProperty("type")
-  private TypeEnum type = null;
-
-  public Device id(String id) {
-    this.id = id;
+  public CountdownStatus end(Long end) {
+    this.end = end;
     return this;
   }
 
    /**
-   * Get id
-   * @return id
+   * Get end
+   * @return end
   **/
   @ApiModelProperty(required = true, value = "")
-  public String getId() {
-    return id;
+  public Long getEnd() {
+    return end;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setEnd(Long end) {
+    this.end = end;
   }
 
-  public Device type(TypeEnum type) {
-    this.type = type;
+  public CountdownStatus source(Device source) {
+    this.source = source;
     return this;
   }
 
    /**
-   * Get type
-   * @return type
+   * Get source
+   * @return source
   **/
   @ApiModelProperty(required = true, value = "")
-  public TypeEnum getType() {
-    return type;
+  public Device getSource() {
+    return source;
   }
 
-  public void setType(TypeEnum type) {
-    this.type = type;
+  public void setSource(Device source) {
+    this.source = source;
+  }
+
+  public CountdownStatus start(Long start) {
+    this.start = start;
+    return this;
+  }
+
+   /**
+   * Get start
+   * @return start
+  **/
+  @ApiModelProperty(required = true, value = "")
+  public Long getStart() {
+    return start;
+  }
+
+  public void setStart(Long start) {
+    this.start = start;
   }
 
 
@@ -115,24 +98,26 @@ public class Device {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Device device = (Device) o;
-    return Objects.equals(this.id, device.id) &&
-        Objects.equals(this.type, device.type);
+    CountdownStatus countdownStatus = (CountdownStatus) o;
+    return Objects.equals(this.end, countdownStatus.end) &&
+        Objects.equals(this.source, countdownStatus.source) &&
+        Objects.equals(this.start, countdownStatus.start);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, type);
+    return Objects.hash(end, source, start);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Device {\n");
+    sb.append("class CountdownStatus {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    end: ").append(toIndentedString(end)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
+    sb.append("    start: ").append(toIndentedString(start)).append("\n");
     sb.append("}");
     return sb.toString();
   }
