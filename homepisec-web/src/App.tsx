@@ -1,10 +1,11 @@
 import * as React from 'react';
+import {MouseEvent} from 'react';
 
 import './App.css';
 
 import {Readings} from "./components/Readings";
 import {Alarm} from "./components/Alarm";
-import {AlarmStatus, DeviceEvent} from "./generated/control-api"
+import {AlarmStatus} from "./generated/control-api"
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -15,7 +16,8 @@ import {TabProps} from "@material-ui/core/Tab/Tab";
 
 import {connect} from 'react-redux'
 import {AppState} from "./model";
-import {getAlarmStatus, getReadingsAction} from "./actions";
+import {getAlarmStatus, getReadingsAction, switchRelayAction} from "./actions";
+import Timer = NodeJS.Timer;
 
 
 enum Routes {
@@ -27,16 +29,30 @@ interface DispatchProps {
   getReadings(): void
 
   getAlarmStatus(): void
+
+  switchRelay(relayId: string, value: boolean): (event: MouseEvent<HTMLElement>) => void | undefined
 }
 
 type AppProps = {} & AppState & DispatchProps;
 
-class App extends React.Component<AppProps, {}> {
+interface AppStateInternal {
+  interval: Timer
+}
+
+class App extends React.Component<AppProps, AppStateInternal> {
 
   componentDidMount() {
-    this.props.getReadings();
-    this.props.getAlarmStatus();
+    const props = this.props;
+    const interval: Timer = setInterval(function refreshReadings() {
+      props.getReadings();
+      props.getAlarmStatus();
+    }, 2000);
+    this.setState({interval})
   };
+
+  componentWillUnmount() {
+    clearInterval(this.state.interval);
+  }
 
   public render() {
     return (
@@ -55,7 +71,7 @@ class App extends React.Component<AppProps, {}> {
               />
             </TabsWithRouter>
           </AppBar>
-          {renderRoutes(this.props.readings, this.props.alarmStatus)}
+          {renderRoutes(this.props)}
         </div>
     );
   }
@@ -96,34 +112,34 @@ const TabsWithRouter = withRouter<RouteComponentProps<any, any> & TabsProps>((pr
     </Tabs>
 );
 
-const renderRoutes = (readings: DeviceEvent[], alarmStatus?: AlarmStatus) =>
+const renderRoutes = (props: AppProps) =>
     <Switch>
       <Route
           path={`${Routes.ALARM}`}
-          component={renderAlarmView.bind(null, alarmStatus)}
+          component={renderAlarmView.bind(null, props.alarmStatus)}
       />
       <Route
           path={`${Routes.READINGS}`}
-          component={renderReadingView.bind(null, readings)}
+          component={renderReadingView.bind(null, props)}
       />
       <Redirect exact={true} from="/" to={`${Routes.ALARM}`}/>
       <Route component={NotFoundView}/>
     </Switch>
 ;
 
-const renderAlarmView = (props?: AlarmStatus) =>
+const renderAlarmView = (alarmStatus?: AlarmStatus) =>
     <Paper style={{margin: "1em", padding: "1em"}}>
-      {!props && (
+      {!alarmStatus && (
           <span>No alarm state?</span>
       )}
-      {props && (
-          <Alarm status={props}/>
+      {alarmStatus && (
+          <Alarm status={alarmStatus}/>
       )}
     </Paper>;
 
-const renderReadingView = (readings: DeviceEvent[]) =>
+const renderReadingView = (props: AppProps) =>
     <div style={{padding: "1em"}}>
-      <Readings readings={readings}/>
+      <Readings readings={props.readings} switchRelay={props.switchRelay}/>
     </div>;
 
 const NotFoundView: React.SFC = () =>
@@ -136,7 +152,8 @@ const mapStateToProps = (state: AppState, ownProps: AppState) => state;
 const mapDispatchToProps = (dispatch: any): DispatchProps => {
   return {
     getAlarmStatus: () => dispatch(getAlarmStatus()),
-    getReadings: () => dispatch(getReadingsAction())
+    getReadings: () => dispatch(getReadingsAction()),
+    switchRelay: (relayId: string, value: boolean) => dispatch(switchRelayAction(relayId, value))
   }
 };
 

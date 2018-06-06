@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {ReactNode} from 'react';
-import {DeviceEvent, DeviceTypeEnum, RelaycontrollerApiFp} from "../generated/control-api";
+import {MouseEvent, ReactNode} from 'react';
+import {DeviceEvent, DeviceTypeEnum} from "../generated/control-api";
 
 import "./readings.css";
 import {InfoIcon, MotionIcon, RelayOffIcon, RelayOnIcon, ThermIcon} from "../icons";
@@ -9,6 +9,8 @@ import {Button} from "@material-ui/core";
 
 interface ReadingsProps {
   readings: DeviceEvent[]
+
+  switchRelay(relayId: string, value: boolean): (event: MouseEvent<HTMLElement>) => void | undefined
 }
 
 export const Readings: React.SFC<ReadingsProps> = (props) =>
@@ -20,14 +22,15 @@ export const Readings: React.SFC<ReadingsProps> = (props) =>
           secondary: r.device.id
         };
         return <Paper key={r.device.id} style={{padding: "1em"}}>
-          {renderItem(r, itemProps)}
+          {renderItem(r, itemProps, props.switchRelay)}
         </Paper>
       })}
     </div>;
 
-function renderItem(r: DeviceEvent, itemProps: ReadingItemProps) {
+function renderItem(r: DeviceEvent, itemProps: ReadingItemProps, switchRelay: (relayId: string, value: boolean) => (event: MouseEvent<HTMLElement>) => void | undefined) {
   if (r.device.type === "RELAY") {
     return <RelayReadingListItem
+        switchRelay={switchRelay}
         {...itemProps}
     />;
   } else if (r.device.type === "SENSOR_MOTION") {
@@ -55,7 +58,17 @@ const ReadingListItem: React.SFC<ReadingItemProps> = (props) =>
     </div>
 ;
 
-const RelayReadingListItem: React.SFC<ReadingItemProps> = (props) =>
+interface RelayReadingListItemProps extends ReadingItemProps {
+  switchRelay(relayId: string, value: boolean): (event: MouseEvent<HTMLElement>) => void | undefined
+}
+
+function _createSwitchRelayOnClickHandler(props: RelayReadingListItemProps) {
+  return function _switchRelayOnClickHandler() {
+    props.switchRelay(props.secondary, props.primary !== "true");
+  }
+}
+
+const RelayReadingListItem: React.SFC<RelayReadingListItemProps> = (props) =>
     <div className="readings-item">
       {props.icon}
       <div className="readings-item-primary">
@@ -63,7 +76,7 @@ const RelayReadingListItem: React.SFC<ReadingItemProps> = (props) =>
         <Button
             variant="raised"
             style={{marginLeft: "5em", verticalAlign: "baseline"}}
-            onClick={switchRelay(props.secondary, props.primary !== "true")}
+            onClick={_createSwitchRelayOnClickHandler(props)}
         >
           Switch
         </Button>
@@ -125,10 +138,4 @@ function determineThermIconColor(temperature: number): string {
     color = '#000000';
   }
   return color;
-}
-
-function switchRelay(relayId: string, value: boolean): () => void {
-  return function switchRelayHandler() {
-    RelaycontrollerApiFp.switchRelayUsingPOST({relayId, value})(fetch, ".")
-  }
 }

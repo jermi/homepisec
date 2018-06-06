@@ -1,34 +1,49 @@
 import {AppState, initialState} from "./model";
 import {Action} from "redux";
-import {ActionTypes, GetAlarmStatusSuccessAction, GetReadingsSuccessAction} from "./actions";
-import {CALL_HISTORY_METHOD, LOCATION_CHANGE, routerReducer} from "react-router-redux";
+import {
+  ActionTypes,
+  GetAlarmStatusSuccessAction,
+  GetReadingsSuccessAction,
+  SwitchRelaySuccessAction
+} from "./actions";
+import {routerReducer} from "react-router-redux";
+import {AlarmStatus, DeviceEvent} from "./generated/control-api";
 
 export const rootReducer = (state: AppState = initialState, action: Action): AppState => {
+  return {
+    alarmStatus: alarmStatusReducer(state.alarmStatus, action),
+    readings: readingsReducer(state.readings, action),
+    router: routerReducer(state.router, action)
+  };
+};
+
+const alarmStatusReducer = (state: AlarmStatus | undefined, action: Action) => {
   switch (action.type) {
     case ActionTypes.GET_ALARM_STATUS_SUCCESS:
-      return {
-        alarmStatus: (action as GetAlarmStatusSuccessAction).payload,
-        readings: state.readings,
-        router: state.router
-      };
-    case ActionTypes.GET_READINGS_SUCCESS:
-      return {
-        alarmStatus: state.alarmStatus,
-        readings: (action as GetReadingsSuccessAction).payload,
-        router: state.router
-      };
-    case LOCATION_CHANGE:
-    case CALL_HISTORY_METHOD:
-      return {
-        alarmStatus: state.alarmStatus,
-        readings: state.readings,
-        router: routerReducer(state.router, action)
-      };
+      return (action as GetAlarmStatusSuccessAction).payload;
     default:
-      return {
-        alarmStatus: state.alarmStatus,
-        readings: state.readings,
-        router: state.router
-      };
+      return state;
+  }
+};
+
+const readingsReducer = (state: DeviceEvent[], action: Action) => {
+  switch (action.type) {
+    case ActionTypes.GET_READINGS_SUCCESS:
+      return (action as GetReadingsSuccessAction).payload;
+    // case ActionTypes.SWITCH_RELAY_SUCCESS:
+    //   const {relayId, value} = (action as SwitchRelaySuccessAction).payload;
+    //   return state.map(e => {
+    //     if (e.device.id === relayId) {
+    //       return {
+    //         device: e.device,
+    //         payload: value.toString(),
+    //         time: e.time,
+    //         type: e.type
+    //       }
+    //     }
+    //     return e
+    //   });
+    default:
+      return state;
   }
 };
