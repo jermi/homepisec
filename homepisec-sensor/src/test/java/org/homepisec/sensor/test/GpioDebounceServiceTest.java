@@ -46,7 +46,7 @@ public class GpioDebounceServiceTest {
         // then
         Thread.sleep(5);
         Assert.assertEquals(true, pinValues.get(pin));
-        Thread.sleep(21);
+        Thread.sleep(50);
         Assert.assertEquals(false, pinValues.get(pin));
     }
 
@@ -65,7 +65,7 @@ public class GpioDebounceServiceTest {
         // then
         Thread.sleep(5);
         Assert.assertEquals(false, pinValues.get(pin));
-        Thread.sleep(21);
+        Thread.sleep(25);
         Assert.assertEquals(true, pinValues.get(pin));
     }
 

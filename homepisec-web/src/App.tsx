@@ -4,23 +4,16 @@ import './App.css';
 
 import {Readings} from "./components/Readings";
 import {Alarm} from "./components/Alarm";
-import {
-  AlarmcontrollerApi,
-  AlarmStatus,
-  DeviceEvent,
-  ReadingscontrollerApi
-} from "./generated/control-api"
+import {AlarmStatus, DeviceEvent} from "./generated/control-api"
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import {Paper, TabsProps} from "material-ui";
 import {AlarmIcon, ReadingsIcon} from "./icons";
 import {Redirect, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
-import {StaticContext} from "react-router";
 import {TabProps} from "@material-ui/core/Tab/Tab";
 
 import {connect} from 'react-redux'
-import {createStore, Dispatch} from 'redux'
 import {AppState} from "./model";
 import {getAlarmStatus, getReadingsAction} from "./actions";
 
@@ -32,6 +25,7 @@ enum Routes {
 
 interface DispatchProps {
   getReadings(): void
+
   getAlarmStatus(): void
 }
 
@@ -139,7 +133,7 @@ const NotFoundView: React.SFC = () =>
 
 const mapStateToProps = (state: AppState, ownProps: AppState) => state;
 
-const mapDispatchToProps = (dispatch: any):DispatchProps => {
+const mapDispatchToProps = (dispatch: any): DispatchProps => {
   return {
     getAlarmStatus: () => dispatch(getAlarmStatus()),
     getReadings: () => dispatch(getReadingsAction())

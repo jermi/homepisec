@@ -6,18 +6,23 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import {Provider} from 'react-redux'
-import {applyMiddleware, combineReducers, createStore} from 'redux'
+import {applyMiddleware, compose, createStore} from 'redux'
 import {initialState} from "./model";
 import {rootReducer} from "./reducers";
 import thunk from "redux-thunk";
-import {ConnectedRouter, routerMiddleware, routerReducer} from 'react-router-redux';
+import {ConnectedRouter, routerMiddleware} from 'react-router-redux';
 import createHistory from 'history/createHashHistory'
+
+// tslint:disable-next-line
+const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
 const history = createHistory();
 const store = createStore(
     rootReducer,
     initialState,
-    applyMiddleware(thunk, routerMiddleware(history))
+    composeEnhancers(
+        applyMiddleware(thunk, routerMiddleware(history))
+    )
 );
 
 ReactDOM.render(
