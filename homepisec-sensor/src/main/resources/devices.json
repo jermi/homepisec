@@ -24,7 +24,8 @@
   ],
   "tempSensors": [
     {
-      "id": "28-0516b2ea33ff"
+      "id": "thermometer-1",
+      "w1SerialCode": "28-0516b2ea33ff"
     }
   ]
 }

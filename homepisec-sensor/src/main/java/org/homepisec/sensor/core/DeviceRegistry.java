@@ -36,11 +36,17 @@ public class DeviceRegistry {
         return tempSensors;
     }
 
+    public enum ContactType {
+        NORMALLY_CLOSED,
+        NORMALLY_OPEN
+    }
+
     public static class DeviceGpio {
         private String id;
         private int gpio;
         private Integer debounceDelay;
         private boolean debounceValue;
+        private ContactType contactType;
 
         private DeviceGpio() {
         }
@@ -50,6 +56,14 @@ public class DeviceRegistry {
             this.gpio = gpio;
             this.debounceDelay = debounceDelay;
             this.debounceValue = debounceValue;
+        }
+
+        public DeviceGpio(String id, int gpio, Integer debounceDelay, boolean debounceValue, ContactType contactType) {
+            this.id = id;
+            this.gpio = gpio;
+            this.debounceDelay = debounceDelay;
+            this.debounceValue = debounceValue;
+            this.contactType = contactType;
         }
 
         public String getId() {
@@ -68,6 +82,10 @@ public class DeviceRegistry {
             return debounceValue;
         }
 
+        public ContactType getContactType() {
+            return contactType;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -76,13 +94,13 @@ public class DeviceRegistry {
             return gpio == that.gpio &&
                     debounceValue == that.debounceValue &&
                     Objects.equals(id, that.id) &&
-                    Objects.equals(debounceDelay, that.debounceDelay);
+                    Objects.equals(debounceDelay, that.debounceDelay) &&
+                    contactType == that.contactType;
         }
 
         @Override
         public int hashCode() {
-
-            return Objects.hash(id, gpio, debounceDelay, debounceValue);
+            return Objects.hash(id, gpio, debounceDelay, debounceValue, contactType);
         }
 
         @Override
@@ -92,22 +110,37 @@ public class DeviceRegistry {
                     ", gpio=" + gpio +
                     ", debounceDelay=" + debounceDelay +
                     ", debounceValue=" + debounceValue +
+                    ", contactType=" + contactType +
                     '}';
         }
     }
 
     public static class DeviceW1 {
         private String id;
+        private String w1SerialCode;
 
         private DeviceW1() {
         }
 
-        public DeviceW1(String id) {
+        public DeviceW1(String id, String w1SerialCode) {
             this.id = id;
+            this.w1SerialCode = w1SerialCode;
         }
 
         public String getId() {
             return id;
+        }
+
+        public String getW1SerialCode() {
+            return w1SerialCode;
+        }
+
+        @Override
+        public String toString() {
+            return "DeviceW1{" +
+                    "id='" + id + '\'' +
+                    ", w1SerialCode='" + w1SerialCode + '\'' +
+                    '}';
         }
     }
 

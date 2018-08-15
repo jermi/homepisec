@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.homepisec.sensor.rest.client.ApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -13,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SensorAppBeans {
+
+    @Value("${basePath:http://rpi:8080/}")
+    String basePath;
 
     @Bean
     RestTemplate restTemplate() {
@@ -34,7 +38,7 @@ public class SensorAppBeans {
     @Bean
     @Autowired
     ApiClient apiClient(RestTemplate restTemplate) {
-        return new ApiClient(restTemplate).setBasePath("http://rpi:8080/");
+        return new ApiClient(restTemplate).setBasePath(basePath);
     }
 
 }

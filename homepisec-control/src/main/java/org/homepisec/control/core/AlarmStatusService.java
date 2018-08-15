@@ -89,11 +89,17 @@ public class AlarmStatusService {
 
     private void handleDeviceRead(DeviceEvent event) {
         final boolean isAlarmArmed = alarmStatus.getState().equals(AlarmState.ARMED);
-        final boolean isDeviceMotionSensor = DeviceType.SENSOR_MOTION.equals(event.getDevice().getType());
-        if (isAlarmArmed && isDeviceMotionSensor) {
-            final Boolean isMotionDetected = Boolean.valueOf(event.getPayload());
-            if (isMotionDetected) {
+        if (isAlarmArmed) {
+            final boolean isDeviceMotionSensor = DeviceType.SENSOR_MOTION.equals(event.getDevice().getType());
+            final boolean isDeviceTamper = DeviceType.TAMPER.equals(event.getDevice().getType());
+            final boolean isDeviceTriggered = Boolean.parseBoolean(event.getPayload());
+            if (isDeviceMotionSensor && isDeviceTriggered) {
                 eventsSubject.onNext(new AlarmCountdownEvent(
+                        System.currentTimeMillis(),
+                        event.getDevice()
+                ));
+            } else if (isDeviceTamper && isDeviceTriggered) {
+                eventsSubject.onNext(new AlarmTriggeredEvent(
                         System.currentTimeMillis(),
                         event.getDevice()
                 ));

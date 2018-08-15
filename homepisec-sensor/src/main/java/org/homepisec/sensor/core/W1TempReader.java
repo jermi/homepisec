@@ -34,7 +34,7 @@ public class W1TempReader {
     }
 
     private DeviceReading readTemp(DeviceRegistry.DeviceW1 sensor) {
-        final String cmd = String.format(READ_CMD, sensor.getId());
+        final String cmd = String.format(READ_CMD, sensor.getW1SerialCode());
         try {
             final Process process = Runtime.getRuntime().exec(cmd);
             bashCmdHelper.checkExitCode(cmd, process);

@@ -33,7 +33,7 @@ public class AlarmStatusServiceTest {
     }
 
     @Test
-    public void trigger_alarm() {
+    public void trigger_alarm_motion_sensor() {
         // given
         final PublishSubject<DeviceEvent> subject = PublishSubject.create();
         AlarmStatusService instance = new AlarmStatusService(0, subject);
@@ -58,6 +58,37 @@ public class AlarmStatusServiceTest {
         Awaitility.await()
                 .atMost(1, TimeUnit.SECONDS)
                 .until(() -> AlarmState.TRIGGERED.equals(instance.getAlarmStatus().getState()));
+        Assert.assertEquals(sensor.getId(), instance.getAlarmStatus().getTrigger().getSource().getId());
+        Assert.assertEquals(sensor.getType(), instance.getAlarmStatus().getTrigger().getSource().getType());
+        // then disarm
+        subject.onNext(new AlarmDisarmEvent(System.currentTimeMillis()));
+        Awaitility.await()
+                .atMost(1, TimeUnit.SECONDS)
+                .until(() -> AlarmState.DISARMED.equals(instance.getAlarmStatus().getState()));
+        Assert.assertNull(instance.getAlarmStatus().getTrigger());
+        Assert.assertNull(instance.getAlarmStatus().getCountdown());
+    }
+
+    @Test
+    public void trigger_alarm_tamper() {
+        // given
+        final PublishSubject<DeviceEvent> subject = PublishSubject.create();
+        AlarmStatusService instance = new AlarmStatusService(0, subject);
+        final Device sensor = new Device("t1", DeviceType.TAMPER);
+        final DeviceEvent deviceReadEvent = new DeviceEvent(
+                EventType.DEVICE_READ,
+                System.currentTimeMillis(),
+                sensor,
+                "true"
+        );
+        Assert.assertEquals(AlarmState.DISARMED, instance.getAlarmStatus().getState());
+        Assert.assertNull(instance.getAlarmStatus().getCountdown());
+        Assert.assertNull(instance.getAlarmStatus().getTrigger());
+        // when alarm armed and tamper detected
+        instance.armAlarm();
+        subject.onNext(deviceReadEvent);
+        // then trigger alarm
+        Assert.assertEquals(AlarmState.TRIGGERED, instance.getAlarmStatus().getState());
         Assert.assertEquals(sensor.getId(), instance.getAlarmStatus().getTrigger().getSource().getId());
         Assert.assertEquals(sensor.getType(), instance.getAlarmStatus().getTrigger().getSource().getType());
         // then disarm

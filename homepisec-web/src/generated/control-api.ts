@@ -53,7 +53,7 @@ export interface Device {
     "type": DeviceTypeEnum;
 }
 
-export type DeviceTypeEnum = "SENSOR_MOTION" | "SENSOR_TEMP" | "RELAY" | "CONTROL";
+export type DeviceTypeEnum = "TAMPER" | "SENSOR_MOTION" | "SENSOR_TEMP" | "RELAY" | "CONTROL";
 export interface DeviceEvent {
     "device": Device;
     "payload": string;

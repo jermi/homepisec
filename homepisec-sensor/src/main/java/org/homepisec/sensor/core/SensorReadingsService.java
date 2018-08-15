@@ -3,7 +3,6 @@ package org.homepisec.sensor.core;
 import org.homepisec.sensor.rest.client.api.ReadingsControllerApi;
 import org.homepisec.sensor.rest.client.model.Device;
 import org.homepisec.sensor.rest.client.model.DeviceReading;
-import org.homepisec.sensor.rest.client.model.EventDeviceReading;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -47,9 +46,19 @@ public class SensorReadingsService {
     private void populateGpioPinReadings(List<DeviceReading> readings, List<DeviceRegistry.DeviceGpio> devices, Device.TypeEnum deviceType) {
         for (DeviceRegistry.DeviceGpio deviceGpio : devices) {
             final int pin = deviceGpio.getGpio();
-            final boolean value = gpioProvider.readPin(pin);
+            final boolean pinValue = gpioProvider.readPin(pin);
+            final DeviceRegistry.ContactType contactType = deviceGpio.getContactType();
+            final boolean normalizedPinValue;
+            if (DeviceRegistry.ContactType.NORMALLY_CLOSED.equals(contactType)) {
+                // for NC need to inverse pin raw reading since
+                // high pin state = low logical state and low pin state = high logical state
+                normalizedPinValue = !pinValue;
+            } else {
+                // for NO use raw pin value since pin state = logical state
+                normalizedPinValue = pinValue;
+            }
             final Device device = new Device().id(deviceGpio.getId()).type(deviceType);
-            final DeviceReading deviceReading = new DeviceReading().device(device).value(String.valueOf(value));
+            final DeviceReading deviceReading = new DeviceReading().device(device).value(String.valueOf(normalizedPinValue));
             readings.add(deviceReading);
         }
     }
