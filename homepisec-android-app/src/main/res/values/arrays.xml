@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <array name="menu_items">
-        <item>Devices</item>
-        <item>Settings</item>
-    </array>
-</resources>
