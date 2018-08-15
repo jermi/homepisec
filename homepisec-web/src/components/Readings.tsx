@@ -4,7 +4,7 @@ import {DeviceEvent, DeviceTypeEnum} from "../generated/control-api";
 
 import "./readings.css";
 import {InfoIcon, MotionIcon, RelayOffIcon, RelayOnIcon, ThermIcon} from "../icons";
-import {Paper} from "material-ui";
+import {Paper} from "@material-ui/core";
 import {Button} from "@material-ui/core";
 
 interface ReadingsProps {

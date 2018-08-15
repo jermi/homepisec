@@ -7,9 +7,9 @@ import {Readings} from "./components/Readings";
 import {Alarm} from "./components/Alarm";
 import {AlarmStatus} from "./generated/control-api"
 import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
+import Tabs, {TabsProps} from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import {Paper, TabsProps} from "material-ui";
+import {Paper} from "@material-ui/core";
 import {AlarmIcon, ReadingsIcon} from "./icons";
 import {Redirect, Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom';
 import {TabProps} from "@material-ui/core/Tab/Tab";
@@ -58,7 +58,7 @@ class App extends React.Component<AppProps, AppStateInternal> {
     return (
         <div>
           <AppBar position="static">
-            <TabsWithRouter>
+            <TabsWithRouter value={null}>
               <TabWithRouter
                   label="Alarm"
                   icon={<AlarmIcon className="menu-icon"/>}
@@ -104,7 +104,9 @@ function determineCurrentTab(pathname: string): number | undefined {
   }
 }
 
-const TabsWithRouter = withRouter<RouteComponentProps<any, any> & TabsProps>((props) =>
+type TabsWithRouterProps = RouteComponentProps<any, any> & TabsProps;
+
+const TabsWithRouter = withRouter<TabsWithRouterProps>((props: TabsWithRouterProps) =>
     <Tabs
         value={determineCurrentTab(props.location.pathname)}
     >

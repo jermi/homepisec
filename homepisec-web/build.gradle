@@ -33,3 +33,19 @@ task genTSControlRestClient {
 }
 
 genTSControlRestClient.dependsOn('swagger')
+
+task npmInstall(type: Exec) {
+    inputs.file("package.json")
+    inputs.file("package-lock.json")
+    outputs.dir("node_modules")
+    commandLine 'npm', 'install'
+}
+
+task build(type: Exec) {
+    inputs.dir("src")
+    inputs.dir("public")
+    outputs.dir("build")
+    commandLine 'npm', 'run', 'build'
+}
+
+build.dependsOn(npmInstall)
